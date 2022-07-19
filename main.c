@@ -7,6 +7,7 @@
 #define SIZEOFBLOCK 16
 #define NUMFRAMES 2
 #define NUMBLOCKS 16
+#define SIZEOFIMAGE 256
 
 /*
 * Struct definitions
@@ -58,8 +59,17 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 
     fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
 
-    while (cur_pixel_row < 256)
+    uint8_t header_counter = 0;
+
+    while (cur_pixel_row < SIZEOFIMAGE - 2)
     {
+        // Skip over the jpg image header
+        if (header_counter < 3)
+        {
+            header_counter++;
+            continue;
+        }
+
         if (!first_iteration)
         {
             if (cur_block_col == SIZEOFBLOCK)
@@ -166,26 +176,20 @@ int main(int argc, char *argv[])
                         {
                             for (int r = 0; r < SIZEOFBLOCK; ++r) // every column in cur_block (cur_pixel)
                             {
-                                for (int l = 0; l < SIZEOFBLOCK; ++l) // every pixel row in other frame
+                                int diff = test_film->frame[i].block[j][k].pixel[s][r] - test_film->frame[i + 1].block[w][f].pixel[s][r];
+                                // printf("Block[%d][%d], difference: %d\n", j, k, diff);
+                                if (diff < 0)
                                 {
-                                    for (int t = 0; t < SIZEOFBLOCK; ++t) // every pixel column in other frame
-                                    {
-                                        int diff = test_film->frame[i].block[j][k].pixel[s][r] - test_film->frame[i + 1].block[w][f].pixel[l][t];
-                                        // printf("Block[%d][%d], difference: %d\n", j, k, diff);
-                                        if (diff < 0)
-                                        {
-                                            temp_sad -= diff;
-                                        }
-                                        else
-                                        {
-                                            temp_sad += diff;
-                                        }
-
-                                        //printf("Block[%d][%d], temp_sad: %d\n", j, k, temp_sad);
-                                    }
-
+                                    temp_sad -= diff;
                                 }
-                            }
+                                else
+                                {
+                                    temp_sad += diff;
+                                }
+
+                                //printf("Block[%d][%d], temp_sad: %d\n", j, k, temp_sad);
+
+                            }   
                         }
                         if (temp_sad == 0)
                         {
