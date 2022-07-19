@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
+#include <math.h>
 
 #define SIZEOFBLOCK 16
 #define NUMFRAMES 2
@@ -136,7 +137,6 @@ int main(int argc, char *argv[])
     
     Frame *test_frame = (Frame*)malloc(sizeof(Frame));
     Film *test_film = (Film*) malloc(sizeof(Film));
-    printf("test above process frame\n");
 
     process_frame(test_frame, fptr);
 
@@ -191,15 +191,17 @@ int main(int argc, char *argv[])
 
                             }   
                         }
-                        if (temp_sad == 0)
+                        /*if (temp_sad == 0)
                         {
-                             printf("Block[%d][%d] compared to Block[%d][%d] in other frame, diff is 0\n", j, k, w, f);
-                        }
-                        if (test_film->frame[i].differences[j][k] > temp_sad)
+                            printf("Block[%d][%d] compared to Block[%d][%d] in other frame, diff is 0\n", j, k, w, f);
+                        }*/
+                        double new_distance = sqrt((w - j) * (w - j) + (k - f) * (k - f));
+                        double cur_distance = sqrt(test_film->frame[i].vectors[j][k].x * test_film->frame[i].vectors[j][k].x + test_film->frame[i].vectors[j][k].y * test_film->frame[i].vectors[j][k].y);
+                        if (test_film->frame[i].differences[j][k] > temp_sad || (new_distance < cur_distance && test_film->frame[i].differences[j][k] == temp_sad))
                         {
                             // printf("In if condition, temp_sad = %d, old value = %d\n", temp_sad, test_film->frame[i].differences[j][k]);
                             test_film->frame[i].differences[j][k] = temp_sad;
-                            test_film->frame[i].vectors[j][k].x = j - w;
+                            test_film->frame[i].vectors[j][k].x = w - j;
                             test_film->frame[i].vectors[j][k].y = k - f;
                         }
                     }
@@ -215,7 +217,7 @@ int main(int argc, char *argv[])
             int temp_diff = test_film->frame[0].differences[i][j];
             int temp_x = test_film->frame[0].vectors[i][j].x;
             int temp_y = test_film->frame[0].vectors[i][j].y;
-            //printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
+            printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
         }
     }
 
