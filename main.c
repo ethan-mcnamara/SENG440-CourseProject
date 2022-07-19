@@ -65,7 +65,7 @@ void process_frame(Frame *cur_frame, FILE *fptr)
     while (cur_pixel_row < SIZEOFIMAGE - 2)
     {
         // Skip over the jpg image header
-        if (header_counter < 3)
+        if (header_counter < 6)
         {
             header_counter++;
             continue;
@@ -98,9 +98,11 @@ void process_frame(Frame *cur_frame, FILE *fptr)
         }
 
         cur_block->pixel[cur_pixel_row % SIZEOFBLOCK][cur_pixel_col % SIZEOFBLOCK] = cur_pixel;
+        //printf("%d\n", cur_pixel);
 
         cur_pixel_col++;
-        fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
+
+        fread(&cur_pixel, sizeof(uint8_t), 1, fptr) != 1
     }
 }
 
@@ -127,7 +129,7 @@ int main(int argc, char *argv[])
     //for each block in frame
     //    find most similar (smallest SAD) other block (limit search to nearby blocks)
 
-    fptr = fopen("test_images/Image1.jpg", "rb");
+    fptr = fopen("test_images/Image1.bmp", "rb");
     if(fptr == NULL)
     {
         printf("Error!");   
@@ -142,7 +144,7 @@ int main(int argc, char *argv[])
 
     test_film->frame[0] = *test_frame;
     fclose(fptr);
-    fptr = fopen("test_images/Image2.jpg", "rb");
+    fptr = fopen("test_images/Image2.bmp", "rb");
     process_frame(test_frame, fptr);
     test_film->frame[1] = *test_frame;
 
