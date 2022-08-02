@@ -196,9 +196,19 @@ int main(int argc, char *argv[])
                             uint8x16_t result;
                             result = vabdq_u8(vector_ref, vector_comp);
 
-                            // Sum all elements in the result vector and write to the differences array
-                            temp_sad += result[0] + result[1] + result[2] + result[3] + result[4] + result[5] + result[6] + result[7]
-                                        result[8] + result[9] + result[10] + result[11] + result[12] + result[13] + result[14] + result[15];
+                            uint8x8_t result_low;
+                            uint8x8_t result_high;
+                            result_low = vget_low_u8(result);
+                            result_high = vget_high_u8(result);
+
+                            uint8x8_t small_result;
+                            small_result = vadd_u8(result_low, result_high);
+
+                            uint8_t temp_storage [8];
+
+                            vst1_u8(temp_storage, small_result);
+
+                            temp_sad = temp_sad + temp_storage[0] + temp_storage[1] + temp_storage[2] + temp_storage[3] + temp_storage[4] + temp_storage[5] = temp_storage[6] + temp_storage[7];
  
                         }
                         if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )
