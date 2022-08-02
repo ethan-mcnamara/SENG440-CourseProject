@@ -11,7 +11,6 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 
-
 /*
 * Struct definitions
 */
@@ -188,30 +187,20 @@ int main(int argc, char *argv[])
                         uint32_t temp_sad = 0;
                         for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                         {
-                            for (uint8_t pixel_col = 0; pixel_col < SIZEOFBLOCK; ++pixel_col) // every column in cur_block (cur_pixel)
-                            {
-                                int diff = test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][pixel_col] - test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col];
-                                // printf("Block[%d][%d], difference: %d\n", block_row_ref, block_col_ref, diff);
-                                if (diff < 0)
-                                {
-                                    temp_sad -= diff;
-                                }
-                                else
-                                {
-                                    temp_sad += diff;
-                                }
+                            uint8x16_t vector_ref; // declare a vector of 16 8-bit lanes
+                            uint8x16_t vector_comp; // declare a vector of 16 8-bit lanes
+                            vector_ref = vld1q_u8(test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row]); // load the array from memory into a vector
+                            vector_comp = vld1q_u8(test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row]); // load the array from memory into a vector
+                            
+                            // Perform the Absolute Differences operation:
+                            uint8x16_t result;
+                            result = vabdq_u8(vector_ref, vector_comp);
 
-                                //printf("Block[%d][%d], temp_sad: %d\n", block_row_ref, block_col_ref, temp_sad);
-
-                            }   
+                            // Sum all elements in the result vector and write to the differences array
+                            temp_sad += vaddvq_u8(result);
+ 
                         }
-                        /*if (temp_sad == 0)
-                        {
-                            printf("Block[%d][%d] compared to Block[%d][%d] in other frame, diff is 0\n", block_row_ref, block_col_ref, block_row_comp, block_col_comp);
-                        }*/
-                        //double new_distance = sqrt((block_row_comp - block_row_ref) * (block_row_comp - block_row_ref) + (block_col_ref - block_col_comp) * (block_col_ref - block_col_comp));
-                        //double cur_distance = sqrt(test_film->frame[frame].vectors[block_row_ref][block_col_ref].x * test_film->frame[frame].vectors[block_row_ref][block_col_ref].x + test_film->frame[frame].vectors[block_row_ref][block_col_ref].y * test_film->frame[frame].vectors[block_row_ref][block_col_ref].y);
-                        if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )//|| (new_distance < cur_distance && test_film->frame[frame].differences[block_row_ref][block_col_ref] == temp_sad))
+                        if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )
                         {
                             // printf("In if condition, temp_sad = %d, old value = %d\n", temp_sad, test_film->frame[frame].differences[block_row_ref][block_col_ref]);
                             test_film->frame[frame].differences[block_row_ref][block_col_ref] = temp_sad;
