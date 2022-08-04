@@ -102,7 +102,7 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 
         cur_pixel_col++;
 
-        fread(&cur_pixel, sizeof(uint8_t), 1, fptr) != 1
+        fread(&cur_pixel, sizeof(uint8_t), 1, fptr) != 1;
     }
 }
 
