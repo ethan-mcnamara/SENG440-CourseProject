@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
-// #include <arm_neon.h>
+#include <arm_neon.h>
 
 #define SIZEOFBLOCK 16
 #define NUMFRAMES 2
@@ -186,29 +186,29 @@ int main(int argc, char *argv[])
                         uint32_t temp_sad = 0;
                         for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                         {
-                            // uint8x16_t vector_ref; // declare a vector of 16 8-bit lanes
-                            // uint8x16_t vector_comp; // declare a vector of 16 8-bit lanes
+                            uint8x16_t vector_ref; // declare a vector of 16 8-bit lanes
+                            uint8x16_t vector_comp; // declare a vector of 16 8-bit lanes
                             printf("After declaration, before intialization\n");
-                            // vector_ref = vld1q_u8(test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row]); // load the array from memory into a vector
-                            // vector_comp = vld1q_u8(test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row]); // load the array from memory into a vector
+                            vector_ref = vld1q_u8(test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row]); // load the array from memory into a vector
+                            vector_comp = vld1q_u8(test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row]); // load the array from memory into a vector
                             
-                            // // Perform the Absolute Differences operation:
-                            // uint8x16_t result;
-                            // result = vabdq_u8(vector_ref, vector_comp);
+                            // Perform the Absolute Differences operation:
+                            uint8x16_t result;
+                            result = vabdq_u8(vector_ref, vector_comp);
 
-                            // uint8x8_t result_low;
-                            // uint8x8_t result_high;
-                            // result_low = vget_low_u8(result);
-                            // result_high = vget_high_u8(result);
+                            uint8x8_t result_low;
+                            uint8x8_t result_high;
+                            result_low = vget_low_u8(result);
+                            result_high = vget_high_u8(result);
 
-                            // uint8x8_t small_result;
-                            // small_result = vadd_u8(result_low, result_high);
+                            uint8x8_t small_result;
+                            small_result = vadd_u8(result_low, result_high);
 
-                            // uint8_t temp_storage [8];
+                            uint8_t temp_storage [8];
 
-                            //vst1_u8(temp_storage, small_result);
+                            vst1_u8(temp_storage, small_result);
 
-                            //temp_sad = temp_sad + temp_storage[0] + temp_storage[1] + temp_storage[2] + temp_storage[3] + temp_storage[4] + temp_storage[5] + temp_storage[6] + temp_storage[7];
+                            temp_sad = temp_sad + temp_storage[0] + temp_storage[1] + temp_storage[2] + temp_storage[3] + temp_storage[4] + temp_storage[5] + temp_storage[6] + temp_storage[7];
  
                         }
                         if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )
