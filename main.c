@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
                             uint8x16_t vector_ref; // declare a vector of 16 8-bit lanes
                             uint8x16_t vector_comp; // declare a vector of 16 8-bit lanes
                             printf("After declaration, before intialization\n");
-                            vector_ref = vld1q_u8(&test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row]); // load the array from memory into a vector
+                            vector_ref = vld1_u8(test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row]); // load the array from memory into a vector
                             printf("After first initalization\n");
                             vector_comp = vld1q_u8(test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row]); // load the array from memory into a vector
                             printf("After second initliazation\n");
