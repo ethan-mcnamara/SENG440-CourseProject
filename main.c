@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
                             uint8x8_t vector_ref; // declare a vector of 16 8-bit lanes
                             uint8x16_t vector_comp; // declare a vector of 16 8-bit lanes
                             printf("After declaration, before intialization\n");
-                            const uint8_t ref_test_array [16] = {0};
+                            const uint8_t ref_test_array [8] = {0};
                             uint8_t comp_test_array [16];
                             vector_ref = vld1_u8(ref_test_array); // load the array from memory into a vector
                             printf("After first initalization\n");
