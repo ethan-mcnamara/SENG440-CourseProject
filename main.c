@@ -196,7 +196,8 @@ int main(int argc, char *argv[])
                                 ref_test_array[i] = test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][i];
                                 comp_test_array[i] = test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][i];
                             }
-                            vector_ref = vld1q_u8(ref_test_array); // load the array from memory into a vector
+                            const uint8_t copy_ref [16] = ref_test_array;
+                            vector_ref = vld1q_u8(copy_ref); // load the array from memory into a vector
                             printf("After first initalization\n");
                             vector_comp = vld1q_u8(comp_test_array); // load the array from memory into a vector
                             printf("After second initliazation\n");
