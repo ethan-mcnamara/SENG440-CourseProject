@@ -205,7 +205,7 @@ int main(int argc, char *argv[])
 
                             uint8_t temp_storage [8];
 
-                            vst1_u8(temp_storage, small_result);
+                            //vst1_u8(temp_storage, small_result);
 
                             //temp_sad = temp_sad + temp_storage[0] + temp_storage[1] + temp_storage[2] + temp_storage[3] + temp_storage[4] + temp_storage[5] + temp_storage[6] + temp_storage[7];
  
