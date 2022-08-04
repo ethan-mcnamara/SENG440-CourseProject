@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
-#include <math.h>
 #include <arm_neon.h>
 
 #define SIZEOFBLOCK 16
