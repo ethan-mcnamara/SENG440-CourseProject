@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
-#include <arm_neon.h>
+// #include <arm_neon.h>
 
 #define SIZEOFBLOCK 16
 #define NUMFRAMES 2
