@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
-#include <math.h>
 
 #define SIZEOFBLOCK 16
 #define NUMFRAMES 2
@@ -197,9 +196,7 @@ int main(int argc, char *argv[])
                         {
                             printf("Block[%d][%d] compared to Block[%d][%d] in other frame, diff is 0\n", j, k, w, f);
                         }*/
-                        double new_distance = sqrt((w - j) * (w - j) + (k - f) * (k - f));
-                        double cur_distance = sqrt(test_film->frame[i].vectors[j][k].x * test_film->frame[i].vectors[j][k].x + test_film->frame[i].vectors[j][k].y * test_film->frame[i].vectors[j][k].y);
-                        if (test_film->frame[i].differences[j][k] > temp_sad || (new_distance < cur_distance && test_film->frame[i].differences[j][k] == temp_sad))
+                        if (test_film->frame[i].differences[j][k] > temp_sad)
                         {
                             // printf("In if condition, temp_sad = %d, old value = %d\n", temp_sad, test_film->frame[i].differences[j][k]);
                             test_film->frame[i].differences[j][k] = temp_sad;
