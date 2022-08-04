@@ -197,22 +197,22 @@ int main(int argc, char *argv[])
                             printf("After second initliazation\n");
 
                             // Perform the Absolute Differences operation:
-                            uint8x16_t result;
-                            result = vabdq_u8(vector_ref, vector_comp);
+                            // uint8x16_t result;
+                            // result = vabdq_u8(vector_ref, vector_comp);
 
-                            uint8x8_t result_low;
-                            uint8x8_t result_high;
-                            result_low = vget_low_u8(result);
-                            result_high = vget_high_u8(result);
+                            // uint8x8_t result_low;
+                            // uint8x8_t result_high;
+                            // result_low = vget_low_u8(result);
+                            // result_high = vget_high_u8(result);
 
-                            uint8x8_t small_result;
-                            small_result = vadd_u8(result_low, result_high);
+                            // uint8x8_t small_result;
+                            // small_result = vadd_u8(result_low, result_high);
 
-                            uint8_t temp_storage [8];
+                            // uint8_t temp_storage [8];
 
-                            vst1_u8(temp_storage, small_result);
+                            // vst1_u8(temp_storage, small_result);
 
-                            temp_sad = temp_sad + temp_storage[0] + temp_storage[1] + temp_storage[2] + temp_storage[3] + temp_storage[4] + temp_storage[5] + temp_storage[6] + temp_storage[7];
+                            // temp_sad = temp_sad + temp_storage[0] + temp_storage[1] + temp_storage[2] + temp_storage[3] + temp_storage[4] + temp_storage[5] + temp_storage[6] + temp_storage[7];
  
                         }
                         if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )
