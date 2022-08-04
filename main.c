@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
-#include <math.h>
 
 #define SIZEOFBLOCK 16
 #define NUMFRAMES 2
