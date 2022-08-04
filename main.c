@@ -191,19 +191,19 @@ int main(int argc, char *argv[])
                             vector_ref = vld1q_u8(test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row]); // load the array from memory into a vector
                             vector_comp = vld1q_u8(test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row]); // load the array from memory into a vector
                             
-                            // Perform the Absolute Differences operation:
-                            uint8x16_t result;
-                            result = vabdq_u8(vector_ref, vector_comp);
+                            // // Perform the Absolute Differences operation:
+                            // uint8x16_t result;
+                            // result = vabdq_u8(vector_ref, vector_comp);
 
-                            uint8x8_t result_low;
-                            uint8x8_t result_high;
-                            result_low = vget_low_u8(result);
-                            result_high = vget_high_u8(result);
+                            // uint8x8_t result_low;
+                            // uint8x8_t result_high;
+                            // result_low = vget_low_u8(result);
+                            // result_high = vget_high_u8(result);
 
-                            uint8x8_t small_result;
-                            small_result = vadd_u8(result_low, result_high);
+                            // uint8x8_t small_result;
+                            // small_result = vadd_u8(result_low, result_high);
 
-                            uint8_t temp_storage [8];
+                            // uint8_t temp_storage [8];
 
                             //vst1_u8(temp_storage, small_result);
 
