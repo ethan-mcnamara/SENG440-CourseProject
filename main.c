@@ -186,34 +186,68 @@ int main(int argc, char *argv[])
                         uint32_t temp_sad = 0;
                         for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                         {
-                            uint8x8_t vector_ref; // declare a vector of 16 8-bit lanes
-                            uint8x16_t vector_comp; // declare a vector of 16 8-bit lanes
-                            printf("After declaration, before intialization\n");
-                            const uint8_t ref_test_array [8] = {0};
-                            uint8_t comp_test_array [16];
-                            vector_ref = vld1_u8(ref_test_array); // load the array from memory into a vector
-                            printf("After first initalization\n");
-                            vector_comp = vld1q_u8(comp_test_array); // load the array from memory into a vector
-                            printf("After second initliazation\n");
+                            for (uint8_t pixel_col = 0; pixel_col , SIZEOFBLOCK; pixel_col += 8)
+                            {
+                                uint8x8_t vector_ref = {0,}; // declare a vector of 16 8-bit lanes
+                                uint8x16_t vector_comp = {0,}; // declare a vector of 16 8-bit lanes
 
-                            // Perform the Absolute Differences operation:
-                            // uint8x16_t result;
-                            // result = vabdq_u8(vector_ref, vector_comp);
+                                uint8_t vector_column = pixel_col % 8;
 
-                            // uint8x8_t result_low;
-                            // uint8x8_t result_high;
-                            // result_low = vget_low_u8(result);
-                            // result_high = vget_high_u8(result);
+                                // Fill the vectors:
+                                vld1_lane_u8(&test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column], vector_ref, pixel_col);
+                                vld1_lane_u8(&test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column], vector_ref, pixel_col + 1);
+                                vld1_lane_u8(&test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column], vector_ref, pixel_col + 2);
+                                vld1_lane_u8(&test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column], vector_ref, pixel_col + 3);
+                                vld1_lane_u8(&test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column], vector_ref, pixel_col + 4);
+                                vld1_lane_u8(&test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column], vector_ref, pixel_col + 5);
+                                vld1_lane_u8(&test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column], vector_ref, pixel_col + 6);
+                                vld1_lane_u8(&test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column], vector_ref, pixel_col + 7);
+                                vld1_lane_u8(&test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column], vector_ref, pixel_col + 8);
 
-                            // uint8x8_t small_result;
-                            // small_result = vadd_u8(result_low, result_high);
+                                vld1_lane_u8(&test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col], vector_comp, pixel_col);
+                                vld1_lane_u8(&test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col], vector_comp, pixel_col + 1);
+                                vld1_lane_u8(&test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col], vector_comp, pixel_col + 2);
+                                vld1_lane_u8(&test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col], vector_comp, pixel_col + 3);
+                                vld1_lane_u8(&test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col], vector_comp, pixel_col + 4);
+                                vld1_lane_u8(&test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col], vector_comp, pixel_col + 5);
+                                vld1_lane_u8(&test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col], vector_comp, pixel_col + 6);
+                                vld1_lane_u8(&test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col], vector_comp, pixel_col + 7);
+                                vld1_lane_u8(&test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col], vector_comp, pixel_col + 8);
 
-                            // uint8_t temp_storage [8];
+                                /* To be deleted:
+                                *
+                                *
+                                printf("After declaration, before intialization\n");
+                                const uint8_t ref_test_array [8] = {0};
+                                uint8_t comp_test_array [16];
+                                vector_ref = vld1_u8(ref_test_array); // load the array from memory into a vector
+                                printf("After first initalization\n");
+                                vector_comp = vld1q_u8(comp_test_array); // load the array from memory into a vector
+                                printf("After second initliazation\n");
+                                *
+                                * 
+                                */
 
-                            // vst1_u8(temp_storage, small_result);
 
-                            // temp_sad = temp_sad + temp_storage[0] + temp_storage[1] + temp_storage[2] + temp_storage[3] + temp_storage[4] + temp_storage[5] + temp_storage[6] + temp_storage[7];
- 
+
+                                // Perform the Absolute Differences operation:
+                                // uint8x16_t result;
+                                // result = vabdq_u8(vector_ref, vector_comp);
+
+                                // uint8x8_t result_low;
+                                // uint8x8_t result_high;
+                                // result_low = vget_low_u8(result);
+                                // result_high = vget_high_u8(result);
+
+                                // uint8x8_t small_result;
+                                // small_result = vadd_u8(result_low, result_high);
+
+                                // uint8_t temp_storage [8];
+
+                                // vst1_u8(temp_storage, small_result);
+
+                                // temp_sad = temp_sad + temp_storage[0] + temp_storage[1] + temp_storage[2] + temp_storage[3] + temp_storage[4] + temp_storage[5] + temp_storage[6] + temp_storage[7];
+                            }
                         }
                         if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )
                         {
