@@ -209,6 +209,7 @@ int main(int argc, char *argv[])
                                 
                                 // Fill the vectors:
                                 vld1_lane_u8(const_ref_array, vector_ref, 0);
+                                printf("It loaded a single fucking elemen\n");
                                 vld1_lane_u8(const_ref_array, vector_ref, 1);
                                 vld1_lane_u8(const_ref_array, vector_ref, 2);
                                 vld1_lane_u8(const_ref_array, vector_ref, 3);
