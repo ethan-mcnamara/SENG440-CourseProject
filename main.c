@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
                             for (uint8_t pixel_col = 0; pixel_col , SIZEOFBLOCK; pixel_col += 8)
                             {
                                 uint8x8_t vector_ref = {0,}; // declare a vector of 16 8-bit lanes
-                                uint8x16_t vector_comp = {0,}; // declare a vector of 16 8-bit lanes
+                                uint8x8_t vector_comp = {0,}; // declare a vector of 16 8-bit lanes
 
                                 uint8_t vector_column = pixel_col % 8;
 
