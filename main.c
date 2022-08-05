@@ -134,10 +134,6 @@ int main(int argc, char *argv[])
         file_name = argv[1];
     }
 
-    
-    //for each block in frame
-    //    find most similar (smallest SAD) other block (limit search to nearby blocks)
-
     fptr = fopen("test_images/Image1.bmp", "rb");
     if(fptr == NULL)
     {
@@ -192,6 +188,17 @@ int main(int argc, char *argv[])
                                 uint8x8_t vector_comp = {0,}; // declare a vector of 16 8-bit lanes
 
                                 uint8_t vector_column = pixel_col % 8;
+
+                                const uint8_t test_array [8] = {test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][0],
+                                                                test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][1],
+                                                                test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][2],
+                                                                test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][3],
+                                                                test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][4],
+                                                                test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][5],
+                                                                test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][6],
+                                                                test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][7]};
+
+                                printf("Test array [0]: %d\n", test_array[0]);
 
                                 // Fill the vectors:
                                 vld1_lane_u8(&test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column], vector_ref, pixel_col);
