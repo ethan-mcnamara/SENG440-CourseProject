@@ -207,25 +207,25 @@ int main(int argc, char *argv[])
                                                                         test_film->frame[frame].block[block_row_comp][block_col_comp].pixel[pixel_row][vector_column + 6],
                                                                         test_film->frame[frame].block[block_row_comp][block_col_comp].pixel[pixel_row][vector_column + 7]};                                
                                 // Fill the vectors:
-                                vld1_lane_u8(&const_ref_array, vector_ref, vector_column);
-                                vld1_lane_u8(&const_ref_array, vector_ref, vector_column + 1);
-                                vld1_lane_u8(&const_ref_array, vector_ref, vector_column + 2);
-                                vld1_lane_u8(&const_ref_array, vector_ref, vector_column + 3);
-                                vld1_lane_u8(&const_ref_array, vector_ref, vector_column + 4);
-                                vld1_lane_u8(&const_ref_array, vector_ref, vector_column + 5);
-                                vld1_lane_u8(&const_ref_array, vector_ref, vector_column + 6);
-                                vld1_lane_u8(&const_ref_array, vector_ref, vector_column + 7);
+                                vld1_lane_u8(const_ref_array, vector_ref, vector_column);
+                                vld1_lane_u8(const_ref_array, vector_ref, vector_column + 1);
+                                vld1_lane_u8(const_ref_array, vector_ref, vector_column + 2);
+                                vld1_lane_u8(const_ref_array, vector_ref, vector_column + 3);
+                                vld1_lane_u8(const_ref_array, vector_ref, vector_column + 4);
+                                vld1_lane_u8(const_ref_array, vector_ref, vector_column + 5);
+                                vld1_lane_u8(const_ref_array, vector_ref, vector_column + 6);
+                                vld1_lane_u8(const_ref_array, vector_ref, vector_column + 7);
 
                                 printf("Between ref and comp vector inializations\n");
 
-                                vld1_lane_u8(&const_comp_array, vector_comp, vector_column);
-                                vld1_lane_u8(&const_comp_array, vector_comp, vector_column + 1);
-                                vld1_lane_u8(&const_comp_array, vector_comp, vector_column + 2);
-                                vld1_lane_u8(&const_comp_array, vector_comp, vector_column + 3);
-                                vld1_lane_u8(&const_comp_array, vector_comp, vector_column + 4);
-                                vld1_lane_u8(&const_comp_array, vector_comp, vector_column + 5);
-                                vld1_lane_u8(&const_comp_array, vector_comp, vector_column + 6);
-                                vld1_lane_u8(&const_comp_array, vector_comp, vector_column + 7);
+                                vld1_lane_u8(const_comp_array, vector_comp, vector_column);
+                                vld1_lane_u8(const_comp_array, vector_comp, vector_column + 1);
+                                vld1_lane_u8(const_comp_array, vector_comp, vector_column + 2);
+                                vld1_lane_u8(const_comp_array, vector_comp, vector_column + 3);
+                                vld1_lane_u8(const_comp_array, vector_comp, vector_column + 4);
+                                vld1_lane_u8(const_comp_array, vector_comp, vector_column + 5);
+                                vld1_lane_u8(const_comp_array, vector_comp, vector_column + 6);
+                                vld1_lane_u8(const_comp_array, vector_comp, vector_column + 7);
                                 // printf("After declaration, before intialization\n");
                                 // const uint8_t ref_test_array [8] = {0};
                                 // uint8_t comp_test_array [16];
