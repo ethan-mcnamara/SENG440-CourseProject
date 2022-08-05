@@ -187,7 +187,7 @@ int main(int argc, char *argv[])
                                 uint8x8_t vector_ref = {0,}; // declare a vector of 16 8-bit lanes
                                 uint8x8_t vector_comp = {0,}; // declare a vector of 16 8-bit lanes
 
-                                uint8_t vector_column = pixel_col % 8;
+                                const uint8_t vector_column = pixel_col % 8;
 
                                 const uint8_t const_ref_array [8] = {   test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column],
                                                                         test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column + 1],
@@ -206,6 +206,7 @@ int main(int argc, char *argv[])
                                                                         test_film->frame[frame].block[block_row_comp][block_col_comp].pixel[pixel_row][vector_column + 5],
                                                                         test_film->frame[frame].block[block_row_comp][block_col_comp].pixel[pixel_row][vector_column + 6],
                                                                         test_film->frame[frame].block[block_row_comp][block_col_comp].pixel[pixel_row][vector_column + 7]};                                
+                                
                                 // Fill the vectors:
                                 vld1_lane_u8(const_ref_array, vector_ref, vector_column);
                                 vld1_lane_u8(const_ref_array, vector_ref, vector_column + 1);
