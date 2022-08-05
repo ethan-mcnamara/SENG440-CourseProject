@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
                                 
                                 // Fill the vectors:
                                 vld1_lane_u8(const_ref_array, vector_ref, vector_column);
-                                vld1_lane_u8(const_ref_array, vector_ref, vector_column + 1);
+                                vld1_lane_u8(const_ref_array, vector_ref, 1);
                                 vld1_lane_u8(const_ref_array, vector_ref, vector_column + 2);
                                 vld1_lane_u8(const_ref_array, vector_ref, vector_column + 3);
                                 vld1_lane_u8(const_ref_array, vector_ref, vector_column + 4);
