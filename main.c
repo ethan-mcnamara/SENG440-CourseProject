@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
+#include <arm_neon.h>
 
 #define SIZEOFBLOCK 16
 #define NUMFRAMES 2
@@ -57,9 +58,11 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 
     uint8_t first_iteration = 1;
 
-    for (int i = 0; i < NUMBLOCKS; ++i)
+    int i;
+    for (i = 0; i < NUMBLOCKS; ++i)
     {
-        for (int j = 0; j < NUMBLOCKS; ++j)
+        int j;
+        for (j = 0; j < NUMBLOCKS; ++j)
         {
             cur_frame->differences[i][j] = UINT32_MAX;
         }
@@ -157,36 +160,28 @@ int main(int argc, char *argv[])
     process_frame(test_frame, fptr);
     test_film->frame[1] = *test_frame;
 
-    /*for (int i = 0; i < 16; ++i)
-    {
-        for (int j = 0; j < 16; ++j)
-        {
-            for (int k = 0; k < 16; ++k)
-            {
-                for (int t = 0; t < 16; ++t)
-                {
-                    printf("Block[%d][%d], Pixel[%d][%d] = '%d'\n", i, j, k, t, test_frame->block[i][j].pixel[k][t]);
-                }
-            }
-        }
-    }*/
+    uint8_t frame
 
-
-    for (uint8_t frame = 0; frame < NUMFRAMES - 1; ++frame) // every frame
+    for (frame = 0; frame < NUMFRAMES - 1; ++frame) // every frame
     {
-        for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
+        uint8_t block_row_ref;
+        for (block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
         {
-            for (uint8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
+            uint8_t block_col_ref;
+            for (block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
             {
-                for (uint8_t block_row_comp = max(0, block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
+                uint8_t block_row_comp;
+                for (block_row_comp = max(0, block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
                 {
-                    printf("block_row_ref: %d, block_row_comp: %d\n", block_row_ref, block_row_comp);
-                    for (uint8_t block_col_comp = max(0, block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
+                    uint8_t block_col_comp
+                    for (block_col_comp = max(0, block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
                     {
                         uint32_t temp_sad = 0;
-                        for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
+                        uint8_t pixel_row
+                        for (pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                         {
-                            for (uint8_t pixel_col = 0; pixel_col < SIZEOFBLOCK; ++pixel_col) // every column in cur_block (cur_pixel)
+                            uint8_t pixel_col
+                            for (pixel_col = 0; pixel_col < SIZEOFBLOCK; ++pixel_col) // every column in cur_block (cur_pixel)
                             {
                                 int diff = test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][pixel_col] - test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col];
                                 // printf("Block[%d][%d], difference: %d\n", block_row_ref, block_col_ref, diff);
@@ -203,13 +198,8 @@ int main(int argc, char *argv[])
 
                             }   
                         }
-                        /*if (temp_sad == 0)
-                        {
-                            printf("Block[%d][%d] compared to Block[%d][%d] in other frame, diff is 0\n", block_row_ref, block_col_ref, block_row_comp, block_col_comp);
-                        }*/
-                        //double new_distance = sqrt((block_row_comp - block_row_ref) * (block_row_comp - block_row_ref) + (block_col_ref - block_col_comp) * (block_col_ref - block_col_comp));
-                        //double cur_distance = sqrt(test_film->frame[frame].vectors[block_row_ref][block_col_ref].x * test_film->frame[frame].vectors[block_row_ref][block_col_ref].x + test_film->frame[frame].vectors[block_row_ref][block_col_ref].y * test_film->frame[frame].vectors[block_row_ref][block_col_ref].y);
-                        if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )//|| (new_distance < cur_distance && test_film->frame[frame].differences[block_row_ref][block_col_ref] == temp_sad))
+            
+                        if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )
                         {
                             // printf("In if condition, temp_sad = %d, old value = %d\n", temp_sad, test_film->frame[frame].differences[block_row_ref][block_col_ref]);
                             test_film->frame[frame].differences[block_row_ref][block_col_ref] = temp_sad;
@@ -222,9 +212,11 @@ int main(int argc, char *argv[])
         }
     }
     
-    for (int i = 0; i < NUMBLOCKS; ++i)
+    int i;
+    for (i = 0; i < NUMBLOCKS; ++i)
     {
-        for (int j = 0; j < NUMBLOCKS; ++j)
+        int j;
+        for (j = 0; j < NUMBLOCKS; ++j)
         {
             int temp_diff = test_film->frame[0].differences[i][j];
             int temp_x = test_film->frame[0].vectors[i][j].x;
