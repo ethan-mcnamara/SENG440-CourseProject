@@ -48,9 +48,11 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 
     uint8_t first_iteration = 1;
 
-    for (int i = 0; i < NUMBLOCKS; ++i)
+    int i;
+    for (i = 0; i < NUMBLOCKS; ++i)
     {
-        for (int j = 0; j < NUMBLOCKS; ++j)
+        int j;
+        for (j = 0; j < NUMBLOCKS; ++j)
         {
             cur_frame->differences[i][j] = UINT32_MAX;
         }
@@ -148,35 +150,27 @@ int main(int argc, char *argv[])
     process_frame(test_frame, fptr);
     test_film->frame[1] = *test_frame;
 
-    /*for (int i = 0; i < 16; ++i)
+    int i;
+    for (i = 0; i < NUMFRAMES - 1; ++i) // every frame
     {
-        for (int j = 0; j < 16; ++j)
+        int j;
+        for (j = 0; j < NUMBLOCKS; ++j) // every row in frame (block)
         {
-            for (int k = 0; k < 16; ++k)
+            int k;
+            for (k = 0; k < NUMBLOCKS; ++k) // every column in frame (block)
             {
-                for (int t = 0; t < 16; ++t)
+                int w;
+                for (w = 0; w < NUMBLOCKS; ++w) // every block row in other frame
                 {
-                    printf("Block[%d][%d], Pixel[%d][%d] = '%d'\n", i, j, k, t, test_frame->block[i][j].pixel[k][t]);
-                }
-            }
-        }
-    }*/
-
-
-    for (int i = 0; i < NUMFRAMES - 1; ++i) // every frame
-    {
-        for (int j = 0; j < NUMBLOCKS; ++j) // every row in frame (block)
-        {
-            for (int k = 0; k < NUMBLOCKS; ++k) // every column in frame (block)
-            {
-                for (int w = 0; w < NUMBLOCKS; ++w) // every block row in other frame
-                {
-                    for (int f = 0; f < NUMBLOCKS; ++f) // every block column in other frame
+                    int f;
+                    for (f = 0; f < NUMBLOCKS; ++f) // every block column in other frame
                     {
                         uint32_t temp_sad = 0;
-                        for (int s = 0; s < SIZEOFBLOCK; ++s) // every row in cur_block (cur_pixel)
+                        int s;
+                        for (s = 0; s < SIZEOFBLOCK; ++s) // every row in cur_block (cur_pixel)
                         {
-                            for (int r = 0; r < SIZEOFBLOCK; ++r) // every column in cur_block (cur_pixel)
+                            int r;
+                            for (r = 0; r < SIZEOFBLOCK; ++r) // every column in cur_block (cur_pixel)
                             {
                                 uint8x8_t vector_ref = {0,};
                                 uint8x8_t vector_com = {0,};
@@ -216,14 +210,16 @@ int main(int argc, char *argv[])
         }
     }
     
-    for (int i = 0; i < NUMBLOCKS; ++i)
+    int p;
+    for (p = 0; p < NUMBLOCKS; ++p)
     {
-        for (int j = 0; j < NUMBLOCKS; ++j)
+        int q;
+        for (q = 0; q < NUMBLOCKS; ++q)
         {
-            int temp_diff = test_film->frame[0].differences[i][j];
-            int temp_x = test_film->frame[0].vectors[i][j].x;
-            int temp_y = test_film->frame[0].vectors[i][j].y;
-            printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
+            int temp_diff = test_film->frame[0].differences[p][q];
+            int temp_x = test_film->frame[0].vectors[p][q].x;
+            int temp_y = test_film->frame[0].vectors[p][q].y;
+            printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", p, q, temp_x, temp_y, temp_diff);
         }
     }
 
