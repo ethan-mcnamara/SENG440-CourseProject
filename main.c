@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
-#include <arm_neon.h>
+#include "arm_neon.h"
 
 #define SIZEOFBLOCK 16
 #define NUMFRAMES 2
@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
         file_name = argv[1];
     }
 
-    fptr = fopen("test_images/Image1.bmp", "rb");
+    fptr = fopen("Image1.bmp", "rb");
     if(fptr == NULL)
     {
         printf("Error!");   
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 
     test_film->frame[0] = *test_frame;
     fclose(fptr);
-    fptr = fopen("test_images/Image2.bmp", "rb");
+    fptr = fopen("Image2.bmp", "rb");
     process_frame(test_frame, fptr);
     test_film->frame[1] = *test_frame;
 
