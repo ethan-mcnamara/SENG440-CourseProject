@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
     process_frame(test_frame, fptr);
     test_film->frame[1] = *test_frame;
 
-    uint8_t frame
+    uint8_t frame;
 
     for (frame = 0; frame < NUMFRAMES - 1; ++frame) // every frame
     {
@@ -173,14 +173,14 @@ int main(int argc, char *argv[])
                 uint8_t block_row_comp;
                 for (block_row_comp = max(0, block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
                 {
-                    uint8_t block_col_comp
+                    uint8_t block_col_comp;
                     for (block_col_comp = max(0, block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
                     {
                         uint32_t temp_sad = 0;
-                        uint8_t pixel_row
+                        uint8_t pixel_row;
                         for (pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                         {
-                            uint8_t pixel_col
+                            uint8_t pixel_col;
                             for (pixel_col = 0; pixel_col < SIZEOFBLOCK; ++pixel_col) // every column in cur_block (cur_pixel)
                             {
                                 int diff = test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][pixel_col] - test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col];
