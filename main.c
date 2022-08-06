@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
+#include "arm_neon.h"
 
 #define SIZEOFBLOCK 16
 #define NUMFRAMES 2
@@ -177,6 +178,12 @@ int main(int argc, char *argv[])
                         {
                             for (int r = 0; r < SIZEOFBLOCK; ++r) // every column in cur_block (cur_pixel)
                             {
+                                uint8x8_t vector_ref = {0,};
+                                uint8x8_t vector_com = {0,};
+
+                                uint8x8_t ss = vadd_u8t(vector_ref, vector_com);
+
+
                                 int diff = test_film->frame[i].block[j][k].pixel[s][r] - test_film->frame[i + 1].block[w][f].pixel[s][r];
                                 // printf("Block[%d][%d], difference: %d\n", j, k, diff);
                                 if (diff < 0)
