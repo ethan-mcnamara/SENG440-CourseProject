@@ -57,9 +57,11 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 
     uint8_t first_iteration = 1;
 
-    for (int i = 0; i < NUMBLOCKS; ++i)
+    int i;
+    for (i = 0; i < NUMBLOCKS; ++i)
     {
-        for (int j = 0; j < NUMBLOCKS; ++j)
+        int j;
+        for (j = 0; j < NUMBLOCKS; ++j)
         {
             cur_frame->differences[i][j] = UINT32_MAX;
         }
