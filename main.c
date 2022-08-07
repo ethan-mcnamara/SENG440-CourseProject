@@ -16,6 +16,9 @@
 */
 int main(int argc, char *argv[]) 
 {
-    uint32x2_t aa, bb, ss;
-    printf("HELLO");
+    int i;
+    for (i =0; i < 10; i++){
+        uint32x2_t aa, bb, ss;
+        printf("HELLO");
+    }
 }
