@@ -23,9 +23,9 @@ int8_t min(int8_t val_1, int8_t val_2)
     return (val_1 > val_2) ? val_2 : val_1;
 }
 
-void process_frame(FILE *fptr)
+uint8x16_t*** void process_frame(FILE *fptr)
 {
-    uint8x16_t Frame1[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
+    uint8x16_t Frame[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
     int block_row;
     for (block_row = 0; block_row < SIZEOFBLOCK; block_row++) {
         int row;
@@ -34,12 +34,12 @@ void process_frame(FILE *fptr)
             int block;
             for (block = 0; block < SIZEOFBLOCK; block++) {
                 fread(&cur_row, sizeof(char)*16, 1, fptr);
-                Frame1[block_row][row][block] = vld1q_u8(cur_row);
+                Frame[block_row][row][block] = vld1q_u8(cur_row);
             }
         }
     }
-    printf("HEELO");
-    return;
+
+    return &Frame;
 }
 
 
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
         exit(1);             
     }
 
-    process_frame(fptr);
+    uint8x16_t*** Frame1 = process_frame(fptr);
     fclose(fptr);
 
     return 0;
