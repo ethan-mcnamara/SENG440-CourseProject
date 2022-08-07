@@ -146,7 +146,15 @@ int main(int argc, char *argv[])
         exit(1);             
     }
     
+    
+    Frame *test_frame = (Frame*)malloc(sizeof(Frame));
+    Film *test_film = (Film*) malloc(sizeof(Film));
+
+    // process_frame(test_frame, fptr);
+
+    test_film->frame[0] = *test_frame;
     fclose(fptr);
+
 
     int i;
     for (i =0; i < 10; i++){
