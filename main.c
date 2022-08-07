@@ -28,7 +28,8 @@ int8_t min(int8_t val_1, int8_t val_2)
 int main(int argc, char *argv[]) 
 {
     char* file_name;
-    FILE *fptr1, *fptr2;
+    FILE *fptr1;
+    FILE *fptr2;
 
     if (argc < 2)
     {
