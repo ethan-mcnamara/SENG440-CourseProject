@@ -84,7 +84,6 @@ int main(int argc, char *argv[])
                     uint8_t px_row;
                     for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
                         uint8x16_t abs_diff = vabdq_u8(Frame2[frame2br][px_row][frame2bc], Frame1[frame1br][px_row][frame1bc]);
-                        temp_sad += vaddvq_u8(abs_diff);
                     }
 
                  }
