@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
 
     test_film->frame[0] = *test_frame;
     fclose(fptr);
-    fptr = fopen("Image2.bmp", "rb");
+    fptr = fopen("Image1.bmp", "rb");
     process_frame(test_frame, fptr);
     test_film->frame[1] = *test_frame;
     /*for (int i = 0; i < 16; ++i)
@@ -165,7 +165,121 @@ int main(int argc, char *argv[])
             }
         }
     }*/
+    for (uint8_t frame = 0; frame < NUMFRAMES - 1; ++frame) // every frame
+    {
+        for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
+        {
+            for (uint8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
+            {
+                for (uint8_t block_row_comp = max(0, block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
+                {
+                    printf("block_row_ref: %d, block_row_comp: %d\n", block_row_ref, block_row_comp);
+                    for (uint8_t block_col_comp = max(0, block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
+                    {
+                        uint32_t temp_sad = 0;
+                        for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
+                        {
+                            for (uint8_t pixel_col = 0; pixel_col , SIZEOFBLOCK; pixel_col += 8)
+                            {
+                                printf("counter");
+                                uint8x8_t vector_ref = {0,}; // declare a vector of 16 8-bit lanes
+                                uint8x8_t vector_comp = {0,}; // declare a vector of 16 8-bit lanes
+
+                                uint8x8_t sum = vadd_u8(vector_ref, vector_comp);
+
+                                /*const uint8_t const_ref_array [8] = {   test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column],
+                                                                        test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column + 1],
+                                                                        test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column + 2],
+                                                                        test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column + 3],
+                                                                        test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column + 4],
+                                                                        test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column + 5],
+                                                                        test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column + 6],
+                                                                        test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column + 7]};
+
+                                const uint8_t const_comp_array [8] = {  test_film->frame[frame].block[block_row_comp][block_col_comp].pixel[pixel_row][vector_column],
+                                                                        test_film->frame[frame].block[block_row_comp][block_col_comp].pixel[pixel_row][vector_column + 1],
+                                                                        test_film->frame[frame].block[block_row_comp][block_col_comp].pixel[pixel_row][vector_column + 2],
+                                                                        test_film->frame[frame].block[block_row_comp][block_col_comp].pixel[pixel_row][vector_column + 3],
+                                                                        test_film->frame[frame].block[block_row_comp][block_col_comp].pixel[pixel_row][vector_column + 4],
+                                                                        test_film->frame[frame].block[block_row_comp][block_col_comp].pixel[pixel_row][vector_column + 5],
+                                                                        test_film->frame[frame].block[block_row_comp][block_col_comp].pixel[pixel_row][vector_column + 6],
+                                                                        test_film->frame[frame].block[block_row_comp][block_col_comp].pixel[pixel_row][vector_column + 7]};                                
+                                
+                                // Fill the vectors:
+                                vld1_lane_u8(const_ref_array, vector_ref, 0);
+                                printf("It loaded a single fucking elemen\n");
+                                vld1_lane_u8(const_ref_array, vector_ref, 1);
+                                vld1_lane_u8(const_ref_array, vector_ref, 2);
+                                vld1_lane_u8(const_ref_array, vector_ref, 3);
+                                vld1_lane_u8(const_ref_array, vector_ref, 4);
+                                vld1_lane_u8(const_ref_array, vector_ref, 5);
+                                vld1_lane_u8(const_ref_array, vector_ref, 6);
+                                vld1_lane_u8(const_ref_array, vector_ref, 7);
+
+                                printf("Between ref and comp vector inializations\n");
+
+                                vld1_lane_u8(const_comp_array, vector_comp, 0);
+                                vld1_lane_u8(const_comp_array, vector_comp, 1);
+                                vld1_lane_u8(const_comp_array, vector_comp, 2);
+                                vld1_lane_u8(const_comp_array, vector_comp, 3);
+                                vld1_lane_u8(const_comp_array, vector_comp, 4);
+                                vld1_lane_u8(const_comp_array, vector_comp, 5);
+                                vld1_lane_u8(const_comp_array, vector_comp, 6);
+                                vld1_lane_u8(const_comp_array, vector_comp, 7);
+                                // printf("After declaration, before intialization\n");
+                                // const uint8_t ref_test_array [8] = {0};
+                                // uint8_t comp_test_array [16];
+                                // vector_ref = vld1_u8(ref_test_array); // load the array from memory into a vector
+                                // printf("After first initalization\n");
+                                // vector_comp = vld1q_u8(comp_test_array); // load the array from memory into a vector
+                                // printf("After second initliazation\n");
+                                
+                                */
+
+
+                                // Perform the Absolute Differences operation:
+                                // uint8x16_t result;
+                                // result = vabdq_u8(vector_ref, vector_comp);
+
+                                // uint8x8_t result_low;
+                                // uint8x8_t result_high;
+                                // result_low = vget_low_u8(result);
+                                // result_high = vget_high_u8(result);
+
+                                // uint8x8_t small_result;
+                                // small_result = vadd_u8(result_low, result_high);
+
+                                // uint8_t temp_storage [8];
+
+                                // vst1_u8(temp_storage, small_result);
+
+                                // temp_sad = temp_sad + temp_storage[0] + temp_storage[1] + temp_storage[2] + temp_storage[3] + temp_storage[4] + temp_storage[5] + temp_storage[6] + temp_storage[7];
+                            }
+                        }
+                        if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )
+                        {
+                            // printf("In if condition, temp_sad = %d, old value = %d\n", temp_sad, test_film->frame[frame].differences[block_row_ref][block_col_ref]);
+                            test_film->frame[frame].differences[block_row_ref][block_col_ref] = temp_sad;
+                            test_film->frame[frame].vectors[block_row_ref][block_col_ref].x = block_row_comp - block_row_ref;
+                            test_film->frame[frame].vectors[block_row_ref][block_col_ref].y = block_col_ref - block_col_comp;
+                        }
+                    }
+                }
+            }
+        }
+    }
     
+    for (int i = 0; i < NUMBLOCKS; ++i)
+    {
+        for (int j = 0; j < NUMBLOCKS; ++j)
+        {
+            int temp_diff = test_film->frame[0].differences[i][j];
+            int temp_x = test_film->frame[0].vectors[i][j].x;
+            int temp_y = test_film->frame[0].vectors[i][j].y;
+            printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
+        }
+    }
+
     printf("max of 0, -3: %d\n", max(0, -3));
     printf("min of 0, 3: %d\n", min(0, 3));
 
