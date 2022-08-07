@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
             uint8_t frame2br;
             for (frame2br = max(0, frame1br - 3); frame2br < min(NUMBLOCKS, frame1br + 3); ++frame2br) {
                 uint8_t frame2bc;
-                 for (rame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
+                 for (frame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
                     uint32_t temp_sad = 0;
                     uint8_t px_row;
                     for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
