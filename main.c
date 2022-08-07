@@ -66,7 +66,7 @@ void process_frame(Frame *cur_frame, FILE *fptr)
             cur_frame->differences[i][j] = UINT32_MAX;
         }
     }
-
+/*
     Block *cur_block = &cur_frame->block[0][0];
 
     fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
@@ -114,7 +114,7 @@ void process_frame(Frame *cur_frame, FILE *fptr)
         cur_pixel_col++;
 
         fread(&cur_pixel, sizeof(uint8_t), 1, fptr) != 1;
-    }
+    } */
 }
 
 /*
@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
     Frame *test_frame = (Frame*)malloc(sizeof(Frame));
     Film *test_film = (Film*) malloc(sizeof(Film));
 
-    // process_frame(test_frame, fptr);
+    process_frame(test_frame, fptr);
 
     test_film->frame[0] = *test_frame;
     fclose(fptr);
