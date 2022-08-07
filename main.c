@@ -83,10 +83,9 @@ int main(int argc, char *argv[])
                     uint32_t temp_sad = 0;
                     uint8_t px_row;
                     for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
-                        uint8x16_t temp = Frame2[frame2br][px_row][frame2bc];
-                        uint8x16_t temp2 = Frame1[frame1br][px_row][frame1bc];
+                        const uint8x16_t temp = Frame2[frame2br][px_row][frame2bc];
+                        const uint8x16_t temp2 = Frame1[frame1br][px_row][frame1bc];
                         uint8x16_t test = vabdq_u8(temp, temp2);
-                        printf("DOES IT REACH HERE");
                     }
 
                  }
