@@ -146,12 +146,7 @@ int main(int argc, char *argv[])
         printf("Error!");   
         exit(1);             
     }
-    
 
-
-    process_frame();
-
-    test_film->frame[0] = *test_frame;
     fclose(fptr);
 
 
