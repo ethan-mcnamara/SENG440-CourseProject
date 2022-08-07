@@ -122,6 +122,42 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 */
 int main(int argc, char *argv[]) 
 {
+    char* file_name;
+    FILE *fptr;
+
+    if (argc < 2)
+    {
+        printf("Please provide a file name\n");
+        exit(-1);
+    }
+    else
+    {
+        file_name = argv[1];
+    }
+
+    
+    //for each block in frame
+    //    find most similar (smallest SAD) other block (limit search to nearby blocks)
+
+    fptr = fopen("Image1.bmp", "rb");
+    if(fptr == NULL)
+    {
+        printf("Error!");   
+        exit(1);             
+    }
+    
+    
+    Frame *test_frame = (Frame*)malloc(sizeof(Frame));
+    Film *test_film = (Film*) malloc(sizeof(Film));
+
+    process_frame(test_frame, fptr);
+
+    test_film->frame[0] = *test_frame;
+    fclose(fptr);
+    fptr = fopen("Image1.bmp", "rb");
+    process_frame(test_frame, fptr);
+    test_film->frame[1] = *test_frame;
+
     int i;
     for (i =0; i < 10; i++){
         uint32x2_t aa, bb, ss;
