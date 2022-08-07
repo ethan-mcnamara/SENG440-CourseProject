@@ -55,7 +55,8 @@ int main(int argc, char *argv[])
     int block_row;
     for (block_row = 0; block_row < SIZEOFBLOCK; block_row++) {
         int row;
-        uint8_t* cur_row1, cur_row2;
+        uint8_t* cur_row1;
+        uint8_t* cur_row2;
         for (row = 0; row < SIZEOFBLOCK; row++){
             int block;
             for (block = 0; block < SIZEOFBLOCK; block++) {
