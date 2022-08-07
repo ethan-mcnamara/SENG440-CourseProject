@@ -47,8 +47,9 @@ int8_t min(int8_t val_1, int8_t val_2)
     return (val_1 > val_2) ? val_2 : val_1;
 }
 
-void process_frame(Frame *cur_frame, FILE *fptr)
+void process_frame()
 {
+    Frame *cur_frame = (Frame*)malloc(sizeof(Frame));
     uint8_t cur_pixel;
     int cur_pixel_row = 0;
     int cur_pixel_col = 0;
@@ -146,11 +147,9 @@ int main(int argc, char *argv[])
         exit(1);             
     }
     
-    
-    Frame *test_frame = (Frame*)malloc(sizeof(Frame));
-    Film *test_film = (Film*) malloc(sizeof(Film));
 
-    process_frame(test_frame, fptr);
+
+    process_frame();
 
     test_film->frame[0] = *test_frame;
     fclose(fptr);
