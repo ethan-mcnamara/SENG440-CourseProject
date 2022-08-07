@@ -41,8 +41,8 @@ int main(int argc, char *argv[])
         file_name = argv[1];
     }
 
-    uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK];
-    uint8x16_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK];
+    uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
+    uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
 
     fptr1 = fopen("Image1.bmp", "rb");
     fptr2 = fopen("Image1.bmp", "rb");
@@ -63,8 +63,8 @@ int main(int argc, char *argv[])
             for (block_col = 0; block_col < NUMBLOCKS; block_col++) {
                 fread(&cur_row1, sizeof(char)*16, 1, fptr1);
                 fread(&cur_row2, sizeof(char)*16, 1, fptr2);
-                Frame1[block_row][row][block_col] = vld1q_u8(cur_row1);
-                Frame2[block_row][row][block_col] = vld1q_u8(cur_row2);
+                Frame1[block_row][row][block_col] = cur_row1;
+                Frame2[block_row][row][block_col] = cur_row2;
             }
         }
     }
@@ -83,9 +83,24 @@ int main(int argc, char *argv[])
                     uint32_t temp_sad = 0;
                     uint8_t px_row;
                     for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
-                        const uint8x16_t temp = Frame2[frame2br][px_row][frame2bc];
-                        const uint8x16_t temp2 = Frame1[frame1br][px_row][frame1bc];
-                        uint8x16_t test = vabdq_u8(temp, temp2);
+                        const uint8x16_t Frame2Vector = {Frame2[frame2br][px_row][frame2bc][0], Frame2[frame2br][px_row][frame2bc][1],
+                                                        Frame2[frame2br][px_row][frame2bc][2], Frame2[frame2br][px_row][frame2bc][3],
+                                                        Frame2[frame2br][px_row][frame2bc][4], Frame2[frame2br][px_row][frame2bc][5],
+                                                        Frame2[frame2br][px_row][frame2bc][6], Frame2[frame2br][px_row][frame2bc][7],
+                                                        Frame2[frame2br][px_row][frame2bc][8], Frame2[frame2br][px_row][frame2bc][9],
+                                                        Frame2[frame2br][px_row][frame2bc][10], Frame2[frame2br][px_row][frame2bc][11],
+                                                        Frame2[frame2br][px_row][frame2bc][12], Frame2[frame2br][px_row][frame2bc][13],
+                                                        Frame2[frame2br][px_row][frame2bc][14], Frame2[frame2br][px_row][frame2bc][15]}
+
+                        const uint8x16_t Frame1Vector = {Frame1[frame1br][px_row][frame1bc][0],Frame1[frame1br][px_row][frame1bc][1],
+                                                        Frame1[frame1br][px_row][frame1bc][2], Frame1[frame1br][px_row][frame1bc][3],
+                                                        Frame1[frame1br][px_row][frame1bc][4], Frame1[frame1br][px_row][frame1bc][5],
+                                                        Frame1[frame1br][px_row][frame1bc][6], Frame1[frame1br][px_row][frame1bc][7],
+                                                        Frame1[frame1br][px_row][frame1bc][8], Frame1[frame1br][px_row][frame1bc][9],
+                                                        Frame1[frame1br][px_row][frame1bc][10], Frame1[frame1br][px_row][frame1bc][11],
+                                                        Frame1[frame1br][px_row][frame1bc][12], Frame1[frame1br][px_row][frame1bc][13],
+                                                        Frame1[frame1br][px_row][frame1bc][14], Frame1[frame1br][px_row][frame1bc][15]}
+                        uint8x16_t test = vabdq_u8(Frame1Vector, Frame2Vector);
                     }
 
                  }
