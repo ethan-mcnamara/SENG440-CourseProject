@@ -31,7 +31,7 @@ void process_frame(FILE *fptr)
         uint8_t* cur_row;
         for (row = 0; row < SIZEOFBLOCK; row++){
             int block;
-            for (block = 0; iterator < SIZEOFBLOCK; iterator++) {
+            for (block = 0; block < SIZEOFBLOCK; block++) {
                 fread(&cur_row, sizeof(char)*16, 1, fptr);
                 Frame1[block_row][row][block] = vld1q_u8(cur_row);
             }
