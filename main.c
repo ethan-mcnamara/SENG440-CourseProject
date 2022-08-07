@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     uint8x16_t Frame2[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
 
     fptr1 = fopen("Image1.bmp", "rb");
-    fptr2 = fopen("Image2.bmp", "rb");
+    fptr2 = fopen("Image1.bmp", "rb");
 
     if(fptr1 == NULL || fptr2 == NULL)
     {
