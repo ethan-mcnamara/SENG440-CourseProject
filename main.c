@@ -40,6 +40,9 @@ int main(int argc, char *argv[])
         file_name = argv[1];
     }
 
+    uint8x16_t Frame1[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
+    uint8x16_t Frame2[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
+
     fptr1 = fopen("Image1.bmp", "rb");
     fptr2 = fopen("Image2.bmp", "rb");
 
@@ -56,9 +59,9 @@ int main(int argc, char *argv[])
         for (row = 0; row < SIZEOFBLOCK; row++){
             int block;
             for (block = 0; block < SIZEOFBLOCK; block++) {
-                fread(&cur_row1, sizeof(char)*16, 1, fptr);
-                fread(&cur_row2, sizeof(char)*16, 1, fptr);
-                Frame1[block_row][row][block] = vld1q_u8(cur_row);
+                fread(&cur_row1, sizeof(char)*16, 1, fptr1);
+                fread(&cur_row2, sizeof(char)*16, 1, fptr2);
+                Frame1[block_row][row][block] = vld1q_u8(cur_row1);
                 Frame2[block_row][row][block] = vld1q_u8(cur_row2);
             }
         }
