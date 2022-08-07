@@ -146,17 +146,7 @@ int main(int argc, char *argv[])
         exit(1);             
     }
     
-    
-    Frame *test_frame = (Frame*)malloc(sizeof(Frame));
-    Film *test_film = (Film*) malloc(sizeof(Film));
-
-    process_frame(test_frame, fptr);
-
-    test_film->frame[0] = *test_frame;
     fclose(fptr);
-    fptr = fopen("Image1.bmp", "rb");
-    process_frame(test_frame, fptr);
-    test_film->frame[1] = *test_frame;
 
     int i;
     for (i =0; i < 10; i++){
