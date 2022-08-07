@@ -66,8 +66,7 @@ int main(int argc, char *argv[])
         exit(1);             
     }
 
-    uint8x16_t Frame[SIZEOFBLOCK];
-    process_frame(fptr, Frame);
+    process_frame(fptr);
     fclose(fptr);
 
     return 0;
