@@ -10,7 +10,7 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 
-uint8x16_t Frame1[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
+
 uint8x16_t Frame2[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
 
 int8_t max(int8_t val_1, int8_t val_2)
@@ -25,6 +25,7 @@ int8_t min(int8_t val_1, int8_t val_2)
 
 void process_frame(FILE *fptr)
 {
+    uint8x16_t Frame1[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
     int block_row;
     for (block_row = 0; block_row < SIZEOFBLOCK; block_row++) {
         int row;
