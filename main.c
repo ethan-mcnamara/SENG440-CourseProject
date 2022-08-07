@@ -23,7 +23,7 @@ int8_t min(int8_t val_1, int8_t val_2)
     return (val_1 > val_2) ? val_2 : val_1;
 }
 
-void process_frame(FILE *fptr, uint8x16_t** Frame)
+void process_frame(FILE *fptr, uint8x16_t*** Frame)
 {
     int block_row;
     for (block_row = 0; block_row < SIZEOFBLOCK; block_row++) {
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
         exit(1);             
     }
     uint8x16_t Frame[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
-    process_frame(fptr, Frame);
+    process_frame(fptr, &Frame);
     fclose(fptr);
 
     return 0;
