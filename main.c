@@ -61,9 +61,8 @@ int main(int argc, char *argv[])
         for (row = 0; row < SIZEOFBLOCK; row++){
             int block_col;
             for (block_col = 0; block_col < NUMBLOCKS; block_col++) {
-                fread(&cur_row1, sizeof(char)*16, 1, fptr1);
+                fread(&Frame1[block_row][row][block_col], sizeof(char)*16, 1, fptr1);
                 fread(&cur_row2, sizeof(char)*16, 1, fptr2);
-                Frame1[block_row][row][block_col] = &cur_row1;
                 Frame2[block_row][row][block_col] = cur_row2;
             }
         }
