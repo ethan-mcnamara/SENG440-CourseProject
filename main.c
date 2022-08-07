@@ -165,42 +165,7 @@ int main(int argc, char *argv[])
             }
         }
     }*/
-    for (uint8_t frame = 0; frame < NUMFRAMES - 1; ++frame) // every frame
-    {
-        for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
-        {
-            for (uint8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
-            {
-                for (uint8_t block_row_comp = max(0, block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
-                {
-                    printf("block_row_ref: %d, block_row_comp: %d\n", block_row_ref, block_row_comp);
-                    for (uint8_t block_col_comp = max(0, block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
-                    {
-                        uint32_t temp_sad = 0;
-                        if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )
-                        {
-                            // printf("In if condition, temp_sad = %d, old value = %d\n", temp_sad, test_film->frame[frame].differences[block_row_ref][block_col_ref]);
-                            test_film->frame[frame].differences[block_row_ref][block_col_ref] = temp_sad;
-                            test_film->frame[frame].vectors[block_row_ref][block_col_ref].x = block_row_comp - block_row_ref;
-                            test_film->frame[frame].vectors[block_row_ref][block_col_ref].y = block_col_ref - block_col_comp;
-                        }
-                    }
-                }
-            }
-        }
-    }
     
-    for (int i = 0; i < NUMBLOCKS; ++i)
-    {
-        for (int j = 0; j < NUMBLOCKS; ++j)
-        {
-            int temp_diff = test_film->frame[0].differences[i][j];
-            int temp_x = test_film->frame[0].vectors[i][j].x;
-            int temp_y = test_film->frame[0].vectors[i][j].y;
-            printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
-        }
-    }
-
     printf("max of 0, -3: %d\n", max(0, -3));
     printf("min of 0, 3: %d\n", min(0, 3));
 
