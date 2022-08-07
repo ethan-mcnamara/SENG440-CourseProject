@@ -10,7 +10,7 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 
-
+uint8x16_t Frame[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
 uint8x16_t Frame2[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
 
 int8_t max(int8_t val_1, int8_t val_2)
@@ -23,7 +23,7 @@ int8_t min(int8_t val_1, int8_t val_2)
     return (val_1 > val_2) ? val_2 : val_1;
 }
 
-void process_frame(FILE *fptr, uint8x16_t[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK] Frame)
+void process_frame(FILE *fptr)
 {
     int block_row;
     for (block_row = 0; block_row < SIZEOFBLOCK; block_row++) {
@@ -37,7 +37,7 @@ void process_frame(FILE *fptr, uint8x16_t[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK]
             }
         }
     }
-    printf("HELLO THERE\n");
+
     return;
 }
 
@@ -70,8 +70,7 @@ int main(int argc, char *argv[])
         printf("Error!");   
         exit(1);             
     }
-    uint8x16_t Frame[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
-    process_frame(fptr, &Frame);
+    process_frame(fptr);
     fclose(fptr);
 
     return 0;
