@@ -63,7 +63,7 @@ void process_frame(Frame *cur_frame, FILE *fptr)
         int j;
         for (j = 0; j < NUMBLOCKS; ++j)
         {
-            cur_frame->differences[i][j] = UINT32_MAX;
+            cur_frame->differences[i][j] = 3;
         }
     }
 /*
