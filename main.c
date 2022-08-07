@@ -41,8 +41,8 @@ int main(int argc, char *argv[])
         file_name = argv[1];
     }
 
-    uint8x16_t Frame1[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
-    uint8x16_t Frame2[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
+    uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK];
+    uint8x16_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK];
 
     fptr1 = fopen("Image1.bmp", "rb");
     fptr2 = fopen("Image1.bmp", "rb");
@@ -54,17 +54,17 @@ int main(int argc, char *argv[])
     }
 
     int block_row;
-    for (block_row = 0; block_row < SIZEOFBLOCK; block_row++) {
+    for (block_row = 0; block_row < NUMBLOCKS; block_row++) {
         int row;
         uint8_t* cur_row1;
         uint8_t* cur_row2;
         for (row = 0; row < SIZEOFBLOCK; row++){
-            int block;
-            for (block = 0; block < SIZEOFBLOCK; block++) {
+            int block_col;
+            for (block_col = 0; block_col < NUMBLOCKS; block_col++) {
                 fread(&cur_row1, sizeof(char)*16, 1, fptr1);
                 fread(&cur_row2, sizeof(char)*16, 1, fptr2);
-                Frame1[block_row][row][block] = vld1q_u8(cur_row1);
-                Frame2[block_row][row][block] = vld1q_u8(cur_row2);
+                Frame1[block_row][row][block_col] = vld1q_u8(cur_row1);
+                Frame2[block_row][row][block_col] = vld1q_u8(cur_row2);
             }
         }
     }
@@ -72,6 +72,25 @@ int main(int argc, char *argv[])
     fclose(fptr1);
     fclose(fptr2);
 
+    uint8_t frame1br;
+    for (frame1br = 0; frame1br < NUMBLOCKS; frame1br++) {
+        uint8_t frame1bc;
+        for (frame1bc = 0; frame1bc < NUMBLOCKS; frame1bc++) {
+            uint8_t frame2br;
+            for (frame2br = max(0, frame1br - 3); frame2br < min(NUMBLOCKS, frame1br + 3); ++frame2br) {
+                uint8_t frame2bc;
+                 for (uint8_t frame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
+                    uint32_t temp_sad = 0;
+
+                    for (uint8_t px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
+                        uint8x16_t abs_diff = vabdq_u8(Frame2[frame2br][px_row][frame2bc], Frame1[frame1br][px_row][frame1bc]);
+                        temp_sad += vaddvq_u8(abs_diff);
+                    }
+
+                 }
+            }
+        }
+    }
 
     return 0;
 }
