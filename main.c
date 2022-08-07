@@ -79,10 +79,10 @@ int main(int argc, char *argv[])
             uint8_t frame2br;
             for (frame2br = max(0, frame1br - 3); frame2br < min(NUMBLOCKS, frame1br + 3); ++frame2br) {
                 uint8_t frame2bc;
-                 for (uint8_t frame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
+                 for (rame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
                     uint32_t temp_sad = 0;
-
-                    for (uint8_t px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
+                    uint8_t px_row;
+                    for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
                         uint8x16_t abs_diff = vabdq_u8(Frame2[frame2br][px_row][frame2bc], Frame1[frame1br][px_row][frame1bc]);
                         temp_sad += vaddvq_u8(abs_diff);
                     }
