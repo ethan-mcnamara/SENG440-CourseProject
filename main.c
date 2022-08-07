@@ -29,8 +29,9 @@ void process_frame(FILE *fptr)
 
     for (iterator = 0; iterator < SIZEOFBLOCK; iterator++) {
         fread(&cur_row, sizeof(char)*16, 1, fptr);
+        uint8x16_t v = {0,};
         uint8x16_t temp = {0, };
-        Frame[iterator] = temp;
+        Frame[iterator] = vaddq_u8(v, temp);
     }
 
     return;
