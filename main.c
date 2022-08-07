@@ -28,7 +28,6 @@ void process_frame(FILE *fptr, uint8x16_t* Frame)
 
     for (iterator = 0; iterator < SIZEOFBLOCK; iterator++) {
         fread(&cur_row, sizeof(char)*16, 1, fptr);
-        Frame[iterator] = vld1q_u8(cur_row);
     }
 
     return;
@@ -65,7 +64,7 @@ int main(int argc, char *argv[])
     }
 
     uint8x16_t Frame[SIZEOFBLOCK];
-    process_frame(fptr, Frame);
+    // process_frame(fptr, Frame);
     fclose(fptr);
 
     return 0;
