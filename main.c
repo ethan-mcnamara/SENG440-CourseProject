@@ -182,6 +182,8 @@ int main(int argc, char *argv[])
                             for (uint8_t pixel_col = 0; pixel_col , SIZEOFBLOCK; pixel_col += 8)
                             {
                                 printf("HELLO\n");
+                                uint32x2_t v1 = {0, 0};
+                                uint32x2_t v2 = {0, 0};
                             }
                         }
                         if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )
