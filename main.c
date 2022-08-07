@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
         printf("Error!");   
         exit(1);             
     }
-
+    process_frame();
     fclose(fptr);
 
 
