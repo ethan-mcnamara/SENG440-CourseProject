@@ -10,6 +10,8 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 
+uint8x16_t Frame1[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
+uint8x16_t Frame2[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
 
 int8_t max(int8_t val_1, int8_t val_2)
 {
@@ -23,16 +25,19 @@ int8_t min(int8_t val_1, int8_t val_2)
 
 void process_frame(FILE *fptr)
 {
-    int iterator;
-    uint8_t* cur_row;
-    uint8x16_t Frame[SIZEOFBLOCK];
-
-    for (iterator = 0; iterator < SIZEOFBLOCK; iterator++) {
-        fread(&cur_row, sizeof(char)*16, 1, fptr);
-        printf("HELLO\n");
-        Frame[iterator] = vld1q_u8(cur_row);
+    int block_row;
+    for (block_row = 0; block_row < SIZEOFBLOCK; block_row++) {
+        int row;
+        uint8_t* cur_row;
+        for (row = 0; row < SIZEOFBLOCK; row++){
+            int block;
+            for (block = 0; iterator < SIZEOFBLOCK; iterator++) {
+                fread(&cur_row, sizeof(char)*16, 1, fptr);
+                Frame1[block_row][row][block] = vld1q_u8(cur_row);
+            }
+        }
     }
-
+    printf("HEELO");
     return;
 }
 
