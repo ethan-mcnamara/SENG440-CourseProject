@@ -61,10 +61,9 @@ void process_frame(Frame *cur_frame, FILE *fptr)
     for (i = 0; i < NUMBLOCKS; ++i)
     {
         int j;
-        int t = 3;
         for (j = 0; j < NUMBLOCKS; ++j)
         {
-             t = 4;
+            cur_frame->differences[i][j] = 3;
         }
     }
 /*
