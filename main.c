@@ -21,10 +21,11 @@ int8_t min(int8_t val_1, int8_t val_2)
     return (val_1 > val_2) ? val_2 : val_1;
 }
 
-void process_frame(FILE *fptr, uint8x16_t* Frame)
+void process_frame(FILE *fptr)
 {
     int iterator;
     uint8_t* cur_row;
+    uint8x16_t Frame[SIZEOFBLOCK];
 
     for (iterator = 0; iterator < SIZEOFBLOCK; iterator++) {
         fread(&cur_row, sizeof(char)*16, 1, fptr);
