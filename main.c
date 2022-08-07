@@ -85,6 +85,7 @@ int main(int argc, char *argv[])
                     for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
                         uint8x16_t temp = Frame2[frame2br][px_row][frame2bc];
                         uint8x16_t temp2 = Frame1[frame1br][px_row][frame1bc];
+                        uint8x16_t test = vabdq_u8(temp, temp2);
                     }
 
                  }
