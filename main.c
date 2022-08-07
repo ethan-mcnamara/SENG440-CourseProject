@@ -10,8 +10,7 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 
-uint8x16_t Frame[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
-uint8x16_t Frame2[SIZEOFBLOCK][SIZEOFBLOCK][SIZEOFBLOCK];
+
 
 int8_t max(int8_t val_1, int8_t val_2)
 {
@@ -23,55 +22,51 @@ int8_t min(int8_t val_1, int8_t val_2)
     return (val_1 > val_2) ? val_2 : val_1;
 }
 
-void process_frame(FILE *fptr)
-{
-    int block_row;
-    for (block_row = 0; block_row < SIZEOFBLOCK; block_row++) {
-        int row;
-        uint8_t* cur_row;
-        for (row = 0; row < SIZEOFBLOCK; row++){
-            int block;
-            for (block = 0; block < SIZEOFBLOCK; block++) {
-                fread(&cur_row, sizeof(char)*16, 1, fptr);
-                Frame[block_row][row][block] = vld1q_u8(cur_row);
-            }
-        }
-    }
-
-    return;
-}
-
-
 /*
 * Main function
 */
 int main(int argc, char *argv[]) 
 {
     char* file_name;
-    FILE *fptr;
+    FILE *fptr1, *fptr2;
 
     if (argc < 2)
     {
         printf("Please provide a file name\n");
-        exit(-1);
+        exit(1);
     }
     else
     {
         file_name = argv[1];
     }
 
-    
-    //for each block in frame
-    //    find most similar (smallest SAD) other block (limit search to nearby blocks)
+    fptr1 = fopen("Image1.bmp", "rb");
+    fptr2 = fopen("Image2.bmp", "rb");
 
-    fptr = fopen("Image1.bmp", "rb");
-    if(fptr == NULL)
+    if(fptr1 == NULL || fptr2 == NULL)
     {
         printf("Error!");   
         exit(1);             
     }
-    process_frame(fptr);
-    fclose(fptr);
+
+    int block_row;
+    for (block_row = 0; block_row < SIZEOFBLOCK; block_row++) {
+        int row;
+        uint8_t* cur_row1, cur_row2;
+        for (row = 0; row < SIZEOFBLOCK; row++){
+            int block;
+            for (block = 0; block < SIZEOFBLOCK; block++) {
+                fread(&cur_row1, sizeof(char)*16, 1, fptr);
+                fread(&cur_row2, sizeof(char)*16, 1, fptr);
+                Frame1[block_row][row][block] = vld1q_u8(cur_row);
+                Frame2[block_row][row][block] = vld1q_u8(cur_row2);
+            }
+        }
+    }
+
+    fclose(fptr1);
+    fclose(fptr2);
+
 
     return 0;
 }
