@@ -62,8 +62,7 @@ int main(int argc, char *argv[])
             int block_col;
             for (block_col = 0; block_col < NUMBLOCKS; block_col++) {
                 fread(&Frame1[block_row][row][block_col], sizeof(char)*16, 1, fptr1);
-                fread(&cur_row2, sizeof(char)*16, 1, fptr2);
-                Frame2[block_row][row][block_col] = cur_row2;
+                fread(&Frame2[block_row][row][block_col], sizeof(char)*16, 1, fptr2);
             }
         }
     }
@@ -89,7 +88,7 @@ int main(int argc, char *argv[])
                                                         Frame2[frame2br][px_row][frame2bc][8], Frame2[frame2br][px_row][frame2bc][9],
                                                         Frame2[frame2br][px_row][frame2bc][10], Frame2[frame2br][px_row][frame2bc][11],
                                                         Frame2[frame2br][px_row][frame2bc][12], Frame2[frame2br][px_row][frame2bc][13],
-                                                        Frame2[frame2br][px_row][frame2bc][14], Frame2[frame2br][px_row][frame2bc][15]}
+                                                        Frame2[frame2br][px_row][frame2bc][14], Frame2[frame2br][px_row][frame2bc][15]};
 
                         const uint8x16_t Frame1Vector = {Frame1[frame1br][px_row][frame1bc][0],Frame1[frame1br][px_row][frame1bc][1],
                                                         Frame1[frame1br][px_row][frame1bc][2], Frame1[frame1br][px_row][frame1bc][3],
@@ -98,7 +97,7 @@ int main(int argc, char *argv[])
                                                         Frame1[frame1br][px_row][frame1bc][8], Frame1[frame1br][px_row][frame1bc][9],
                                                         Frame1[frame1br][px_row][frame1bc][10], Frame1[frame1br][px_row][frame1bc][11],
                                                         Frame1[frame1br][px_row][frame1bc][12], Frame1[frame1br][px_row][frame1bc][13],
-                                                        Frame1[frame1br][px_row][frame1bc][14], Frame1[frame1br][px_row][frame1bc][15]}
+                                                        Frame1[frame1br][px_row][frame1bc][14], Frame1[frame1br][px_row][frame1bc][15]};
                         uint8x16_t test = vabdq_u8(Frame1Vector, Frame2Vector);
                     }
 
