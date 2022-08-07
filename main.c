@@ -25,10 +25,10 @@ void process_frame(FILE *fptr, uint8x16_t* Frame)
 {
     int iterator;
     uint8_t* cur_row;
-    uint8x8_t test = {0,};
 
     for (iterator = 0; iterator < SIZEOFBLOCK; iterator++) {
         fread(&cur_row, sizeof(char)*16, 1, fptr);
+        Frame[i] = {0,};
     }
 
     return;
