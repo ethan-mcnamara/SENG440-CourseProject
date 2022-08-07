@@ -37,7 +37,7 @@ void process_frame(FILE *fptr, uint8x16_t** Frame)
             }
         }
     }
-
+    printf("HELLO THERE\n");
     return;
 }
 
