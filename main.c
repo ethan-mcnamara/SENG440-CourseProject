@@ -152,7 +152,6 @@ int main(int argc, char *argv[])
     fptr = fopen("Image2.bmp", "rb");
     process_frame(test_frame, fptr);
     test_film->frame[1] = *test_frame;
-
     /*for (int i = 0; i < 16; ++i)
     {
         for (int j = 0; j < 16; ++j)
@@ -166,8 +165,6 @@ int main(int argc, char *argv[])
             }
         }
     }*/
-
-
     for (uint8_t frame = 0; frame < NUMFRAMES - 1; ++frame) // every frame
     {
         for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
@@ -187,9 +184,9 @@ int main(int argc, char *argv[])
                                 uint8x8_t vector_ref = {0,}; // declare a vector of 16 8-bit lanes
                                 uint8x8_t vector_comp = {0,}; // declare a vector of 16 8-bit lanes
 
-                                const uint8_t vector_column = pixel_col % 8;
+                                uint8x8_t sum = vadd_u8(vector_ref, vector_comp);
 
-                                const uint8_t const_ref_array [8] = {   test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column],
+                                /*const uint8_t const_ref_array [8] = {   test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column],
                                                                         test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column + 1],
                                                                         test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column + 2],
                                                                         test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][vector_column + 3],
@@ -236,7 +233,7 @@ int main(int argc, char *argv[])
                                 // vector_comp = vld1q_u8(comp_test_array); // load the array from memory into a vector
                                 // printf("After second initliazation\n");
                                 
-
+                                */
 
 
                                 // Perform the Absolute Differences operation:
