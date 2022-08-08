@@ -70,6 +70,18 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
 }
 
 
+void print_uint8 (uint8x16_t data) {
+    int i;
+    static uint8_t p[16];
+
+    vst1q_u8 (p, data);
+
+    for (i = 0; i < 16; i++) {
+	printf ("%02d ", p[i]);
+    }
+    printf ("\n");
+}
+
 /*
 * Main function
 */
@@ -115,6 +127,12 @@ int main(int argc, char *argv[])
                         vector_ref = vld1q_u8(Frame1[block_row_ref][block_col_ref][pixel_row]); // load the array from memory into a vector
                         vector_comp = vld1q_u8(Frame2[block_row_comp][block_row_ref][pixel_row]); // load the array from memory into a vector
                         
+                        printf("reference vector:\n");
+                        print_uint8(vector_ref);
+                        printf("\n*****\n\n");
+                        printf("comparison vector:\n");
+                        print_uint8(vector_comp);
+
                         // Perform the Absolute Differences operation:
                         uint8x16_t init_result;
                         init_result = vabdq_u8(vector_ref, vector_comp);
