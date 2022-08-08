@@ -50,69 +50,77 @@ int8_t min(int8_t val_1, int8_t val_2)
 
 void process_frame(Frame *cur_frame, FILE *fptr)
 {
-    uint8_t cur_pixel;
-    int cur_pixel_row = 0;
-    int cur_pixel_col = 0;
-    int cur_block_row = 0;
-    int cur_block_col = 0;
+    
 
-    uint8_t first_iteration = 1;
 
-    for (int i = 0; i < NUMBLOCKS; ++i)
-    {
-        for (int j = 0; j < NUMBLOCKS; ++j)
-        {
-            cur_frame->differences[i][j] = UINT32_MAX;
-        }
-    }
 
-    Block *cur_block = &cur_frame->block[0][0];
 
-    fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
 
-    uint8_t header_counter = 0;
 
-    while (cur_pixel_row < SIZEOFIMAGE - 2)
-    {
-        // Skip over the jpg image header
-        if (header_counter < 6)
-        {
-            header_counter++;
-            continue;
-        }
 
-        if (!first_iteration)
-        {
-            if (cur_block_col == SIZEOFBLOCK)
-            {
-                cur_pixel_col = 0;
-                cur_block_col = 0;
-                cur_pixel_row++;
+    // uint8_t cur_pixel;
+    // int cur_pixel_row = 0;
+    // int cur_pixel_col = 0;
+    // int cur_block_row = 0;
+    // int cur_block_col = 0;
 
-                if (cur_pixel_row % SIZEOFBLOCK ==0)
-                {
-                    cur_block_row++;
-                }
+    // uint8_t first_iteration = 1;
 
-                cur_block = &cur_frame->block[cur_block_row][cur_block_col];
+    // for (int i = 0; i < NUMBLOCKS; ++i)
+    // {
+    //     for (int j = 0; j < NUMBLOCKS; ++j)
+    //     {
+    //         cur_frame->differences[i][j] = UINT32_MAX;
+    //     }
+    // }
 
-            }
-            if (cur_pixel_col % SIZEOFBLOCK == 0)
-            {
-                cur_block = &cur_frame->block[cur_block_row][++cur_block_col];
-            }
-        }
-        else
-        {
-            first_iteration = 0;
-        }
+    // Block *cur_block = &cur_frame->block[0][0];
 
-        cur_block->pixel[cur_pixel_row % SIZEOFBLOCK][cur_pixel_col % SIZEOFBLOCK] = cur_pixel;
-        //printf("%d\n", cur_pixel);
+    // fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
 
-        cur_pixel_col++;
+    // uint8_t header_counter = 0;
 
-        fread(&cur_pixel, sizeof(uint8_t), 1, fptr) != 1;
+    // while (cur_pixel_row < SIZEOFIMAGE - 2)
+    // {
+    //     // Skip over the jpg image header
+    //     if (header_counter < 6)
+    //     {
+    //         header_counter++;
+    //         continue;
+    //     }
+
+    //     if (!first_iteration)
+    //     {
+    //         if (cur_block_col == SIZEOFBLOCK)
+    //         {
+    //             cur_pixel_col = 0;
+    //             cur_block_col = 0;
+    //             cur_pixel_row++;
+
+    //             if (cur_pixel_row % SIZEOFBLOCK ==0)
+    //             {
+    //                 cur_block_row++;
+    //             }
+
+    //             cur_block = &cur_frame->block[cur_block_row][cur_block_col];
+
+    //         }
+    //         if (cur_pixel_col % SIZEOFBLOCK == 0)
+    //         {
+    //             cur_block = &cur_frame->block[cur_block_row][++cur_block_col];
+    //         }
+    //     }
+    //     else
+    //     {
+    //         first_iteration = 0;
+    //     }
+
+    //     cur_block->pixel[cur_pixel_row % SIZEOFBLOCK][cur_pixel_col % SIZEOFBLOCK] = cur_pixel;
+    //     //printf("%d\n", cur_pixel);
+
+    //     cur_pixel_col++;
+
+    //     fread(&cur_pixel, sizeof(uint8_t), 1, fptr) != 1;
     }
 }
 
@@ -136,6 +144,18 @@ int main(int argc, char *argv[])
     }
 
     
+    uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
+    uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
+
+    process_frame(Frame1, Frame2);
+
+    uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
+    
+
+
+
+
+
     //for each block in frame
     //    find most similar (smallest SAD) other block (limit search to nearby blocks)
 
