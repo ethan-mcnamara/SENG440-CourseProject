@@ -67,11 +67,13 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 
     Block *cur_block = &cur_frame->block[0][0];
 
-    fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
+    //fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
 
     uint8_t header_counter = 1;
 
     uint8_t rm_header [54];
+
+    fread(&rm_header, sizeof(uint8_t) * 7 - 2, 1, fptr);
 
     while (cur_pixel_row < SIZEOFIMAGE)
     {
@@ -82,7 +84,7 @@ void process_frame(Frame *cur_frame, FILE *fptr)
         //     fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
         //     continue;
         // }
-        fread(&rm_header, sizeof(uint8_t) * 7 - 2, 1, fptr);
+        
 
         if (!first_iteration)
         {
