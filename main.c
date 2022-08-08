@@ -97,16 +97,16 @@ int main(int argc, char *argv[])
                     }
                     if (1) {
                         printf("%d\n", max_sad);
-                        max_sad = temp_sad;
+                        //max_sad = temp_sad;
                         // Confirm these changes are correct with Ethan
-                        x_displ = frame2bc - frame1bc;
-                        y_displ = frame1br - frame2br;
+                        //x_displ = frame2bc - frame1bc;
+                        //y_displ = frame1br - frame2br;
                     }
                 }
             }
-            Differences[frame1br][frame1bc] = max_sad;
-            x_vector[frame1br][frame1bc] = x_displ;
-            y_vector[frame1br][frame1bc] = y_displ;
+            //Differences[frame1br][frame1bc] = max_sad;
+            //x_vector[frame1br][frame1bc] = x_displ;
+            //y_vector[frame1br][frame1bc] = y_displ;
         }
     }
 
