@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
                         uint8_t px_i;
                         for (px_i = 0; px_i < SIZEOFBLOCK; px_i++) {
                             const uint8_t temp_px = px_i;
-                            temp_sad += vgetq_lane_u8(sad, temp_px);
+                            //temp_sad += vgetq_lane_u8(sad, temp_px);
                         }
                     }
                     if (1) {
