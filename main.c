@@ -74,6 +74,15 @@ int main(int argc, char *argv[])
 
     process_frame(Frame1, Frame2);
 
+    for (int i = 0; i < 16; i++) {
+        for (int j = 0; j < 16; j++) {
+            for (int k = 0; k < 16; k++) {
+                for (int t = 0; t < 16; t++) {
+                    printf("%d\n", Frame1[i][j][k][t]);
+                }
+            }
+        }
+    }
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
     uint32_t x_vectors[NUMBLOCKS][NUMBLOCKS];
     uint32_t y_vectors[NUMBLOCKS][NUMBLOCKS];
@@ -96,38 +105,25 @@ int main(int argc, char *argv[])
                         const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
                         const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
                         const uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
-                        printf("Place: %d, Val: %d\n", 0, temp_sad);
+                        
                         temp_sad += vgetq_lane_u8(sad, 0);
-                        printf("Place: %d, Val: %d\n", 1, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 1);
-                        printf("Place: %d, Val: %d\n", 2, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 2);
-                        printf("Place: %d, Val: %d\n", 3, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 3);
-                        printf("Place: %d, Val: %d\n", 4, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 4);
-                        printf("Place: %d, Val: %d\n", 5, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 5);
-                        printf("Place: %d, Val: %d\n", 6, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 6);
-                        printf("Place: %d, Val: %d\n", 7, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 7);
-                        printf("Place: %d, Val: %d\n", 8, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 8);
-                        printf("Place: %d, Val: %d\n", 9, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 9);
-                        printf("Place: %d, Val: %d\n", 10, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 10);
-                        printf("Place: %d, Val: %d\n", 11, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 12);
-                        printf("Place: %d, Val: %d\n", 12, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 13);
-                        printf("Place: %d, Val: %d\n", 13, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 14);
-                        printf("Place: %d, Val: %d\n", 14, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 15);
-                        printf("Place: %d, Val: %d\n", 15, temp_sad);
                     }
+
+                    printf("%d\n", temp_sad);
                     if (assignment_flag || min_sad > temp_sad) {
                         assignment_flag = 0;
                         min_sad = temp_sad;
@@ -141,7 +137,6 @@ int main(int argc, char *argv[])
             y_vectors[frame1br][frame1bc] = y_displ;
             break;
         }
-        break;
     }
 
     uint8_t print_i;
