@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
+    uint32_t x_vector[NUMBLOCKS][NUMBLOCKS];
 
     fptr1 = fopen("Image1.bmp", "rb");
     fptr2 = fopen("Image1.bmp", "rb");
@@ -74,6 +75,8 @@ int main(int argc, char *argv[])
         uint8_t frame1bc;
         for (frame1bc = 0; frame1bc < NUMBLOCKS; frame1bc++) {
             uint32_t max_sad = 0;
+            uint32_t x_displ = 0;
+            uint32_t y_displ = 0;
             uint8_t frame2br;
             for (frame2br = max(0, frame1br - 3); frame2br < min(NUMBLOCKS, frame1br + 3); ++frame2br) {
                 uint8_t frame2bc;
@@ -93,6 +96,9 @@ int main(int argc, char *argv[])
                     }
                     if (max_sad > temp_sad) {
                         max_sad = temp_sad;
+                        // Confirm these changes are correct with Ethan
+                        x_displ = Frame2bc - Frame1bc;
+                        y_displ = Frame1br - Frame2br;
                     }
                 }
             }
