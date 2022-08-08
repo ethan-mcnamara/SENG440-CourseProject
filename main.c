@@ -33,12 +33,10 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
         exit(1);             
     }
 
-    int block_row;
-    for (block_row = 0; block_row < NUMBLOCKS; block_row++) {
-        int row;
+    for (uint8_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
         uint8_t* cur_row1;
         uint8_t* cur_row2;
-        for (row = 0; row < SIZEOFBLOCK; row++){
+        for (uint8_t row = 0; row < SIZEOFBLOCK; row++){
             int block_col;
             for (block_col = 0; block_col < NUMBLOCKS; block_col++) {
                 fread(&Frame1[block_row][row][block_col], sizeof(char)*16, 1, fptr1);
@@ -72,33 +70,33 @@ int main(int argc, char *argv[])
 
     uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
+
+    process_frame(Frame1, Frame2);
+
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
     uint32_t x_vector[NUMBLOCKS][NUMBLOCKS];
     uint32_t y_vector[NUMBLOCKS][NUMBLOCKS];
-
-    process_frame(Frame1, Frame2);
    
-    uint8_t frame1br;
-    for (frame1br = 0; frame1br < NUMBLOCKS; frame1br++) {
-        uint8_t frame1bc;
-        for (frame1bc = 0; frame1bc < NUMBLOCKS; frame1bc++) {
+
+    for (uint8_t frame1br = 0; frame1br < NUMBLOCKS; frame1br++) {
+        for (uint8_t frame1bc = 0; frame1bc < NUMBLOCKS; frame1bc++) {
+            // Use Local Variables for Good Repository Handling
             uint32_t max_sad = 0;
+            uint32_t temp_sad = 0;
             uint32_t x_displ = 0;
             uint32_t y_displ = 0;
-            uint8_t frame2br;
-            for (frame2br = max(0, frame1br - 3); frame2br < min(NUMBLOCKS, frame1br + 3); ++frame2br) {
-                uint8_t frame2bc;
-                uint32_t temp_sad = 0;
-                for (frame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
-                    uint8_t px_row;
-                    for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
 
+            for (uint8_t frame2br = max(0, frame1br - 3); frame2br < min(NUMBLOCKS, frame1br + 3); ++frame2br) {
+                for (uint8_t frame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
+                    for (uint8_t px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
                         const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
                         const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
                         const uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
+                        temp_sad = vaddlvq_s8(sad);
                     }
                 }
             }
+
             Differences[frame1br][frame1bc] = max_sad;
             x_vector[frame1br][frame1bc] = x_displ;
             y_vector[frame1br][frame1bc] = y_displ;
