@@ -73,7 +73,7 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 
     while (cur_pixel_row < SIZEOFIMAGE)
     {
-        // Skip over the jpg image header
+        // Skip over the bmp image header
         if (header_counter < 54)
         {
             header_counter++;
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
     process_frame(test_frame, fptr);
     test_film->frame[1] = *test_frame;
 
-    /*for (int i = 0; i < 16; ++i)
+    for (int i = 0; i < 16; ++i)
     {
         for (int j = 0; j < 16; ++j)
         {
@@ -166,11 +166,12 @@ int main(int argc, char *argv[])
             {
                 for (int t = 0; t < 16; ++t)
                 {
-                    printf("Block[%d][%d], Pixel[%d][%d] = '%d'\n", i, j, k, t, test_frame->block[i][j].pixel[k][t]);
+                    printf("%5d ", test_film->frame[0].block[i][j].pixel[k][t]);
                 }
+                printf("\n");
             }
         }
-    }*/
+    }
 
 
     for (uint8_t frame = 0; frame < NUMFRAMES - 1; ++frame) // every frame
