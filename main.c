@@ -75,14 +75,16 @@ int main(int argc, char *argv[])
     process_frame(Frame1, Frame2);
 
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
-    uint32_t x_vector[NUMBLOCKS][NUMBLOCKS];
-    uint32_t y_vector[NUMBLOCKS][NUMBLOCKS];
+    uint32_t x_vectors[NUMBLOCKS][NUMBLOCKS];
+    uint32_t y_vectors[NUMBLOCKS][NUMBLOCKS];
    
 
     for (uint8_t frame1br = 0; frame1br < NUMBLOCKS; frame1br++) {
         for (uint8_t frame1bc = 0; frame1bc < NUMBLOCKS; frame1bc++) {
             // Use Local Variables for Good Repository Handling
-            uint32_t max_sad = 0;
+            // min_sad is signed to make the comparison easier
+            uint32_t min_sad = 0;
+            uint8_t assignment_flag = 1;
             uint32_t temp_sad = 0;
             uint32_t x_displ = 0;
             uint32_t y_displ = 0;
@@ -94,6 +96,9 @@ int main(int argc, char *argv[])
                         const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
                         const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
                         const uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
+                        const uint8x8_t sad_high = vget_high_u8(base_sad);
+                        const uint8x8_t sad_low = vget_low_u8(base_sad);
+                        const uint16x8_t added_sad = vaddl_u8(sad_high, sad_low);
                         
                         temp_sad += vgetq_lane_u8(sad, 0);
                         temp_sad += vgetq_lane_u8(sad, 1);
@@ -104,18 +109,17 @@ int main(int argc, char *argv[])
                         temp_sad += vgetq_lane_u8(sad, 6);
                         temp_sad += vgetq_lane_u8(sad, 7);
                         temp_sad += vgetq_lane_u8(sad, 8);
-                        temp_sad += vgetq_lane_u8(sad, 9);
-                        temp_sad += vgetq_lane_u8(sad, 10);
-                        temp_sad += vgetq_lane_u8(sad, 11);
-                        temp_sad += vgetq_lane_u8(sad, 12);
-                        temp_sad += vgetq_lane_u8(sad, 13);
-                        temp_sad += vgetq_lane_u8(sad, 14);
-                        temp_sad += vgetq_lane_u8(sad, 15);
+                    }
+
+                    if (assignment_flag || min_sad > temp_sad) {
+                        assignment_flag = 0;
+                        min_sad = temp_sad;
+                        x_displ = frame2bc - frame1bc;
+                        y_displ = frame1br - frame2br;
                     }
                 }
             }
-
-            Differences[frame1br][frame1bc] = max_sad;
+            Differences[frame1br][frame1bc] = min_sad;
             x_vector[frame1br][frame1bc] = x_displ;
             y_vector[frame1br][frame1bc] = y_displ;
         }
