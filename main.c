@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
     uint32_t y_vector[NUMBLOCKS][NUMBLOCKS];
 
     fptr1 = fopen("Image1.bmp", "rb");
-    fptr2 = fopen("Image1.bmp", "rb");
+    fptr2 = fopen("Image2.bmp", "rb");
 
     if(fptr1 == NULL || fptr2 == NULL)
     {
