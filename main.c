@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
                     }
 
                     if (assignment_flag || min_sad > temp_sad) {
-                        print("%d\n", temp_sad);
+                        printf("%d\n", temp_sad);
                         assignment_flag = 0;
                         min_sad = temp_sad;
                         x_displ = frame2bc - frame1bc;
