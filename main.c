@@ -85,28 +85,28 @@ int main(int argc, char *argv[])
                 for (frame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
                     uint8_t px_row;
                     for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
-                        const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
-                        const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
+                        //const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
+                        //const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
 
-                        uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
+                       // uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
                         // Cannot use accumulate function
-                        uint8_t px_i;
-                        for (px_i = 0; px_i < SIZEOFBLOCK; px_i++) {
-                            temp_sad += vgetq_lane_u8(sad, px_i);
-                        }
+                        //uint8_t px_i;
+                        //for (px_i = 0; px_i < SIZEOFBLOCK; px_i++) {
+                        //    temp_sad += vgetq_lane_u8(sad, px_i);
+                        //}
                     }
                     if (1) {
                         printf("%d\n", max_sad);
-                        //max_sad = temp_sad;
+                        max_sad = temp_sad;
                         // Confirm these changes are correct with Ethan
-                        //x_displ = frame2bc - frame1bc;
-                        //y_displ = frame1br - frame2br;
+                        x_displ = frame2bc - frame1bc;
+                        y_displ = frame1br - frame2br;
                     }
                 }
             }
-            //Differences[frame1br][frame1bc] = max_sad;
-            //x_vector[frame1br][frame1bc] = x_displ;
-            //y_vector[frame1br][frame1bc] = y_displ;
+            Differences[frame1br][frame1bc] = max_sad;
+            x_vector[frame1br][frame1bc] = x_displ;
+            y_vector[frame1br][frame1bc] = y_displ;
         }
     }
 
