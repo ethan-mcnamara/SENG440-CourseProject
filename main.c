@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS] = { { UINT_MAX } };
 
     printf("Differences[7][9]: %d\n", Differences[7][9]);
-    return;
+    return 0;
     Vector vectors [NUMBLOCKS][NUMBLOCKS];
 
     // Initialize the frame arrays
