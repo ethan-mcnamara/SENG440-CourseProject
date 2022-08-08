@@ -96,10 +96,6 @@ int main(int argc, char *argv[])
                 for (uint8_t frame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
                     temp_sad &= 0;
                     for (uint8_t px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
-                        for(uint8_t j = 0; j < 16; j++) {
-                            printf("1: %d 2: %d ",Frame1[frame1br][frame1bc][px_row][j], Frame2[frame2br][frame2bc][px_row][j] );
-                        }
-                        printf("++++++++++++++++++++++++++++++++++++\n");
                         const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][frame2bc][px_row]);
                         const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][frame1bc][px_row]);
                         const uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
@@ -121,6 +117,7 @@ int main(int argc, char *argv[])
                         temp_sad += vgetq_lane_u8(sad, 15);
                     }
 
+                    printf("%d\n", temp_sad);
                     if (assignment_flag || min_sad > temp_sad) {
                         assignment_flag = 0;
                         min_sad = temp_sad;
