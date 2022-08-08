@@ -42,7 +42,6 @@ int main(int argc, char *argv[])
     uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS] = {0};
-    Vector vectors[NUMBLOCKS][NUMBLOCKS];
 
     fptr1 = fopen("Image1.bmp", "rb");
     fptr2 = fopen("Image1.bmp", "rb");
