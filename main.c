@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
     uint32_t x_vector[NUMBLOCKS][NUMBLOCKS];
+    uint32_t y_vector[NUMBLOCKS][NUMBLOCKS];
 
     fptr1 = fopen("Image1.bmp", "rb");
     fptr2 = fopen("Image1.bmp", "rb");
@@ -103,6 +104,8 @@ int main(int argc, char *argv[])
                 }
             }
             Differences[frame1br][frame1bc] = max_sad;
+            x_vector[frame1br][frame1bc] = x_displ;
+            y_vector[frame1br][frame1bc] = y_displ;
         }
     }
 
