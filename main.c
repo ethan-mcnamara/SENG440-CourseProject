@@ -96,9 +96,11 @@ int main(int argc, char *argv[])
                         const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
                         const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
                         const uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
-                        
+                        printf("Place: %d, Val: %d\n", 0, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 0);
+                        printf("Place: %d, Val: %d\n", 1, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 1);
+                        printf("Place: %d, Val: %d\n", 2, temp_sad);
                         temp_sad += vgetq_lane_u8(sad, 2);
                         temp_sad += vgetq_lane_u8(sad, 3);
                         temp_sad += vgetq_lane_u8(sad, 4);
