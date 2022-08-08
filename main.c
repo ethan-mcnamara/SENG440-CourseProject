@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 
     process_frame(Frame1, Frame2);
 
-    uint32_t Differences[NUMBLOCKS][NUMBLOCKS] = { UINT_MAX };
+    uint32_t Differences[NUMBLOCKS][NUMBLOCKS] = { { UINT_MAX } };
     Vector vectors [NUMBLOCKS][NUMBLOCKS];
 
     // Initialize the frame arrays
@@ -127,6 +127,8 @@ int main(int argc, char *argv[])
                         temp_sad += vgetq_lane_u16(final_result, 7);
 
                     }
+
+                    printf("temp_sad value: %d\n", temp_sad);
                     if (Differences[block_row_ref][block_col_ref] > temp_sad )
                     {
                         Differences[block_row_ref][block_col_ref] = temp_sad;
