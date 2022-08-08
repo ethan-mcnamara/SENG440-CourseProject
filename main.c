@@ -26,7 +26,7 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     FILE *fptr1;
     FILE *fptr2;
     fptr1 = fopen("Image1.bmp", "rb");
-    fptr2 = fopen("Image2.bmp", "rb");
+    fptr2 = fopen("Image1.bmp", "rb");
 
     if(fptr1 == NULL || fptr2 == NULL)
     {
