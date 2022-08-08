@@ -43,7 +43,7 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     uint8_t rm_header [54];
 
     fptr1 = fopen("test_images/Image1.bmp", "rb");
-    fptr2 = fopen("test_images/Image1.bmp", "rb");
+    fptr2 = fopen("test_images/Image2.bmp", "rb");
 
     // BMP header size is 54 bytes (8 bytes * 7 - 2 = 54 bytes)
     fread(&rm_header, sizeof(uint8_t) * 7 - 2, 1, fptr1);
@@ -109,32 +109,6 @@ int main(int argc, char *argv[])
     // Initialize the frame arrays
     process_frame(Frame1, Frame2);
 
-
-    // for (int i = 0; i < NUMBLOCKS; ++i)
-    // {
-    //     for (int j = 0; j < NUMBLOCKS; ++j)
-    //     {
-    //         for (int k = 0; k < SIZEOFBLOCK; ++k)
-    //         {
-    //             printf("Frame 1: ");
-    //             for (int s = 0; s < SIZEOFBLOCK; ++s)
-    //             {
-    //                 printf("%d ", Frame1[i][j][k][s]);
-    //             }
-    //             printf("\n");
-
-    //             printf("Frame 2: ");
-    //             for (int s = 0; s < SIZEOFBLOCK; ++s)
-    //             {
-    //                 printf("%d ", Frame2[i][j][k][s]);
-    //             }
-    //             printf("\n");
-    //         }
-    //     }
-    // }
-
-    // return 0;
-
     // Start calculating the SAD values
     for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
     {
@@ -152,15 +126,6 @@ int main(int argc, char *argv[])
                         uint8x16_t vector_comp; // declare a vector of 16 8-bit lanes
                         vector_ref = vld1q_u8(Frame1[block_row_ref][block_col_ref][pixel_row]); // load the array from memory into a vector
                         vector_comp = vld1q_u8(Frame2[block_row_comp][block_col_comp][pixel_row]); // load the array from memory into a vector
-                        
-                        if (block_row_ref == block_row_comp && block_col_ref == block_col_comp)
-                        {
-                            printf("reference vector:\n");
-                            print_uint8(vector_ref);
-                            printf("\n*****\n\n");
-                            printf("comparison vector:\n");
-                            print_uint8(vector_comp);
-                        }
 
                         // Perform the Absolute Differences operation:
                         uint8x16_t init_result;
