@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
                         uint8x16_t vector_ref; // declare a vector of 16 8-bit lanes
                         uint8x16_t vector_comp; // declare a vector of 16 8-bit lanes
                         vector_ref = vld1q_u8(Frame1[block_row_ref][block_col_ref][pixel_row]); // load the array from memory into a vector
-                        vector_comp = vld1q_u8(Frame2[block_row_comp][block_row_comp][pixel_row]); // load the array from memory into a vector
+                        vector_comp = vld1q_u8(Frame2[block_row_comp][block_col_comp][pixel_row]); // load the array from memory into a vector
                         
                         if (block_row_ref == block_row_comp && block_col_ref == block_col_comp)
                         {
