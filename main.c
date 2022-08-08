@@ -46,7 +46,7 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
                 fread(&Frame1[block_row][row][block_col], sizeof(uint8_t)*16, 1, fptr1);
                 fread(&Frame2[block_row][row][block_col], sizeof(uint8_t)*16, 1, fptr2);
                 for (uint8_t t = 0; t < 16; t++) {
-                    printf("%d ", Frame1[block_row][row][block_col]);
+                    printf("%d ", Frame1[block_row][row][block_col][t]);
                 }
                 printf("\n");
             }
