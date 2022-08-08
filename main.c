@@ -26,7 +26,7 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     FILE *fptr1;
     FILE *fptr2;
     fptr1 = fopen("Image1.bmp", "rb");
-    fptr2 = fopen("Image1.bmp", "rb");
+    fptr2 = fopen("Image2.bmp", "rb");
 
     if(fptr1 == NULL || fptr2 == NULL)
     {
@@ -126,7 +126,9 @@ int main(int argc, char *argv[])
             Differences[frame1br][frame1bc] = min_sad;
             x_vectors[frame1br][frame1bc] = x_displ;
             y_vectors[frame1br][frame1bc] = y_displ;
+            break;
         }
+        break;
     }
 
     uint8_t print_i;
