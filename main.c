@@ -29,7 +29,7 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     uint8_t* rm_header2;
 
     fptr1 = fopen("Image1.bmp", "rb");
-    fptr2 = fopen("Image1.bmp", "rb");
+    fptr2 = fopen("Image2.bmp", "rb");
 
     fread(&rm_header1, sizeof(uint8_t), 1, fptr1);
     fread(&rm_header2, sizeof(uint8_t), 1, fptr2);
@@ -119,6 +119,7 @@ int main(int argc, char *argv[])
                     }
 
                     if (assignment_flag || min_sad > temp_sad) {
+                        printf("%d\n", temp_sad);
                         assignment_flag = 0;
                         min_sad = temp_sad;
                         x_displ = frame2bc - frame1bc;
