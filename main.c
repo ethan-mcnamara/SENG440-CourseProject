@@ -49,6 +49,10 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
                     printf("%d ", Frame1[block_row][row][block_col][t]);
                 }
                 printf("\n");
+                for (uint8_t t = 0; t < 16; t++) {
+                    printf("%d ", Frame1[block_row][row][block_col][t]);
+                }
+                printf("\n");
             }
         }
     }
