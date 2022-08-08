@@ -96,9 +96,6 @@ int main(int argc, char *argv[])
                         const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
                         const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
                         const uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
-                        const uint8x8_t sad_high = vget_high_u8(sad);
-                        const uint8x8_t sad_low = vget_low_u8(sad);
-                        const uint16x8_t added_sad = vaddl_u8(sad_high, sad_low);
                         
                         temp_sad += vgetq_lane_u8(sad, 0);
                         temp_sad += vgetq_lane_u8(sad, 1);
@@ -109,6 +106,12 @@ int main(int argc, char *argv[])
                         temp_sad += vgetq_lane_u8(sad, 6);
                         temp_sad += vgetq_lane_u8(sad, 7);
                         temp_sad += vgetq_lane_u8(sad, 8);
+                        temp_sad += vgetq_lane_u8(sad, 9);
+                        temp_sad += vgetq_lane_u8(sad, 10);
+                        temp_sad += vgetq_lane_u8(sad, 12);
+                        temp_sad += vgetq_lane_u8(sad, 13);
+                        temp_sad += vgetq_lane_u8(sad, 14);
+                        temp_sad += vgetq_lane_u8(sad, 15);
                     }
 
                     printf("%d\n", temp_sad);
