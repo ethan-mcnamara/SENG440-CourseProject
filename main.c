@@ -76,16 +76,10 @@ void process_frame(Frame *cur_frame, FILE *fptr)
     // Read the header and store it in an array (not to be used)
     fread(&rm_header, sizeof(uint8_t) * 7 - 2, 1, fptr);
 
+    fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
+
     while (cur_pixel_row < SIZEOFIMAGE)
     {
-        // Skip over the bmp image header
-        // if (header_counter < 54)
-        // {
-        //     header_counter++;
-        //     fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
-        //     continue;
-        // }
-        
 
         if (!first_iteration)
         {
@@ -95,7 +89,7 @@ void process_frame(Frame *cur_frame, FILE *fptr)
                 cur_block_col = 0;
                 cur_pixel_row++;
 
-                if (cur_pixel_row % SIZEOFBLOCK ==0)
+                if (cur_pixel_row % SIZEOFBLOCK == 0)
                 {
                     cur_block_row++;
                 }
