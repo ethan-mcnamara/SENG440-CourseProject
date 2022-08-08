@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
                         const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
                         const uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
                         const uint8x8_t sad_high = vget_high_u8(sad);
-                        const uint8x8_t sad_low = vget_low_u8(base_sad);
+                        const uint8x8_t sad_low = vget_low_u8(sad);
                         const uint16x8_t added_sad = vaddl_u8(sad_high, sad_low);
                         
                         temp_sad += vgetq_lane_u8(sad, 0);
