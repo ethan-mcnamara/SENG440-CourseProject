@@ -109,6 +109,41 @@ int main(int argc, char *argv[])
     // Initialize the frame arrays
     process_frame(Frame1, Frame2);
 
+    printf("Frame 1:")
+    for (int i = 0; i < NUMBLOCKS; ++i)
+    {
+        for (int j = 0; j < NUMBLOCKS; ++j)
+        {
+            for (int k = 0; k < SIZEOFBLOCK; ++k)
+            {
+                for (int s = 0; s < SIZEOFBLOCK; ++s)
+                {
+                    printf("%d ", Frame1[i][j][k][s]);
+                }
+                printf("\n");
+            }
+        }
+    }
+
+    printf("\n*****\n\n");
+    printf("Frame 2:")
+    for (int i = 0; i < NUMBLOCKS; ++i)
+    {
+        for (int j = 0; j < NUMBLOCKS; ++j)
+        {
+            for (int k = 0; k < SIZEOFBLOCK; ++k)
+            {
+                for (int s = 0; s < SIZEOFBLOCK; ++s)
+                {
+                    printf("%d ", Frame2[i][j][k][s]);
+                }
+                printf("\n");
+            }
+        }
+    }
+
+    return 0;
+
     // Start calculating the SAD values
     for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
     {
