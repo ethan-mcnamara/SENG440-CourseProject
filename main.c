@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
     uint8_t print_i;
     for (print_i = 0; print_i < NUMBLOCKS; ++print_i)
     {
-        uint8_t print_j
+        uint8_t print_j;
         for (print_j = 0; print_j < NUMBLOCKS; ++print_j)
         {
             int temp_diff = Differences[print_i][print_j];
