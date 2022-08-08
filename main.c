@@ -41,7 +41,15 @@ int main(int argc, char *argv[])
 
     uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
-    uint32_t Differences[NUMBLOCKS][NUMBLOCKS] = {0};
+    uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
+
+    uint8_t diff_row;
+    for(diff_row = 0; diff_row < NUMBLOCKS; diff_row++) {
+        uint8_t diff_col;
+        for (diff_col = 0; diff_col < NUMBLOCKS; diff_col++) {
+            Differences[diff_row][diff_col] = 0;
+        }
+    }
 
     fptr1 = fopen("Image1.bmp", "rb");
     fptr2 = fopen("Image1.bmp", "rb");
@@ -89,10 +97,6 @@ int main(int argc, char *argv[])
                         for (px_i = 0; px_i < SIZEOFBLOCK; px_i++) {
                             temp_sad += vgetq_lane_u8(sad, px_i);
                         }
-                    }
-                
-                    if (Differences[frame1br][frame1bc]) {
-                        Differences[frame1br][frame1bc] = temp_sad;
                     }
                 }
             }
