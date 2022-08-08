@@ -81,19 +81,8 @@ int main(int argc, char *argv[])
                     uint32_t temp_sad = 0;
                     uint8_t px_row;
                     for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
-
-                        uint8_t* Frame_2_px = Frame2[frame2br][px_row][frame2bc];
-
-                        const uint8x16_t Frame_2_Vector = vld1q_u8(Frame_2_px);
-                        uint8_t* Frame_1_px = Frame1[frame1br][px_row][frame1bc];
-                        const uint8x16_t Frame_1_Vector = {Frame_1_px[0],Frame_1_px[1],
-                                                            Frame_1_px[2], Frame_1_px[3],
-                                                            Frame_1_px[4], Frame_1_px[5],
-                                                            Frame_1_px[6], Frame_1_px[7],
-                                                            Frame_1_px[8], Frame_1_px[9],
-                                                            Frame_1_px[10], Frame_1_px[11],
-                                                            Frame_1_px[12], Frame_1_px[13],
-                                                            Frame_1_px[14], Frame_1_px[15]};
+                        const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
+                        const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc])
 
                         uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
                         
