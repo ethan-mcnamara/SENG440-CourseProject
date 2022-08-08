@@ -20,34 +20,13 @@ int8_t min(int8_t val_1, int8_t val_2)
     return (val_1 > val_2) ? val_2 : val_1;
 }
 
-/*
-* Main function
-*/
-int main(int argc, char *argv[]) 
+void process_frame(uint8_t*** Frame1, uint8_t*** Frame2)
 {
-    char* file_name;
     FILE *fptr1;
-    FILE *fptr2;
-
-    if (argc < 2)
-    {
-        printf("Please provide a file name\n");
-        exit(1);
-    }
-    else
-    {
-        file_name = argv[1];
-    }
-
-    uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
-    uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
-    uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
-    uint32_t x_vector[NUMBLOCKS][NUMBLOCKS];
-    uint32_t y_vector[NUMBLOCKS][NUMBLOCKS];
-
+    FILe *fptr2;
     fptr1 = fopen("Image1.bmp", "rb");
     fptr2 = fopen("Image2.bmp", "rb");
-    printf("HELLOAGAIN\n");
+
     if(fptr1 == NULL || fptr2 == NULL)
     {
         printf("Error!");   
@@ -70,7 +49,35 @@ int main(int argc, char *argv[])
 
     fclose(fptr1);
     fclose(fptr2);
-    printf("HELLO\n");
+    return;
+}
+
+
+/*
+* Main function
+*/
+int main(int argc, char *argv[]) 
+{
+    char* file_name;
+
+    if (argc < 2)
+    {
+        printf("Please provide a file name\n");
+        exit(1);
+    }
+    else
+    {
+        file_name = argv[1];
+    }
+
+    uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
+    uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
+    uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
+    uint32_t x_vector[NUMBLOCKS][NUMBLOCKS];
+    uint32_t y_vector[NUMBLOCKS][NUMBLOCKS];
+
+    process_frame(Frame1, Frame2);
+   
     uint8_t frame1br;
     for (frame1br = 0; frame1br < NUMBLOCKS; frame1br++) {
         uint8_t frame1bc;
@@ -85,34 +92,13 @@ int main(int argc, char *argv[])
                 for (frame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
                     uint8_t px_row;
                     for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
-                        printf("1");
+
                         const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
                         const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
-                        printf("2");
                         const uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
-                        // Cannot use accumulate function
-                        printf("3");
-                        temp_sad += vgetq_lane_u8(sad, 0);
-                        temp_sad += vgetq_lane_u8(sad, 1);
-                        temp_sad += vgetq_lane_u8(sad, 2);
-                        temp_sad += vgetq_lane_u8(sad, 3);
-                        temp_sad += vgetq_lane_u8(sad, 4);
-                        temp_sad += vgetq_lane_u8(sad, 5);
-                        temp_sad += vgetq_lane_u8(sad, 6);
-                        temp_sad += vgetq_lane_u8(sad, 7);
-                        temp_sad += vgetq_lane_u8(sad, 8);
-                        temp_sad += vgetq_lane_u8(sad, 9);
-                        temp_sad += vgetq_lane_u8(sad, 10);
-                        temp_sad += vgetq_lane_u8(sad, 11);
-                        temp_sad += vgetq_lane_u8(sad, 12);
-                        temp_sad += vgetq_lane_u8(sad, 13);
-                        temp_sad += vgetq_lane_u8(sad, 14);
-                        temp_sad += vgetq_lane_u8(sad, 15);
-                        printf("4");
                     }
                 }
             }
-            printf("5");
             Differences[frame1br][frame1bc] = max_sad;
             x_vector[frame1br][frame1bc] = x_displ;
             y_vector[frame1br][frame1bc] = y_displ;
