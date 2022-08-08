@@ -109,10 +109,7 @@ int main(int argc, char *argv[])
     process_frame(Frame1, Frame2);
 
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
-    
-
-
-
+    Vector vectors [NUMBLOCKS][NUMBLOCKS];
 
 
     //for each block in frame
@@ -125,17 +122,19 @@ int main(int argc, char *argv[])
         exit(1);             
     }
     
+    // Initialize the frame arrays
+    process_frame(Frame1, Frame2);
     
-    Frame *test_frame = (Frame*)malloc(sizeof(Frame));
-    Film *test_film = (Film*) malloc(sizeof(Film));
+    // Frame *test_frame = (Frame*)malloc(sizeof(Frame));
+    // Film *test_film = (Film*) malloc(sizeof(Film));
 
-    process_frame(test_frame, fptr);
+    // process_frame(test_frame, fptr);
 
-    test_film->frame[0] = *test_frame;
-    fclose(fptr);
-    fptr = fopen("test_images/Image2.bmp", "rb");
-    process_frame(test_frame, fptr);
-    test_film->frame[1] = *test_frame;
+    // test_film->frame[0] = *test_frame;
+    // fclose(fptr);
+    // fptr = fopen("test_images/Image2.bmp", "rb");
+    // process_frame(test_frame, fptr);
+    // test_film->frame[1] = *test_frame;
 
     /*for (int i = 0; i < 16; ++i)
     {
@@ -151,75 +150,68 @@ int main(int argc, char *argv[])
         }
     }*/
 
-
-    for (uint8_t frame = 0; frame < NUMFRAMES - 1; ++frame) // every frame
+    for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
     {
-        for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
+        for (uint8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
         {
-            for (uint8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
+            for (uint8_t block_row_comp = max(0, block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
             {
-                for (uint8_t block_row_comp = max(0, block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
+                // printf("block_row_ref: %d, block_row_comp: %d\n", block_row_ref, block_row_comp);
+                for (uint8_t block_col_comp = max(0, block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
                 {
-                    // printf("block_row_ref: %d, block_row_comp: %d\n", block_row_ref, block_row_comp);
-                    for (uint8_t block_col_comp = max(0, block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
+                    uint32_t temp_sad = 0;
+                    for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                     {
-                        uint32_t temp_sad = 0;
-                        for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
-                        {
-                            uint8x16_t vector_ref; // declare a vector of 16 8-bit lanes
-                            uint8x16_t vector_comp; // declare a vector of 16 8-bit lanes
-                            vector_ref = vld1q_u8(test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row]); // load the array from memory into a vector
-                            vector_comp = vld1q_u8(test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row]); // load the array from memory into a vector
-                            
-                            // Perform the Absolute Differences operation:
-                            uint8x16_t init_result;
-                            init_result = vabdq_u8(vector_ref, vector_comp);
+                        uint8x16_t vector_ref; // declare a vector of 16 8-bit lanes
+                        uint8x16_t vector_comp; // declare a vector of 16 8-bit lanes
+                        vector_ref = vld1q_u8(Frame1[block_row_ref][block_col_ref][pixel_row]); // load the array from memory into a vector
+                        vector_comp = vld1q_u8(Frame2[block_row_comp][block_row_ref][pixel_row]); // load the array from memory into a vector
+                        
+                        // Perform the Absolute Differences operation:
+                        uint8x16_t init_result;
+                        init_result = vabdq_u8(vector_ref, vector_comp);
 
-                            // Store first and second halves of the result vector in two different vectors of half size
-                            uint8x8_t result_high = vget_high_u8( init_result );
-                            uint8x8_t result_low = vget_low_u8( init_result );
+                        // Store first and second halves of the result vector in two different vectors of half size
+                        uint8x8_t result_high = vget_high_u8( init_result );
+                        uint8x8_t result_low = vget_low_u8( init_result );
 
-                            // Perform vector addition with the high and low vectors
-                            uint16x8_t final_result = vaddl_u8( result_high, result_low);
+                        // Perform vector addition with the high and low vectors
+                        uint16x8_t final_result = vaddl_u8( result_high, result_low);
 
-                            // Sum all elements in the result vector by reading the lanes individually
-                            temp_sad += vgetq_lane_u16(final_result, 0);
-                            temp_sad += vgetq_lane_u16(final_result, 1);
-                            temp_sad += vgetq_lane_u16(final_result, 2);
-                            temp_sad += vgetq_lane_u16(final_result, 3);
-                            temp_sad += vgetq_lane_u16(final_result, 4);
-                            temp_sad += vgetq_lane_u16(final_result, 5);
-                            temp_sad += vgetq_lane_u16(final_result, 6);
-                            temp_sad += vgetq_lane_u16(final_result, 7);
- 
-                        }
-                        if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )
-                        {
-                            // printf("In if condition, temp_sad = %d, old value = %d\n", temp_sad, test_film->frame[frame].differences[block_row_ref][block_col_ref]);
-                            test_film->frame[frame].differences[block_row_ref][block_col_ref] = temp_sad;
-                            test_film->frame[frame].vectors[block_row_ref][block_col_ref].x = block_col_comp - block_col_ref;
-                            test_film->frame[frame].vectors[block_row_ref][block_col_ref].y = block_row_ref - block_row_comp;
-                        }
+                        // Sum all elements in the result vector by reading the lanes individually
+                        temp_sad += vgetq_lane_u16(final_result, 0);
+                        temp_sad += vgetq_lane_u16(final_result, 1);
+                        temp_sad += vgetq_lane_u16(final_result, 2);
+                        temp_sad += vgetq_lane_u16(final_result, 3);
+                        temp_sad += vgetq_lane_u16(final_result, 4);
+                        temp_sad += vgetq_lane_u16(final_result, 5);
+                        temp_sad += vgetq_lane_u16(final_result, 6);
+                        temp_sad += vgetq_lane_u16(final_result, 7);
+
+                    }
+                    if (Differences[block_row_ref][block_col_ref] > temp_sad )
+                    {
+                        // printf("In if condition, temp_sad = %d, old value = %d\n", temp_sad, test_film->frame[frame].differences[block_row_ref][block_col_ref]);
+                        Differences[block_row_ref][block_col_ref] = temp_sad;
+                        vectors[block_row_ref][block_col_ref].x = block_col_comp - block_col_ref;
+                        vectors[block_row_ref][block_col_ref].y = block_row_ref - block_row_comp;
                     }
                 }
             }
         }
     }
+
     
     for (int i = 0; i < NUMBLOCKS; ++i)
     {
         for (int j = 0; j < NUMBLOCKS; ++j)
         {
-            int temp_diff = test_film->frame[0].differences[i][j];
-            int temp_x = test_film->frame[0].vectors[i][j].x;
-            int temp_y = test_film->frame[0].vectors[i][j].y;
+            int temp_diff = Differences[i][j];
+            int temp_x = vectors[i][j].x;
+            int temp_y = vectors[i][j].y;
             printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
         }
     }
 
-    // printf("max of 0, -3: %d\n", max(0, -3));
-    // printf("min of 0, 3: %d\n", min(0, 3));
-
-    fclose(fptr);
     return 0;
 }
