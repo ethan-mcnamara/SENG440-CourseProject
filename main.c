@@ -213,8 +213,8 @@ int main(int argc, char *argv[])
                         {
                             // printf("In if condition, temp_sad = %d, old value = %d\n", temp_sad, test_film->frame[frame].differences[block_row_ref][block_col_ref]);
                             test_film->frame[frame].differences[block_row_ref][block_col_ref] = temp_sad;
-                            test_film->frame[frame].vectors[block_row_ref][block_col_ref].x = block_row_comp - block_row_ref;
-                            test_film->frame[frame].vectors[block_row_ref][block_col_ref].y = block_col_ref - block_col_comp;
+                            test_film->frame[frame].vectors[block_row_ref][block_col_ref].x = block_col_comp - block_col_ref;
+                            test_film->frame[frame].vectors[block_row_ref][block_col_ref].y = block_row_ref - block_row_comp;
                         }
                     }
                 }
