@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     fptr1 = fopen("Image1.bmp", "rb");
     fptr2 = fopen("Image2.bmp", "rb");
-
+    printf("HELLOAGAIN\n");
     if(fptr1 == NULL || fptr2 == NULL)
     {
         printf("Error!");   
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 
     fclose(fptr1);
     fclose(fptr2);
-
+    printf("HELLO\n");
     uint8_t frame1br;
     for (frame1br = 0; frame1br < NUMBLOCKS; frame1br++) {
         uint8_t frame1bc;
