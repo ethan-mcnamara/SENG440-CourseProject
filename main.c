@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
                         const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
                         const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
 
-                       // uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
+                        uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
                         // Cannot use accumulate function
                         //uint8_t px_i;
                         //for (px_i = 0; px_i < SIZEOFBLOCK; px_i++) {
