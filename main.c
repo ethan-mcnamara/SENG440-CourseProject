@@ -97,8 +97,8 @@ int main(int argc, char *argv[])
                     if (max_sad > temp_sad) {
                         max_sad = temp_sad;
                         // Confirm these changes are correct with Ethan
-                        x_displ = Frame2bc - Frame1bc;
-                        y_displ = Frame1br - Frame2br;
+                        x_displ = frame2bc - frame1bc;
+                        y_displ = frame1br - frame2br;
                     }
                 }
             }
