@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
                         
                         uint8_t px_i;
                         for (px_i = 0; px_i < SIZEOFBLOCK; px_i++) {
-                            temp_sad += sad[px_i];
+                            temp_sad += vdupb_laneq_u8(sad, px_i);
                         } 
                     }
 
