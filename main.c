@@ -48,80 +48,39 @@ int8_t min(int8_t val_1, int8_t val_2)
     return (val_1 > val_2) ? val_2 : val_1;
 }
 
-void process_frame(Frame *cur_frame, FILE *fptr)
+void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK], 
+                   uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK])
 {
-    
+    FILE *fptr1;
+    FILE *fptr2;
+    uint8_t* rm_header1;
+    uint8_t* rm_header2;
 
+    fptr1 = fopen("test_images/Image1.bmp", "rb");
+    fptr2 = fopen("test_images/Image2.bmp", "rb");
 
+    // BMP header size is 54 bytes (8 bytes * 7 - 2 = 54 bytes)
+    fread(&rm_header1, sizeof(uint8_t) * 7 - 2, 1, fptr1);
+    fread(&rm_header2, sizeof(uint8_t)* 7 - 2, 1, fptr2);
 
-
-
-
-
-    // uint8_t cur_pixel;
-    // int cur_pixel_row = 0;
-    // int cur_pixel_col = 0;
-    // int cur_block_row = 0;
-    // int cur_block_col = 0;
-
-    // uint8_t first_iteration = 1;
-
-    // for (int i = 0; i < NUMBLOCKS; ++i)
-    // {
-    //     for (int j = 0; j < NUMBLOCKS; ++j)
-    //     {
-    //         cur_frame->differences[i][j] = UINT32_MAX;
-    //     }
-    // }
-
-    // Block *cur_block = &cur_frame->block[0][0];
-
-    // fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
-
-    // uint8_t header_counter = 0;
-
-    // while (cur_pixel_row < SIZEOFIMAGE - 2)
-    // {
-    //     // Skip over the jpg image header
-    //     if (header_counter < 6)
-    //     {
-    //         header_counter++;
-    //         continue;
-    //     }
-
-    //     if (!first_iteration)
-    //     {
-    //         if (cur_block_col == SIZEOFBLOCK)
-    //         {
-    //             cur_pixel_col = 0;
-    //             cur_block_col = 0;
-    //             cur_pixel_row++;
-
-    //             if (cur_pixel_row % SIZEOFBLOCK ==0)
-    //             {
-    //                 cur_block_row++;
-    //             }
-
-    //             cur_block = &cur_frame->block[cur_block_row][cur_block_col];
-
-    //         }
-    //         if (cur_pixel_col % SIZEOFBLOCK == 0)
-    //         {
-    //             cur_block = &cur_frame->block[cur_block_row][++cur_block_col];
-    //         }
-    //     }
-    //     else
-    //     {
-    //         first_iteration = 0;
-    //     }
-
-    //     cur_block->pixel[cur_pixel_row % SIZEOFBLOCK][cur_pixel_col % SIZEOFBLOCK] = cur_pixel;
-    //     //printf("%d\n", cur_pixel);
-
-    //     cur_pixel_col++;
-
-    //     fread(&cur_pixel, sizeof(uint8_t), 1, fptr) != 1;
+    if(fptr1 == NULL || fptr2 == NULL)
+    {
+        printf("Error!");   
+        exit(1);             
     }
+
+    for (uint8_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
+        for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; pixel_row++){
+            for (uint8_t block_col = 0; block_col < NUMBLOCKS; block_col++) {
+                fread(&Frame1[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr1);
+                fread(&Frame2[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr2);
+            }
+        }
+    }
+
+    fclose(fptr1);
+    fclose(fptr2);
+    return;
 }
 
 
