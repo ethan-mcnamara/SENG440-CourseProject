@@ -29,7 +29,7 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     uint8_t* rm_header2;
 
     fptr1 = fopen("Image1.bmp", "rb");
-    fptr2 = fopen("Image2.bmp", "rb");
+    fptr2 = fopen("Image1.bmp", "rb");
 
     fread(&rm_header1, sizeof(uint8_t), 1, fptr1);
     fread(&rm_header2, sizeof(uint8_t), 1, fptr2);
@@ -77,16 +77,6 @@ int main(int argc, char *argv[])
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
 
     process_frame(Frame1, Frame2);
-
-    for (int i = 0; i < 15; i++) {
-        for (int j = 0; j < 16; j++) {
-            for (int k = 0; k < 16; k++) {
-                for (int t = 0; t < 16; t++) {
-                    printf("%d ", Frame1[i][j][k][t]);
-                }
-            }
-        }
-    }
 
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
     uint32_t x_vectors[NUMBLOCKS][NUMBLOCKS];
