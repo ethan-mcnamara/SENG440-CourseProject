@@ -43,16 +43,8 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     for (uint8_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
         for (uint8_t row = 0; row < SIZEOFBLOCK; row++){
             for (uint8_t block_col = 0; block_col < NUMBLOCKS; block_col++) {
-                fread(&Frame1[block_row][row][block_col], sizeof(uint8_t)*16, 1, fptr1);
-                fread(&Frame2[block_row][row][block_col], sizeof(uint8_t)*16, 1, fptr2);
-                for (uint8_t t = 0; t < 16; t++) {
-                    printf("%d ", Frame1[block_row][row][block_col][t]);
-                }
-                printf("\n");
-                for (uint8_t t = 0; t < 16; t++) {
-                    printf("%d ", Frame1[block_row][row][block_col][t]);
-                }
-                printf("==========================================\n");
+                fread(&Frame1[block_row][block_col][row], sizeof(uint8_t)*16, 1, fptr1);
+                fread(&Frame2[block_row][block_col][row], sizeof(uint8_t)*16, 1, fptr2);
             }
         }
     }
@@ -104,8 +96,12 @@ int main(int argc, char *argv[])
                 for (uint8_t frame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
                     temp_sad &= 0;
                     for (uint8_t px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
-                        const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
-                        const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
+                        for(uint8_t j = 0; j < 16; j++) {
+                            printf("1: %d 2: %d ",Frame1[frame1br][frame1bc][px_row], Frame2[frame2br][frame2bc][px_row] );
+                        }
+                        printf("++++++++++++++++++++++++++++++++++++\n");
+                        const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][frame2bc][px_row]);
+                        const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][frame1bc][px_row]);
                         const uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
                         
                         temp_sad += vgetq_lane_u8(sad, 0);
@@ -126,6 +122,7 @@ int main(int argc, char *argv[])
                     }
 
                     if (assignment_flag || min_sad > temp_sad) {
+                        print("%d\n", temp_sad);
                         assignment_flag = 0;
                         min_sad = temp_sad;
                         x_displ = frame2bc - frame1bc;
