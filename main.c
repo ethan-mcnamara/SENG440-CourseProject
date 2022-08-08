@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
                     }
                 }
             }
-            Differences[frame1br][frame1bc] = temp_sad;
+            Differences[frame1br][frame1bc] = max_sad;
         }
     }
 
