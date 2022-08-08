@@ -43,14 +43,6 @@ int main(int argc, char *argv[])
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
 
-    uint8_t diff_row;
-    for(diff_row = 0; diff_row < NUMBLOCKS; diff_row++) {
-        uint8_t diff_col;
-        for (diff_col = 0; diff_col < NUMBLOCKS; diff_col++) {
-            Differences[diff_row][diff_col] = 0;
-        }
-    }
-
     fptr1 = fopen("Image1.bmp", "rb");
     fptr2 = fopen("Image1.bmp", "rb");
 
@@ -81,11 +73,11 @@ int main(int argc, char *argv[])
     for (frame1br = 0; frame1br < NUMBLOCKS; frame1br++) {
         uint8_t frame1bc;
         for (frame1bc = 0; frame1bc < NUMBLOCKS; frame1bc++) {
+            uint32_t temp_sad = 0;
             uint8_t frame2br;
             for (frame2br = max(0, frame1br - 3); frame2br < min(NUMBLOCKS, frame1br + 3); ++frame2br) {
                 uint8_t frame2bc;
                 for (frame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
-                    uint32_t temp_sad = 0;
                     uint8_t px_row;
                     for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
                         const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
@@ -98,12 +90,9 @@ int main(int argc, char *argv[])
                             temp_sad += vgetq_lane_u8(sad, px_i);
                         }
                     }
-
-                    if (Differences[frame1br][frame1bc] > temp_sad) {
-                        Differences[frame1br][frame1bc] = temp_sad;
-                    }
                 }
             }
+            Differences[frame1br][frame1bc] = temp_sad;
         }
     }
 
