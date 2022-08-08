@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
                         const uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
                         // Cannot use accumulate function
                         
-                        for (px_i = 0; px_i < SIZEOFBLOCK; px_i++) {
+                        for (uint8_t = 0; px_i < SIZEOFBLOCK; px_i++) {
                             const uint8_t temp_px = px_i;
                             temp_sad += vgetq_lane_u8(sad, 1);
                         }
