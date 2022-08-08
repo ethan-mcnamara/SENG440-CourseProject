@@ -96,6 +96,7 @@ int main(int argc, char *argv[])
             for (uint8_t frame2br = max(0, frame1br - 3); frame2br < min(NUMBLOCKS, frame1br + 3); ++frame2br) {
                 for (uint8_t frame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
                     temp_sad &= 0;
+                    assignment_flag = 1;
                     for (uint8_t px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
                         const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
                         const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
@@ -119,7 +120,6 @@ int main(int argc, char *argv[])
                     }
 
                     if (assignment_flag || min_sad > temp_sad) {
-                        printf("%d\n", temp_sad);
                         assignment_flag = 0;
                         min_sad = temp_sad;
                         x_displ = frame2bc - frame1bc;
