@@ -53,8 +53,8 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
 {
     FILE *fptr1;
     FILE *fptr2;
-    uint8_t* rm_header1;
-    uint8_t* rm_header2;
+    uint8_t rm_header1[54];
+    uint8_t rm_header2[54];
     printf("after declaration of pointers\n");
 
     fptr1 = fopen("test_images/Image1.bmp", "rb");
