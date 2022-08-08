@@ -82,7 +82,7 @@ void process_frame(Frame *cur_frame, FILE *fptr)
         //     fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
         //     continue;
         // }
-        fread(&rm_header, 54, 1, fptr);
+        fread(&rm_header, sizeof(uint8_t) * 7 - 2, 1, fptr);
 
         if (!first_iteration)
         {
