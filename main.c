@@ -127,11 +127,14 @@ int main(int argc, char *argv[])
                         vector_ref = vld1q_u8(Frame1[block_row_ref][block_col_ref][pixel_row]); // load the array from memory into a vector
                         vector_comp = vld1q_u8(Frame2[block_row_comp][block_row_ref][pixel_row]); // load the array from memory into a vector
                         
-                        printf("reference vector:\n");
-                        print_uint8(vector_ref);
-                        printf("\n*****\n\n");
-                        printf("comparison vector:\n");
-                        print_uint8(vector_comp);
+                        if (block_row_ref == block_row_comp && block_col_ref == block_col_comp)
+                        {
+                            printf("reference vector:\n");
+                            print_uint8(vector_ref);
+                            printf("\n*****\n\n");
+                            printf("comparison vector:\n");
+                            print_uint8(vector_comp);
+                        }
 
                         // Perform the Absolute Differences operation:
                         uint8x16_t init_result;
