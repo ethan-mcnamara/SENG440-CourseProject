@@ -193,11 +193,25 @@ int main(int argc, char *argv[])
                             vector_comp = vld1q_u8(test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row]); // load the array from memory into a vector
                             
                             // Perform the Absolute Differences operation:
-                            uint8x16_t result;
-                            result = vabdq_u8(vector_ref, vector_comp);
+                            uint8x16_t init_result;
+                            init_result = vabdq_u8(vector_ref, vector_comp);
 
-                            // Sum all elements in the result vector and write to the differences array
-                            temp_sad += vaddvq_u8(result);
+                            // Store first and second halves of the result vector in two different vectors of half size
+                            uint8x8_t result_high = vget_high_u8( init_result );
+                            uint8x8_t result_low = vget_low_u8( init_result );
+
+                            // Perform vector addition with the high and low vectors
+                            uint16x8_t final_result = vaddl_u8( result_high, result_low);
+
+                            // Sum all elements in the result vector by reading the lanes individually
+                            temp_sad += vgetq_lane_u16(final_result, 0);
+                            temp_sad += vgetq_lane_u16(final_result, 1);
+                            temp_sad += vgetq_lane_u16(final_result, 2);
+                            temp_sad += vgetq_lane_u16(final_result, 3);
+                            temp_sad += vgetq_lane_u16(final_result, 4);
+                            temp_sad += vgetq_lane_u16(final_result, 5);
+                            temp_sad += vgetq_lane_u16(final_result, 6);
+                            temp_sad += vgetq_lane_u16(final_result, 7);
  
                         }
                         if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )
