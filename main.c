@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
                             temp_sad += vgetq_lane_u8(sad, px_i);
                         }
                     }
-                    if (true) {
+                    if (1) {
                         printf("%d\n", max_sad);
                         max_sad = temp_sad;
                         // Confirm these changes are correct with Ethan
