@@ -127,14 +127,22 @@ int main(int argc, char *argv[])
                         uint16x8_t final_result = vaddl_u8( result_high, result_low);
 
                         // Sum all elements in the result vector by reading the lanes individually
-                        temp_sad += vgetq_lane_u16(final_result, 0);
-                        temp_sad += vgetq_lane_u16(final_result, 1);
-                        temp_sad += vgetq_lane_u16(final_result, 2);
-                        temp_sad += vgetq_lane_u16(final_result, 3);
-                        temp_sad += vgetq_lane_u16(final_result, 4);
-                        temp_sad += vgetq_lane_u16(final_result, 5);
-                        temp_sad += vgetq_lane_u16(final_result, 6);
-                        temp_sad += vgetq_lane_u16(final_result, 7);
+                        temp_sad += vgetq_lane_u16(init_result, 0);
+                        temp_sad += vgetq_lane_u16(init_result, 1);
+                        temp_sad += vgetq_lane_u16(init_result, 2);
+                        temp_sad += vgetq_lane_u16(init_result, 3);
+                        temp_sad += vgetq_lane_u16(init_result, 4);
+                        temp_sad += vgetq_lane_u16(init_result, 5);
+                        temp_sad += vgetq_lane_u16(init_result, 6);
+                        temp_sad += vgetq_lane_u16(init_result, 7);
+                        temp_sad += vgetq_lane_u16(init_result, 8);
+                        temp_sad += vgetq_lane_u16(init_result, 9);
+                        temp_sad += vgetq_lane_u16(init_result, 10);
+                        temp_sad += vgetq_lane_u16(init_result, 11);
+                        temp_sad += vgetq_lane_u16(init_result, 12);
+                        temp_sad += vgetq_lane_u16(init_result, 13);
+                        temp_sad += vgetq_lane_u16(init_result, 14);
+                        temp_sad += vgetq_lane_u16(init_result, 15);
 
                     }
                     if (block_row_ref == block_row_comp && block_col_ref == block_col_comp)
