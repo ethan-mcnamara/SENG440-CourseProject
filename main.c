@@ -96,6 +96,7 @@ int main(int argc, char *argv[])
                         }
                     }
                     if (max_sad == 0 || max_sad > temp_sad) {
+                        printf("%d\n", max_sad);
                         max_sad = temp_sad;
                         // Confirm these changes are correct with Ethan
                         x_displ = frame2bc - frame1bc;
