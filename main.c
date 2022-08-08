@@ -44,7 +44,7 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
 
         for (uint8_t row = 0; row < SIZEOFBLOCK; row++){
             int block_col;
-            for (block_col = 0; block_col < NUMBLOCKS; block_col++) {
+            for (block_col = 0; block_col < NUMBLOCKS-1; block_col++) {
                 fread(&Frame1[block_row][row][block_col], sizeof(uint8_t)*16, 1, fptr1);
                 fread(&Frame2[block_row][row][block_col], sizeof(uint8_t)*16, 1, fptr2);
             }
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 
     process_frame(Frame1, Frame2);
 
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < 15; i++) {
         for (int j = 0; j < 16; j++) {
             for (int k = 0; k < 16; k++) {
                 for (int t = 0; t < 16; t++) {
