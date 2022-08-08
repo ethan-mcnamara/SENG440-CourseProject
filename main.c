@@ -90,10 +90,6 @@ int main(int argc, char *argv[])
                             temp_sad += vgetq_lane_u8(sad, px_i);
                         }
                     }
-
-                    if (Differences[frame1br][frame1bc] > temp_sad ){
-                            Differences[frame1br][frame1bc] = temp_sad;
-                    }
                 }
             }
         }
