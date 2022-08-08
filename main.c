@@ -28,11 +28,12 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     uint8_t* rm_header1;
     uint8_t* rm_header2;
 
-    fptr1 = fopen("Image1.bmp", "rb");
-    fptr2 = fopen("Image2.bmp", "rb");
+    fptr1 = fopen("test_images/Image1.bmp", "rb");
+    fptr2 = fopen("test_images/Image2.bmp", "rb");
 
-    fread(&rm_header1, sizeof(uint8_t), 1, fptr1);
-    fread(&rm_header2, sizeof(uint8_t), 1, fptr2);
+    // BMP header size is 54 bytes (8 bytes * 7 - 2 = 54 bytes)
+    fread(&rm_header1, sizeof(uint8_t) * 7 - 2, 1, fptr1);
+    fread(&rm_header2, sizeof(uint8_t)* 7 - 2, 1, fptr2);
 
     if(fptr1 == NULL || fptr2 == NULL)
     {
@@ -41,10 +42,10 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     }
 
     for (uint8_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
-        for (uint8_t row = 0; row < SIZEOFBLOCK; row++){
+        for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; pixel_row++){
             for (uint8_t block_col = 0; block_col < NUMBLOCKS; block_col++) {
-                fread(&Frame1[block_row][block_col][row], sizeof(uint8_t)*16, 1, fptr1);
-                fread(&Frame2[block_row][block_col][row], sizeof(uint8_t)*16, 1, fptr2);
+                fread(&Frame1[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr1);
+                fread(&Frame2[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr2);
             }
         }
     }
