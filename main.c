@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
             {
                 for (uint8_t block_row_comp = max(0, block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
                 {
-                    printf("block_row_ref: %d, block_row_comp: %d\n", block_row_ref, block_row_comp);
+                    // printf("block_row_ref: %d, block_row_comp: %d\n", block_row_ref, block_row_comp);
                     for (uint8_t block_col_comp = max(0, block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
                     {
                         uint32_t temp_sad = 0;
@@ -233,8 +233,8 @@ int main(int argc, char *argv[])
         }
     }
 
-    printf("max of 0, -3: %d\n", max(0, -3));
-    printf("min of 0, 3: %d\n", min(0, 3));
+    // printf("max of 0, -3: %d\n", max(0, -3));
+    // printf("min of 0, 3: %d\n", min(0, 3));
 
     fclose(fptr);
     return 0;
