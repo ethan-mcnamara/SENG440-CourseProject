@@ -137,8 +137,10 @@ int main(int argc, char *argv[])
                         temp_sad += vgetq_lane_u16(final_result, 7);
 
                     }
-
-                    printf("temp_sad value: %d\n", temp_sad);
+                    if (block_row_ref == block_row_comp && block_col_ref == block_col_comp)
+                    {
+                        printf("temp_sad value: %d\n", temp_sad);
+                    }
                     if (Differences[block_row_ref][block_col_ref] > temp_sad )
                     {
                         Differences[block_row_ref][block_col_ref] = temp_sad;
