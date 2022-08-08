@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
                         const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][px_row][frame2bc]);
                         const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
                         const uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
-                        temp_sad = vaddlvq_s8(sad);
+                        temp_sad = vaddlvq_u8(sad);
                     }
                 }
             }
