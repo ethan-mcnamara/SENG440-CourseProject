@@ -128,8 +128,6 @@ int main(int argc, char *argv[])
                         temp_sad += vgetq_lane_u8(sad, 15);
                         printf("Place: %d, Val: %d\n", 15, temp_sad);
                     }
-
-                    printf("%d\n", temp_sad);
                     if (assignment_flag || min_sad > temp_sad) {
                         assignment_flag = 0;
                         min_sad = temp_sad;
