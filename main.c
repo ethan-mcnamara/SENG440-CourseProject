@@ -10,13 +10,6 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 
-typedef struct Vector
-{
-    int8_t x;
-    int8_t y;
-} Vector;
-
-
 int8_t max(int8_t val_1, int8_t val_2)
 {
     return (val_1 < val_2) ? val_2 : val_1;
@@ -101,8 +94,6 @@ int main(int argc, char *argv[])
 
                     if (Differences[frame1br][frame1bc] > temp_sad ){
                             Differences[frame1br][frame1bc] = temp_sad;
-                            vectors[frame1br][frame1bc].x = frame2br - frame1br;
-                            vectors[frame1br][frame2bc].y = frame1bc - frame2bc;
                     }
                 }
             }
