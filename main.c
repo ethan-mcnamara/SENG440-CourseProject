@@ -25,8 +25,14 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
 {
     FILE *fptr1;
     FILE *fptr2;
+    uint8_t* rm_header1;
+    uint8_t* rm_header2;
+    fread(&rm_header1, sizeof(uint8_t), 1, fptr1);
+    fread(&rm_header2, sizeof(uint8_t), 1, fptr2);
+
     fptr1 = fopen("Image1.bmp", "rb");
     fptr2 = fopen("Image2.bmp", "rb");
+
 
     if(fptr1 == NULL || fptr2 == NULL)
     {
@@ -35,13 +41,12 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     }
 
     for (uint8_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
-        uint8_t* cur_row1;
-        uint8_t* cur_row2;
+
         for (uint8_t row = 0; row < SIZEOFBLOCK; row++){
             int block_col;
             for (block_col = 0; block_col < NUMBLOCKS; block_col++) {
-                fread(&Frame1[block_row][row][block_col], sizeof(char)*16, 1, fptr1);
-                fread(&Frame2[block_row][row][block_col], sizeof(char)*16, 1, fptr2);
+                fread(&Frame1[block_row][row][block_col], sizeof(uint8_t)*16, 1, fptr1);
+                fread(&Frame2[block_row][row][block_col], sizeof(uint8_t)*16, 1, fptr2);
             }
         }
     }
