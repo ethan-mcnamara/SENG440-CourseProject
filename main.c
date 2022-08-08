@@ -53,20 +53,14 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
 {
     FILE *fptr1;
     FILE *fptr2;
-    uint8_t rm_header1[54];
-    uint8_t rm_header2[54];
-    printf("after declaration of pointers\n");
+    uint8_t rm_header[54];
 
     fptr1 = fopen("test_images/Image1.bmp", "rb");
     fptr2 = fopen("test_images/Image2.bmp", "rb");
 
-    printf("after opening file pointers\n");
-
     // BMP header size is 54 bytes (8 bytes * 7 - 2 = 54 bytes)
-    fread(&rm_header1, sizeof(uint8_t) * 7 - 2, 1, fptr1);
-    fread(&rm_header2, sizeof(uint8_t)* 7 - 2, 1, fptr2);
-
-    printf("after reading file headers\n");
+    fread(&rm_header, sizeof(uint8_t) * 7 - 2, 1, fptr1);
+    fread(&rm_header, sizeof(uint8_t)* 7 - 2, 1, fptr2);
 
     if(fptr1 == NULL || fptr2 == NULL)
     {
@@ -77,10 +71,8 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     for (uint8_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
         for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; pixel_row++){
             for (uint8_t block_col = 0; block_col < NUMBLOCKS; block_col++) {
-                printf("before writing to either frame\n");
                 fread(&Frame1[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr1);
                 fread(&Frame2[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr2);
-                printf("after writing to both frames\n");
             }
         }
     }
@@ -96,72 +88,19 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
 */
 int main(int argc, char *argv[]) 
 {
-    printf("First line of main function\n");
-    char* file_name;
-    FILE *fptr;
 
-    if (argc < 2)
-    {
-        printf("Please provide a file name\n");
-        exit(-1);
-    }
-    else
-    {
-        file_name = argv[1];
-    }
-
-    printf("Before declaration of frames\n");
     uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
 
-    printf("before process_frame\n");
-
     process_frame(Frame1, Frame2);
-
-    printf("after process_frame\n");
 
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS] = { 0 };
     Vector vectors [NUMBLOCKS][NUMBLOCKS];
 
-
-    //for each block in frame
-    //    find most similar (smallest SAD) other block (limit search to nearby blocks)
-
-    // fptr = fopen("test_images/Image1.bmp", "rb");
-    // if(fptr == NULL)
-    // {
-    //     printf("Error!");   
-    //     exit(1);             
-    // }
-    
     // Initialize the frame arrays
     process_frame(Frame1, Frame2);
-    
-    // Frame *test_frame = (Frame*)malloc(sizeof(Frame));
-    // Film *test_film = (Film*) malloc(sizeof(Film));
 
-    // process_frame(test_frame, fptr);
-
-    // test_film->frame[0] = *test_frame;
-    // fclose(fptr);
-    // fptr = fopen("test_images/Image2.bmp", "rb");
-    // process_frame(test_frame, fptr);
-    // test_film->frame[1] = *test_frame;
-
-    /*for (int i = 0; i < 16; ++i)
-    {
-        for (int j = 0; j < 16; ++j)
-        {
-            for (int k = 0; k < 16; ++k)
-            {
-                for (int t = 0; t < 16; ++t)
-                {
-                    printf("Block[%d][%d], Pixel[%d][%d] = '%d'\n", i, j, k, t, test_frame->block[i][j].pixel[k][t]);
-                }
-            }
-        }
-    }*/
-
+    // Start calculating the SAD values
     for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
     {
         for (uint8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
@@ -200,12 +139,9 @@ int main(int argc, char *argv[])
                         temp_sad += vgetq_lane_u16(final_result, 6);
                         temp_sad += vgetq_lane_u16(final_result, 7);
 
-                        printf("after calculating the temp_sad value\n");
-
                     }
                     if (Differences[block_row_ref][block_col_ref] > temp_sad )
                     {
-                        printf("In if condition\n");
                         Differences[block_row_ref][block_col_ref] = temp_sad;
                         vectors[block_row_ref][block_col_ref].x = block_col_comp - block_col_ref;
                         vectors[block_row_ref][block_col_ref].y = block_row_ref - block_row_comp;
