@@ -109,5 +109,18 @@ int main(int argc, char *argv[])
         }
     }
 
+    uint8_t print_i;
+    for (print_i = 0; print_i < NUMBLOCKS; ++print_i)
+    {
+        uint8_t print_j
+        for (print_j = 0; print_j < NUMBLOCKS; ++print_j)
+        {
+            int temp_diff = Differences[print_i][print_j];
+            int temp_x = x_vector[print_i][print_j];
+            int temp_y = y_vectors[print_i][print_j];
+            printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", print_i, print_j, temp_x, temp_y, temp_diff);
+        }
+    }
+
     return 0;
 }
