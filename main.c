@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
 
     process_frame(Frame1, Frame2);
-
+/*
     for (int i = 0; i < 15; i++) {
         for (int j = 0; j < 16; j++) {
             for (int k = 0; k < 16; k++) {
@@ -88,6 +88,7 @@ int main(int argc, char *argv[])
             }
         }
     }
+*/    
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
     uint32_t x_vectors[NUMBLOCKS][NUMBLOCKS];
     uint32_t y_vectors[NUMBLOCKS][NUMBLOCKS];
