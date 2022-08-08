@@ -83,24 +83,24 @@ int main(int argc, char *argv[])
                     for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
 
                         uint8_t* Frame_2_px = Frame2[frame2br][px_row][frame2bc];
-                        const uint8x16_t Frame_2_Vector = {Frame2px[0], Frame2px[1],
-                                                            Frame2px[2], Frame2px[3],
-                                                            Frame2px[4], Frame2px[5],
-                                                            Frame2px[6], Frame2px[7],
-                                                            Frame2px[8], Frame2px[9],
-                                                            Frame2px[10], Frame2px[11],
-                                                            Frame2px[12], Frame2px[13],
-                                                            Frame2px[14], Frame2px[15]};
+                        const uint8x16_t Frame_2_Vector = {Frame_2_px[0], Frame_2_px[1],
+                                                            Frame_2_px[2], Frame_2_px[3],
+                                                            Frame_2_px[4], Frame_2_px[5],
+                                                            Frame_2_px[6], Frame_2_px[7],
+                                                            Frame_2_px[8], Frame_2_px[9],
+                                                            Frame_2_px[10], Frame_2_px[11],
+                                                            Frame_2_px[12], Frame_2_px[13],
+                                                            Frame_2_px[14], Frame_2_px[15]};
 
                         uint8_t* Frame_1_px = Frame1[frame1br][px_row][frame1bc];
-                        const uint8x16_t Frame_1_Vector = {Frame1px[0],Frame1px[1],
-                                                            Frame1px[2], Frame1px[3],
-                                                            Frame1px[4], Frame1px[5],
-                                                            Frame1px[6], Frame1px[7],
-                                                            Frame1px[8], Frame1px[9],
-                                                            Frame1px[10], Frame1px[11],
-                                                            Frame1px[12], Frame1px[13],
-                                                            Frame1px[14], Frame1px[15]};
+                        const uint8x16_t Frame_1_Vector = {Frame_1_px[0],Frame_1_px[1],
+                                                            Frame_1_px[2], Frame_1_px[3],
+                                                            Frame_1_px[4], Frame_1_px[5],
+                                                            Frame_1_px[6], Frame_1_px[7],
+                                                            Frame_1_px[8], Frame_1_px[9],
+                                                            Frame_1_px[10], Frame_1_px[11],
+                                                            Frame_1_px[12], Frame_1_px[13],
+                                                            Frame_1_px[14], Frame_1_px[15]};
 
                         uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
                         temp_sad += vaddvq_u8(sad);
