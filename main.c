@@ -40,14 +40,15 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
 {
     FILE *fptr1;
     FILE *fptr2;
-    uint8_t rm_header[54];
+    uint8_t rm_header1[54];
+    uint8_t rm_header2 [54];
 
     fptr1 = fopen("test_images/Image1.bmp", "rb");
     fptr2 = fopen("test_images/Image1.bmp", "rb");
 
     // BMP header size is 54 bytes (8 bytes * 7 - 2 = 54 bytes)
-    fread(&rm_header, sizeof(uint8_t) * 7 - 2, 1, fptr1);
-    fread(&rm_header, sizeof(uint8_t)* 7 - 2, 1, fptr2);
+    fread(&rm_header1, sizeof(uint8_t) * 7 - 2, 1, fptr1);
+    fread(&rm_header2, sizeof(uint8_t)* 7 - 2, 1, fptr2);
 
     if(fptr1 == NULL || fptr2 == NULL)
     {
