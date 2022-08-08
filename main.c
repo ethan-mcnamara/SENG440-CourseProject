@@ -95,10 +95,22 @@ int main(int argc, char *argv[])
                         const uint8x16_t Frame_1_Vector = vld1q_u8(Frame1[frame1br][px_row][frame1bc]);
                         const uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
                         
-                        for (uint8_t px_col = 0; px_col < SIZEOFBLOCK; px_col++) {
-                            const uint8_t temp_col = px_col;
-                            temp_sad += vgetq_lane_u8(sad, temp_col);
-                        }
+                        temp_sad += vgetq_lane_u8(sad, 0);
+                        temp_sad += vgetq_lane_u8(sad, 1);
+                        temp_sad += vgetq_lane_u8(sad, 2);
+                        temp_sad += vgetq_lane_u8(sad, 3);
+                        temp_sad += vgetq_lane_u8(sad, 4);
+                        temp_sad += vgetq_lane_u8(sad, 5);
+                        temp_sad += vgetq_lane_u8(sad, 6);
+                        temp_sad += vgetq_lane_u8(sad, 7);
+                        temp_sad += vgetq_lane_u8(sad, 8);
+                        temp_sad += vgetq_lane_u8(sad, 9);
+                        temp_sad += vgetq_lane_u8(sad, 10);
+                        temp_sad += vgetq_lane_u8(sad, 11);
+                        temp_sad += vgetq_lane_u8(sad, 12);
+                        temp_sad += vgetq_lane_u8(sad, 13);
+                        temp_sad += vgetq_lane_u8(sad, 14);
+                        temp_sad += vgetq_lane_u8(sad, 15);
                     }
                 }
             }
