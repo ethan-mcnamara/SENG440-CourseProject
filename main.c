@@ -81,24 +81,29 @@ int main(int argc, char *argv[])
                     uint32_t temp_sad = 0;
                     uint8_t px_row;
                     for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
-                        const uint8x16_t Frame2Vector = {Frame2[frame2br][px_row][frame2bc][0], Frame2[frame2br][px_row][frame2bc][1],
-                                                        Frame2[frame2br][px_row][frame2bc][2], Frame2[frame2br][px_row][frame2bc][3],
-                                                        Frame2[frame2br][px_row][frame2bc][4], Frame2[frame2br][px_row][frame2bc][5],
-                                                        Frame2[frame2br][px_row][frame2bc][6], Frame2[frame2br][px_row][frame2bc][7],
-                                                        Frame2[frame2br][px_row][frame2bc][8], Frame2[frame2br][px_row][frame2bc][9],
-                                                        Frame2[frame2br][px_row][frame2bc][10], Frame2[frame2br][px_row][frame2bc][11],
-                                                        Frame2[frame2br][px_row][frame2bc][12], Frame2[frame2br][px_row][frame2bc][13],
-                                                        Frame2[frame2br][px_row][frame2bc][14], Frame2[frame2br][px_row][frame2bc][15]};
 
-                        const uint8x16_t Frame1Vector = {Frame1[frame1br][px_row][frame1bc][0],Frame1[frame1br][px_row][frame1bc][1],
-                                                        Frame1[frame1br][px_row][frame1bc][2], Frame1[frame1br][px_row][frame1bc][3],
-                                                        Frame1[frame1br][px_row][frame1bc][4], Frame1[frame1br][px_row][frame1bc][5],
-                                                        Frame1[frame1br][px_row][frame1bc][6], Frame1[frame1br][px_row][frame1bc][7],
-                                                        Frame1[frame1br][px_row][frame1bc][8], Frame1[frame1br][px_row][frame1bc][9],
-                                                        Frame1[frame1br][px_row][frame1bc][10], Frame1[frame1br][px_row][frame1bc][11],
-                                                        Frame1[frame1br][px_row][frame1bc][12], Frame1[frame1br][px_row][frame1bc][13],
-                                                        Frame1[frame1br][px_row][frame1bc][14], Frame1[frame1br][px_row][frame1bc][15]};
-                        uint8x16_t test = vabdq_u8(Frame1Vector, Frame2Vector);
+                        uint8_t* Frame_2_px = Frame2[frame2br][px_row][frame2bc];
+                        const uint8x16_t Frame_2_Vector = {Frame2px[0], Frame2px[1],
+                                                            Frame2px[2], Frame2px[3],
+                                                            Frame2px[4], Frame2px[5],
+                                                            Frame2px[6], Frame2px[7],
+                                                            Frame2px[8], Frame2px[9],
+                                                            Frame2px[10], Frame2px[11],
+                                                            Frame2px[12], Frame2px[13],
+                                                            Frame2px[14], Frame2px[15]};
+
+                        uint8_t* Frame_1_px = Frame1[frame1br][px_row][frame1bc];
+                        const uint8x16_t Frame_1_Vector = {Frame1px[0],Frame1px[1],
+                                                            Frame1px[2], Frame1px[3],
+                                                            Frame1px[4], Frame1px[5],
+                                                            Frame1px[6], Frame1px[7],
+                                                            Frame1px[8], Frame1px[9],
+                                                            Frame1px[10], Frame1px[11],
+                                                            Frame1px[12], Frame1px[13],
+                                                            Frame1px[14], Frame1px[15]};
+
+                        uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
+                        temp_sad += vaddvq_u8(sad);
                     }
 
                  }
