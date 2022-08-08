@@ -69,14 +69,15 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 
     fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
 
-    uint8_t header_counter = 0;
+    uint8_t header_counter = 1;
 
-    while (cur_pixel_row < SIZEOFIMAGE - 2)
+    while (cur_pixel_row < SIZEOFIMAGE)
     {
         // Skip over the jpg image header
-        if (header_counter < 6)
+        if (header_counter < 54)
         {
             header_counter++;
+            fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
             continue;
         }
 
