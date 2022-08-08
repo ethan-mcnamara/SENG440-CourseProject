@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
             {
                 for (int t = 0; t < 16; ++t)
                 {
-                    printf("%5d ", test_film->frame[0].block[i][j].pixel[k][t]);
+                    printf("%3d ", test_film->frame[0].block[i][j].pixel[k][t]);
                 }
                 printf("\n");
             }
