@@ -41,11 +41,11 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     }
 
     for (uint8_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
-
         for (uint8_t row = 0; row < SIZEOFBLOCK; row++){
             for (uint8_t block_col = 0; block_col < NUMBLOCKS; block_col++) {
                 fread(&Frame1[block_row][row][block_col], sizeof(uint8_t)*16, 1, fptr1);
                 fread(&Frame2[block_row][row][block_col], sizeof(uint8_t)*16, 1, fptr2);
+                printf("1: %c 2: %c\n", Frame1[block_row][row][block_col][0], Frame2[block_row][row][block_col][0] )
             }
         }
     }
@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
                         temp_sad += vgetq_lane_u8(sad, 14);
                         temp_sad += vgetq_lane_u8(sad, 15);
                     }
-                    printf("%d\n", temp_sad);
+
                     if (assignment_flag || min_sad > temp_sad) {
                         assignment_flag = 0;
                         min_sad = temp_sad;
