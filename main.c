@@ -118,12 +118,12 @@ int main(int argc, char *argv[])
     //for each block in frame
     //    find most similar (smallest SAD) other block (limit search to nearby blocks)
 
-    fptr = fopen("test_images/Image1.bmp", "rb");
-    if(fptr == NULL)
-    {
-        printf("Error!");   
-        exit(1);             
-    }
+    // fptr = fopen("test_images/Image1.bmp", "rb");
+    // if(fptr == NULL)
+    // {
+    //     printf("Error!");   
+    //     exit(1);             
+    // }
     
     // Initialize the frame arrays
     process_frame(Frame1, Frame2);
