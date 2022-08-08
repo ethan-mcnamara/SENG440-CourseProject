@@ -123,9 +123,7 @@ int main(int argc, char *argv[])
             Differences[frame1br][frame1bc] = min_sad;
             x_vectors[frame1br][frame1bc] = x_displ;
             y_vectors[frame1br][frame1bc] = y_displ;
-            break;
         }
-        break;
     }
 
     uint8_t print_i;
