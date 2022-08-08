@@ -96,7 +96,8 @@ int main(int argc, char *argv[])
                         const uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
                         
                         for (uint8_t px_col = 0; px_col < SIZEOFBLOCK; px_col++) {
-                            temp_sad += vgetq_lane_u8(sad, px_col);
+                            const temp_col = px_col;
+                            temp_sad += vgetq_lane_u8(sad, temp_col);
                         }
                     }
                 }
