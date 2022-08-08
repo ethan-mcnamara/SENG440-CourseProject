@@ -72,8 +72,10 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     for (uint8_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
         for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; pixel_row++){
             for (uint8_t block_col = 0; block_col < NUMBLOCKS; block_col++) {
+                printf("before writing to either frame\n");
                 fread(&Frame1[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr1);
                 fread(&Frame2[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr2);
+                printf("after writing to both frames\n");
             }
         }
     }
@@ -108,7 +110,7 @@ int main(int argc, char *argv[])
 
     process_frame(Frame1, Frame2);
 
-    uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
+    uint32_t Differences[NUMBLOCKS][NUMBLOCKS] = { 0 };
     Vector vectors [NUMBLOCKS][NUMBLOCKS];
 
 
@@ -188,10 +190,12 @@ int main(int argc, char *argv[])
                         temp_sad += vgetq_lane_u16(final_result, 6);
                         temp_sad += vgetq_lane_u16(final_result, 7);
 
+                        printf("after calculating the temp_sad value\n");
+
                     }
                     if (Differences[block_row_ref][block_col_ref] > temp_sad )
                     {
-                        // printf("In if condition, temp_sad = %d, old value = %d\n", temp_sad, test_film->frame[frame].differences[block_row_ref][block_col_ref]);
+                        printf("In if condition\n");
                         Differences[block_row_ref][block_col_ref] = temp_sad;
                         vectors[block_row_ref][block_col_ref].x = block_col_comp - block_col_ref;
                         vectors[block_row_ref][block_col_ref].y = block_row_ref - block_row_comp;
