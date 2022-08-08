@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
         for (int j = 0; j < 16; j++) {
             for (int k = 0; k < 16; k++) {
                 for (int t = 0; t < 16; t++) {
-                    printf("%d\n", Frame1[i][j][k][t]);
+                    printf("%d ", Frame1[i][j][k][t]);
                 }
             }
         }
