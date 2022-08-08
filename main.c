@@ -12,7 +12,7 @@
 #define SIZEOFIMAGE 256
 
 /*
-* Struct definitions
+* Struct definition
 */
 
 typedef struct Vector
@@ -21,22 +21,9 @@ typedef struct Vector
     int8_t y;
 } Vector;
 
-typedef struct Block
-{
-  uint8_t pixel[SIZEOFBLOCK][SIZEOFBLOCK];
-} Block;
-
-typedef struct Frame
-{
-    Block block[NUMBLOCKS][NUMBLOCKS];
-    uint32_t differences [NUMBLOCKS][NUMBLOCKS];
-    Vector vectors [NUMBLOCKS][NUMBLOCKS];
-} Frame;
-
-typedef struct Film
-{
-    Frame frame[NUMFRAMES];
-} Film;
+/*
+* Function definitions
+*/
 
 int8_t max(int8_t val_1, int8_t val_2)
 {
