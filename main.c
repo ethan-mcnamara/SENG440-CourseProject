@@ -63,7 +63,7 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
                 printf("Frame 1: %d\n", Frame1[block_row][block_col][pixel_row][15]);
                 fread(&Frame2[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr2);
                 printf("Frame 2: %d\n", Frame2[block_row][block_col][pixel_row][15]);
-                printf("*****\n")
+                printf("*****\n");
             }
         }
     }
