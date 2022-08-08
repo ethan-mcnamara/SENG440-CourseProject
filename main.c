@@ -55,13 +55,18 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     FILE *fptr2;
     uint8_t* rm_header1;
     uint8_t* rm_header2;
+    printf("after declaration of pointers\n");
 
     fptr1 = fopen("test_images/Image1.bmp", "rb");
     fptr2 = fopen("test_images/Image2.bmp", "rb");
 
+    printf("after opening file pointers\n");
+
     // BMP header size is 54 bytes (8 bytes * 7 - 2 = 54 bytes)
     fread(&rm_header1, sizeof(uint8_t) * 7 - 2, 1, fptr1);
     fread(&rm_header2, sizeof(uint8_t)* 7 - 2, 1, fptr2);
+
+    printf("after reading file headers\n");
 
     if(fptr1 == NULL || fptr2 == NULL)
     {
@@ -105,11 +110,15 @@ int main(int argc, char *argv[])
         file_name = argv[1];
     }
 
-    
+    printf("Before declaration of frames\n");
     uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
 
+    printf("before process_frame\n");
+
     process_frame(Frame1, Frame2);
+
+    printf("after process_frame\n");
 
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS] = { 0 };
     Vector vectors [NUMBLOCKS][NUMBLOCKS];
