@@ -73,10 +73,11 @@ int main(int argc, char *argv[])
     for (frame1br = 0; frame1br < NUMBLOCKS; frame1br++) {
         uint8_t frame1bc;
         for (frame1bc = 0; frame1bc < NUMBLOCKS; frame1bc++) {
-            uint32_t temp_sad = 0;
+            uint32_t max_sad = 0;
             uint8_t frame2br;
             for (frame2br = max(0, frame1br - 3); frame2br < min(NUMBLOCKS, frame1br + 3); ++frame2br) {
                 uint8_t frame2bc;
+                uint32_t temp_sad = 0;
                 for (frame2bc = max(0, frame1bc - 3); frame2bc < min(NUMBLOCKS, frame1bc+ 3); ++frame2bc) {
                     uint8_t px_row;
                     for (px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
@@ -89,6 +90,9 @@ int main(int argc, char *argv[])
                         for (px_i = 0; px_i < SIZEOFBLOCK; px_i++) {
                             temp_sad += vgetq_lane_u8(sad, px_i);
                         }
+                    }
+                    if (max_sad > temp_sad) {
+                        max_sad = temp_sad;
                     }
                 }
             }
