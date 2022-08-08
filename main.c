@@ -86,7 +86,11 @@ int main(int argc, char *argv[])
 
                         uint8x16_t sad = vabdq_u8(Frame_2_Vector, Frame_1_Vector);
                         // Cannot use accumulate function
-                        vgetq_lane_u8(sad, 0);
+                        uint8_t px_i;
+                        for (px_i = 0; px_i < SIZEOFBLOCK; px_i++) {
+                            temp_sad += vgetq_lane_u8(sad, px_i);
+                        }
+
                     }
 
                  }
