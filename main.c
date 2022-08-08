@@ -91,6 +91,7 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
 */
 int main(int argc, char *argv[]) 
 {
+    printf("First line of main function\n");
     char* file_name;
     FILE *fptr;
 
