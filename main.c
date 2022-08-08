@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
                     temp_sad &= 0;
                     for (uint8_t px_row = 0; px_row < SIZEOFBLOCK; px_row++) {
                         for(uint8_t j = 0; j < 16; j++) {
-                            printf("1: %d 2: %d ",Frame1[frame1br][frame1bc][px_row], Frame2[frame2br][frame2bc][px_row] );
+                            printf("1: %d 2: %d ",Frame1[frame1br][frame1bc][px_row][j], Frame2[frame2br][frame2bc][px_row][j] );
                         }
                         printf("++++++++++++++++++++++++++++++++++++\n");
                         const uint8x16_t Frame_2_Vector = vld1q_u8(Frame2[frame2br][frame2bc][px_row]);
