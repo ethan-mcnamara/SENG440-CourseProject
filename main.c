@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
     // Initialize the frame arrays
     process_frame(Frame1, Frame2);
 
-    printf("Frame 1:")
+    printf("Frame 1:");
     for (int i = 0; i < NUMBLOCKS; ++i)
     {
         for (int j = 0; j < NUMBLOCKS; ++j)
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     }
 
     printf("\n*****\n\n");
-    printf("Frame 2:")
+    printf("Frame 2:");
     for (int i = 0; i < NUMBLOCKS; ++i)
     {
         for (int j = 0; j < NUMBLOCKS; ++j)
