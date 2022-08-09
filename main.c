@@ -115,7 +115,6 @@ int main(int argc, char *argv[])
         {
             for (uint8_t block_row_comp = max(0, block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
             {
-                // printf("block_row_ref: %d, block_row_comp: %d\n", block_row_ref, block_row_comp);
                 for (uint8_t block_col_comp = max(0, block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
                 {
                     uint32_t temp_sad = 0;
