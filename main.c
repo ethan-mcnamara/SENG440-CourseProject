@@ -96,6 +96,10 @@ int main(int argc, char *argv[])
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     process_frame(Frame1, Frame2);
 
+    clock_t end = clock();
+    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("The elapsed time is %f seconds", time_spent);
+
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
     Vector vectors [NUMBLOCKS][NUMBLOCKS];
 
@@ -178,8 +182,5 @@ int main(int argc, char *argv[])
         }
     }
 */
-    clock_t end = clock();
-    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("The elapsed time is %f seconds", time_spent);
     return 0;
 }
