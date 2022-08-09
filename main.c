@@ -53,7 +53,7 @@ int8_t min(int8_t val_1, int8_t val_2)
     return (val_1 > val_2) ? val_2 : val_1;
 }
 
-// Method for Processing Frame
+// Method for Processing the frame
 void process_frame(Frame *cur_frame, FILE *fptr)
 {
     uint8_t cur_pixel;
@@ -79,14 +79,10 @@ void process_frame(Frame *cur_frame, FILE *fptr)
     uint8_t rm_header [54];
 
     // Read the header and store it in an array (not to be used)
-    for (uint8_t i = 0; i < 54; i++) {
-        fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
-        printf("%d\n", cur_pixel);
-    }
+    fread(&rm_header, sizeof(uint8_t) * 7 - 2, 1, fptr);
 
     // Read the first pixel for iteration purposes
     fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
-    printf("%d\n", cur_pixel);
 
     while (cur_pixel_row < SIZEOFIMAGE)
     {
