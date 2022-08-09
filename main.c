@@ -91,13 +91,12 @@ int main(int argc, char *argv[])
     double time_spent = 0.0;
     clock_t begin = clock();
 
+    // Initialize the frames
     uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
-
     process_frame(Frame1, Frame2);
 
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
-
     Vector vectors [NUMBLOCKS][NUMBLOCKS];
 
     // Initialize the Differences 2-D array
@@ -108,9 +107,6 @@ int main(int argc, char *argv[])
             Differences[i][j] = UINT32_MAX;
         }
     }
-    
-    // Initialize the frame arrays
-    process_frame(Frame1, Frame2);
 
     // Start calculating the SAD values
     for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
