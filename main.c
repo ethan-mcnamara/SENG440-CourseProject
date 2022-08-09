@@ -90,8 +90,8 @@ void print_uint8 (uint8x16_t data) {
 int main(int argc, char *argv[]) 
 {
     // Uncomment for Timer
-    // double time_spent = 0.0;
-    // clock_t begin = clock();
+    double time_spent = 0.0;
+    clock_t begin = clock();
 
     // Initialize the frames
     // Make the last frame be the vectors in order to prevent loading in the for-loop
@@ -99,17 +99,9 @@ int main(int argc, char *argv[])
     uint8x16_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK];
     process_frame(Frame1, Frame2);
 
+    // Differences does not need to be initialised due to the local variable `min_sad`
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
     Vector vectors[NUMBLOCKS][NUMBLOCKS];
-
-    // Initialize the Differences 2-D array
-    for (int i = 0; i < NUMBLOCKS; ++i)
-    {
-        for (int j = 0; j < NUMBLOCKS; ++j)
-        {
-            Differences[i][j] = UINT32_MAX;
-        }
-    }
 
     // Create Local Variables to speed-up the process
     register uint32_t temp_sad = 0;
@@ -174,9 +166,9 @@ int main(int argc, char *argv[])
     }
 
     // Uncomment for Timer
-    //clock_t end = clock();
-    //time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
-    //printf("The elapsed time is %f seconds", time_spent);
+    clock_t end = clock();
+    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("The elapsed time is %f seconds", time_spent);
 
 /*
     for (int i = 0; i < NUMBLOCKS; ++i)
