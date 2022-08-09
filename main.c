@@ -79,6 +79,11 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 
         if (!first_iteration)
         {
+            if (cur_pixel_col % SIZEOFBLOCK == 0)
+            {
+                cur_block = &cur_frame->block[cur_block_row][++cur_block_col];
+            }
+            
             if (cur_block_col == SIZEOFBLOCK)
             {
                 cur_pixel_col = 0;
@@ -93,10 +98,6 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 
                 cur_block = &cur_frame->block[cur_block_row][cur_block_col];
 
-            }
-            if (cur_pixel_col % SIZEOFBLOCK == 0)
-            {
-                cur_block = &cur_frame->block[cur_block_row][++cur_block_col];
             }
         }
         else
