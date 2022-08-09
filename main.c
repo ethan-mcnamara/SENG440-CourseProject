@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <limits.h>
 #include <math.h>
+#include <time.h>
 #include <arm_neon.h>
 
 #define SIZEOFBLOCK 16
@@ -69,6 +70,7 @@ void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK
     return;
 }
 
+// This is just for testing purposes
 void print_uint8 (uint8x16_t data) {
     int i;
     static uint8_t p[16];
@@ -86,6 +88,8 @@ void print_uint8 (uint8x16_t data) {
 */
 int main(int argc, char *argv[]) 
 {
+    double time_spent = 0.0;
+    clock_t begin = clock();
 
     uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
@@ -166,7 +170,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    
+/*
     for (int i = 0; i < NUMBLOCKS; ++i)
     {
         for (int j = 0; j < NUMBLOCKS; ++j)
@@ -177,6 +181,9 @@ int main(int argc, char *argv[])
             printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
         }
     }
-
+*/
+    clock_t end = clock();
+    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("The elapsed time is %f seconds", time_spent);
     return 0;
 }
