@@ -88,17 +88,10 @@ void print_uint8 (uint8x16_t data) {
 */
 int main(int argc, char *argv[]) 
 {
-    double time_spent = 0.0;
-    clock_t begin = clock();
-
     // Initialize the frames
     uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
     process_frame(Frame1, Frame2);
-
-    clock_t end = clock();
-    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("The elapsed time is %f seconds", time_spent);
 
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
     Vector vectors [NUMBLOCKS][NUMBLOCKS];
@@ -111,6 +104,8 @@ int main(int argc, char *argv[])
             Differences[i][j] = UINT32_MAX;
         }
     }
+    double time_spent = 0.0;
+    clock_t begin = clock();
 
     // Start calculating the SAD values
     for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
@@ -169,6 +164,10 @@ int main(int argc, char *argv[])
             }
         }
     }
+    clock_t end = clock();
+    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("The elapsed time is %f seconds", time_spent);
+
 
 /*
     for (int i = 0; i < NUMBLOCKS; ++i)
