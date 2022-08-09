@@ -84,10 +84,11 @@ void process_frame(Frame *cur_frame, FILE *fptr)
                 cur_pixel_col = 0;
                 cur_block_col = 0;
                 cur_pixel_row++;
+                printf("%d\n", cur_pixel_row);
 
                 if (cur_pixel_row % SIZEOFBLOCK == 0)
                 {
-                    printf("%d\n", cur_pixel_row);
+
                     cur_block_row++;
                 }
 
