@@ -89,9 +89,9 @@ void print_uint8 (uint8x16_t data) {
 */
 int main(int argc, char *argv[]) 
 {
-    
-    double time_spent = 0.0;
-    clock_t begin = clock();
+    // Uncomment for Timer
+    // double time_spent = 0.0;
+    // clock_t begin = clock();
 
     // Initialize the frames
     // Make the last frame be the vectors in order to prevent loading in the for-loop
@@ -172,12 +172,13 @@ int main(int argc, char *argv[])
             min_sad = UINT32_MAX;
         }
     }
-    
-    clock_t end = clock();
-    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("The elapsed time is %f seconds", time_spent);
 
-/*
+    // Uncomment for Timer
+    //clock_t end = clock();
+    //time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
+    //printf("The elapsed time is %f seconds", time_spent);
+
+
     for (int i = 0; i < NUMBLOCKS; ++i)
     {
         for (int j = 0; j < NUMBLOCKS; ++j)
@@ -187,7 +188,7 @@ int main(int argc, char *argv[])
             int temp_y = vectors[i][j].y;
             printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
         }
-    } */
+    }
 
     return 0;
 }
