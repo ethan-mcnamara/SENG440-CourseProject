@@ -83,6 +83,11 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 
         if (!first_iteration)
         {
+            if (cur_pixel_col % SIZEOFBLOCK == 0)
+            {
+                cur_block = &cur_frame->block[cur_block_row][++cur_block_col];
+            }
+
             if (cur_block_col == SIZEOFBLOCK)
             {
                 cur_pixel_col = 0;
@@ -96,10 +101,6 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 
                 cur_block = &cur_frame->block[cur_block_row][cur_block_col];
 
-            }
-            if (cur_pixel_col % SIZEOFBLOCK == 0)
-            {
-                cur_block = &cur_frame->block[cur_block_row][++cur_block_col];
             }
         }
         else
@@ -157,21 +158,6 @@ int main(int argc, char *argv[])
     fptr = fopen("test_images/Image2.bmp", "rb");
     process_frame(test_frame, fptr);
     test_film->frame[1] = *test_frame;
-
-    for (int i = 0; i < 16; ++i)
-    {
-        for (int j = 0; j < 16; ++j)
-        {
-            for (int k = 0; k < 16; ++k)
-            {
-                for (int t = 0; t < 16; ++t)
-                {
-                    printf("%3d ", test_film->frame[0].block[i][j].pixel[k][t]);
-                }
-                printf("\n");
-            }
-        }
-    }
 
 
     for (uint8_t frame = 0; frame < NUMFRAMES - 1; ++frame) // every frame
