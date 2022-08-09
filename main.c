@@ -137,14 +137,14 @@ int main(int argc, char *argv[])
 
                         // Sum all elements in the result vector by reading the lanes individually
                         // A for-loop would add additional operations that are not necessary (operations require consts)
-                        temp_sad += vgetq_lane_u16(init_result, 0);
-                        temp_sad += vgetq_lane_u16(init_result, 1);
-                        temp_sad += vgetq_lane_u16(init_result, 2);
-                        temp_sad += vgetq_lane_u16(init_result, 3);
-                        temp_sad += vgetq_lane_u16(init_result, 4);
-                        temp_sad += vgetq_lane_u16(init_result, 5);
-                        temp_sad += vgetq_lane_u16(init_result, 6);
-                        temp_sad += vgetq_lane_u16(init_result, 7);
+                        temp_sad += vgetq_lane_u16(final_result, 0);
+                        temp_sad += vgetq_lane_u16(final_result, 1);
+                        temp_sad += vgetq_lane_u16(final_result, 2);
+                        temp_sad += vgetq_lane_u16(final_result, 3);
+                        temp_sad += vgetq_lane_u16(final_result, 4);
+                        temp_sad += vgetq_lane_u16(final_result, 5);
+                        temp_sad += vgetq_lane_u16(final_result, 6);
+                        temp_sad += vgetq_lane_u16(final_result, 7);
                     }
 
                     if (Differences[block_row_ref][block_col_ref] > temp_sad )
