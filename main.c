@@ -41,10 +41,12 @@ typedef struct Film
     Frame frame[NUMFRAMES];
 } Film;
 
+
 int8_t max(int8_t val_1, int8_t val_2)
 {
     return (val_1 < val_2) ? val_2 : val_1;
 }
+
 
 int8_t min(int8_t val_1, int8_t val_2)
 {
@@ -79,10 +81,12 @@ void process_frame(Frame *cur_frame, FILE *fptr)
     // Read the header and store it in an array (not to be used)
     for (uint8_t i = 0; i < 54; i++) {
         fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
+        printf("%d\n", cur_pixel);
     }
 
     // Read the first pixel for iteration purposes
     fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
+    printf("%d\n", cur_pixel);
 
     while (cur_pixel_row < SIZEOFIMAGE)
     {
