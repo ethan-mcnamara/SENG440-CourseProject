@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 
     // Create Local Variables to speed-up the process
     register uint32_t temp_sad = 0;
-    uint32_t min_sad = UINT32_MAX;
+    register uint32_t min_sad = UINT32_MAX;
     uint8_t x_displ = 0;
     uint8_t y_displ = 0;
 
