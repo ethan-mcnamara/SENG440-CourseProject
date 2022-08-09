@@ -84,7 +84,7 @@ void process_frame(Frame *cur_frame, FILE *fptr)
                 cur_pixel_col = 0;
                 cur_block_col = 0;
                 cur_pixel_row++;
-
+                printf("WE ENTER\n");
                 if (cur_pixel_row % SIZEOFBLOCK == 0)
                 {
 
@@ -104,7 +104,6 @@ void process_frame(Frame *cur_frame, FILE *fptr)
             first_iteration = 0;
         }
 
-        printf("THIS SHOULD HAPPEN\n");
         printf("block_row: %d, block_col: %d, pixel_row: %d, pixel_col: %d\n", cur_block_row, cur_block_col,cur_pixel_row % SIZEOFBLOCK, cur_pixel_col % SIZEOFBLOCK);
         cur_block->pixel[cur_pixel_row % SIZEOFBLOCK][cur_pixel_col % SIZEOFBLOCK] = cur_pixel;
 
