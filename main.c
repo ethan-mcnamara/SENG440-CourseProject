@@ -104,8 +104,6 @@ int main(int argc, char *argv[])
             Differences[i][j] = UINT32_MAX;
         }
     }
-    double time_spent = 0.0;
-    clock_t begin = clock();
 
     // Start calculating the SAD values
     for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
@@ -164,9 +162,6 @@ int main(int argc, char *argv[])
             }
         }
     }
-    clock_t end = clock();
-    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("The elapsed time is %f seconds", time_spent);
 
 
 /*
