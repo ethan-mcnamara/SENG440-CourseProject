@@ -93,6 +93,7 @@ int main(int argc, char *argv[])
     double time_spent = 0.0;
     clock_t begin = clock();
     */
+
     // Initialize the frames
     // Make the last frame be the vectors in order to prevent loading in the for-loop
     uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK];
@@ -111,6 +112,12 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Create Local Variables to speed-up the process
+    register uint32_t temp_sad = 0;
+    uint32_t min_sad = UINT32_MAX;
+    uint8_t x_displ = 0;
+    uint8_t y_displ = 0;
+
     // Start calculating the SAD values
     for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
     {
@@ -120,7 +127,7 @@ int main(int argc, char *argv[])
             {
                 for (uint8_t block_col_comp = max(0, block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
                 {
-                    uint32_t temp_sad = 0;
+                    temp_sad &= 0;
                     for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                     {
                         // No longer need to load the arrays
@@ -151,14 +158,19 @@ int main(int argc, char *argv[])
                         temp_sad += vgetq_lane_u16(final_result, 7);
                     }
 
-                    if (Differences[block_row_ref][block_col_ref] > temp_sad )
+                    if (min_sad > temp_sad )
                     {
-                        Differences[block_row_ref][block_col_ref] = temp_sad;
-                        vectors[block_row_ref][block_col_ref].x = block_col_comp - block_col_ref;
-                        vectors[block_row_ref][block_col_ref].y = block_row_ref - block_row_comp;
+                        min_sad = temp_sad;
+                        x_displ = block_col_comp - block_col_ref;
+                        y_displ = block_row_ref - block_row_comp;
                     }
                 }
             }
+            // Assign the local values to the array (less memory handling)
+            Differences[block_row_ref][block_col_ref] = min_sad;
+            vectors[block_row_ref][block_col_ref].x = x_displ;
+            vectors[block_row_ref][block_col_ref].y = y_displ;
+            min_sad = UINT32_MAX;
         }
     }
     /*
