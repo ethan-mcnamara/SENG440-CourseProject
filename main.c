@@ -36,8 +36,9 @@ int8_t min(int8_t val_1, int8_t val_2)
     return (val_1 > val_2) ? val_2 : val_1;
 }
 
-void process_frame(uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK], 
-                   uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK])
+// Add Restrict Keyword to prevent overlap concerns
+void process_frame(restrict uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK], 
+                   restrict uint8x16_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK])
 {
     FILE *fptr1;
     FILE *fptr2;
@@ -89,12 +90,13 @@ void print_uint8 (uint8x16_t data) {
 int main(int argc, char *argv[]) 
 {
     // Initialize the frames
-    uint8_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
-    uint8_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK][SIZEOFBLOCK];
+    // Make the last frame be the vectors in order to prevent loading in the for-loop
+    uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK];
+    uint8x16_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK];
     process_frame(Frame1, Frame2);
 
     uint32_t Differences[NUMBLOCKS][NUMBLOCKS];
-    Vector vectors [NUMBLOCKS][NUMBLOCKS];
+    Vector vectors[NUMBLOCKS][NUMBLOCKS];
 
     // Initialize the Differences 2-D array
     for (int i = 0; i < NUMBLOCKS; ++i)
@@ -117,41 +119,34 @@ int main(int argc, char *argv[])
                     uint32_t temp_sad = 0;
                     for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                     {
-                        uint8x16_t vector_ref; // declare a vector of 16 8-bit lanes
-                        uint8x16_t vector_comp; // declare a vector of 16 8-bit lanes
-                        vector_ref = vld1q_u8(Frame1[block_row_ref][block_col_ref][pixel_row]); // load the array from memory into a vector
-                        vector_comp = vld1q_u8(Frame2[block_row_comp][block_col_comp][pixel_row]); // load the array from memory into a vector
+                        // No longer need to load the arrays
+                        uint8x16_t vector_ref = Frame1[block_row_ref][block_col_ref][pixel_row]; // declare a vector of 16 8-bit lanes
+                        uint8x16_t vector_comp = Frame2[block_row_comp][block_col_comp][pixel_row]; // declare a vector of 16 8-bit lanes
 
                         // Perform the Absolute Differences operation:
-                        uint8x16_t init_result;
-                        init_result = vabdq_u8(vector_ref, vector_comp);
+                        uint8x16_t init_result = vabdq_u8(vector_ref, vector_comp);
 
                         // Store first and second halves of the result vector in two different vectors of half size
                         uint8x8_t result_high = vget_high_u8( init_result );
                         uint8x8_t result_low = vget_low_u8( init_result );
 
-                        // Perform vector addition with the high and low vectors
+                        // Perform vector addition with the high and low vectors.
+                        // This shortens number of needed calculations below.
+                        // Use vaddl_u8 to prevent overflow
                         uint16x8_t final_result = vaddl_u8( result_high, result_low);
 
                         // Sum all elements in the result vector by reading the lanes individually
-                        temp_sad += vgetq_lane_u8(init_result, 0);
-                        temp_sad += vgetq_lane_u8(init_result, 1);
-                        temp_sad += vgetq_lane_u8(init_result, 2);
-                        temp_sad += vgetq_lane_u8(init_result, 3);
-                        temp_sad += vgetq_lane_u8(init_result, 4);
-                        temp_sad += vgetq_lane_u8(init_result, 5);
-                        temp_sad += vgetq_lane_u8(init_result, 6);
-                        temp_sad += vgetq_lane_u8(init_result, 7);
-                        temp_sad += vgetq_lane_u8(init_result, 8);
-                        temp_sad += vgetq_lane_u8(init_result, 9);
-                        temp_sad += vgetq_lane_u8(init_result, 10);
-                        temp_sad += vgetq_lane_u8(init_result, 11);
-                        temp_sad += vgetq_lane_u8(init_result, 12);
-                        temp_sad += vgetq_lane_u8(init_result, 13);
-                        temp_sad += vgetq_lane_u8(init_result, 14);
-                        temp_sad += vgetq_lane_u8(init_result, 15);
-
+                        // A for-loop would add additional operations that are not necessary (operations require consts)
+                        temp_sad += vgetq_lane_u16(init_result, 0);
+                        temp_sad += vgetq_lane_u16(init_result, 1);
+                        temp_sad += vgetq_lane_u16(init_result, 2);
+                        temp_sad += vgetq_lane_u16(init_result, 3);
+                        temp_sad += vgetq_lane_u16(init_result, 4);
+                        temp_sad += vgetq_lane_u16(init_result, 5);
+                        temp_sad += vgetq_lane_u16(init_result, 6);
+                        temp_sad += vgetq_lane_u16(init_result, 7);
                     }
+
                     if (Differences[block_row_ref][block_col_ref] > temp_sad )
                     {
                         Differences[block_row_ref][block_col_ref] = temp_sad;
@@ -164,7 +159,7 @@ int main(int argc, char *argv[])
     }
 
 
-/*
+
     for (int i = 0; i < NUMBLOCKS; ++i)
     {
         for (int j = 0; j < NUMBLOCKS; ++j)
@@ -175,6 +170,6 @@ int main(int argc, char *argv[])
             printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
         }
     }
-*/
+
     return 0;
 }
