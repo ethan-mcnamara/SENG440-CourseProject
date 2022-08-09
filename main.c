@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <limits.h>
+#include <time.h> 
 
 #define SIZEOFBLOCK 16
 #define NUMFRAMES 2
@@ -129,6 +130,7 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 */
 int main(int argc, char *argv[]) 
 {
+    time_t begin = time(NULL);
     FILE *fptr;
     
     //for each block in frame
@@ -197,7 +199,7 @@ int main(int argc, char *argv[])
             }
         }
     }
-    
+    /*
     for (int i = 0; i < NUMBLOCKS; ++i)
     {
         for (int j = 0; j < NUMBLOCKS; ++j)
@@ -208,5 +210,8 @@ int main(int argc, char *argv[])
             printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
         }
     }
+    */
+    time_t end = time(NULL);
+    printf("The elapsed time is %d seconds", (end - begin));
     return 0;
 }
