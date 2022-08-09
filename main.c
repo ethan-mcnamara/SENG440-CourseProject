@@ -67,8 +67,6 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 
     Block *cur_block = &cur_frame->block[0][0];
 
-    uint8_t header_counter = 0;
-
     uint8_t rm_header [54];
 
     // Read the header and store it in an array (not to be used)
@@ -217,9 +215,6 @@ int main(int argc, char *argv[])
             printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
         }
     }
-
-    // printf("max of 0, -3: %d\n", max(0, -3));
-    // printf("min of 0, 3: %d\n", min(0, 3));
 
     fclose(fptr);
     return 0;
