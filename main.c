@@ -89,9 +89,10 @@ void print_uint8 (uint8x16_t data) {
 */
 int main(int argc, char *argv[]) 
 {
+    /*
     double time_spent = 0.0;
     clock_t begin = clock();
-
+    */
     // Initialize the frames
     // Make the last frame be the vectors in order to prevent loading in the for-loop
     uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK];
@@ -160,11 +161,11 @@ int main(int argc, char *argv[])
             }
         }
     }
-
+    /*
     clock_t end = clock();
     time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
     printf("The elapsed time is %f seconds", time_spent);
-
+    */
 /*
     for (int i = 0; i < NUMBLOCKS; ++i)
     {
