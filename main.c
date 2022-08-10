@@ -113,13 +113,13 @@ int main(int argc, char *argv[])
     uint8_t x_displ = 0;
     uint8_t y_displ = 0;
 
-    uint8_t t = NEGATIVECHECK(-1);
+    int8_t t = NEGATIVECHECK(-1);
     printf("%d\n", t);
 
-    uint8_t t1 = NEGATIVECHECK(0);
+    int8_t t1 = NEGATIVECHECK(0);
     printf("%d\n", t1);
 
-        uint8_t t2 = NEGATIVECHECK(1);
+    int8_t t2 = NEGATIVECHECK(1);
     printf("%d\n", t2);
 
     // Start calculating the SAD values
