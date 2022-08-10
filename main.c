@@ -13,7 +13,8 @@
 #define SIZEOFIMAGE 256
 
 // These Pragmas are in replacement of the Min/Max Functions.
-// 
+// Note, (uint8_t - value) are passed as parameters and would cause wrap-around
+// behaviour. 
 #define NEGATIVECHECK(block_i) ((block_i)^(0xf0000000) & block_i)  
 #define MAXCHECK(block_i)      (((block_i)&(0x00000010)) ? SIZEOFBLOCK: (block_i))
 
