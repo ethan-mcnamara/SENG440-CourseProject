@@ -38,12 +38,6 @@
 *                associated with SAD.
 */
 
-
-// These Pragmas were added in accordance with Lecture, but do not make any difference
-// to the runtime of the application.
-#define MIN(block1)      ((block1 > SIZEOFBLOCK) ? SIZEOFBLOCK : block1)
-#define MAX(block1)      ((0 < block1) ? (block1) : 0)
-
 /*
 * Struct definition
 */
