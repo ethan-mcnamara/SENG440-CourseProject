@@ -12,7 +12,8 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 
-
+// These Pragmas were added in accordance with Lecture, but do not make any difference
+// to the runtime of the application.
 #define MIN(block1)      ((block1 > SIZEOFBLOCK) ? SIZEOFBLOCK : block1)
 #define MAX(block1)      ((0 < block1) ? (block1) : (0))
 
@@ -29,18 +30,6 @@ typedef struct Vector
 /*
 * Function definitions
 */
-
-// max(0, block_col_ref - 3)
-int8_t max(int8_t val_1, int8_t val_2)
-{
-    return (val_1 < val_2) ? val_2 : val_1;
-}
-
-int8_t min(int8_t val_1, int8_t val_2)
-{
-    return (val_1 > val_2) ? val_2 : val_1;
-}
-
 
 void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK], 
                    uint8x16_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK])
@@ -95,8 +84,8 @@ void print_uint8 (uint8x16_t data) {
 int main(int argc, char *argv[]) 
 {
     // Uncomment for Timer
-    double time_spent = 0.0;
-    clock_t begin = clock();
+    // double time_spent = 0.0;
+    // clock_t begin = clock();
 
     // Initialize the frames
     // Make the last frame be the vectors in order to prevent loading in the for-loop
@@ -171,9 +160,9 @@ int main(int argc, char *argv[])
     }
 
     // Uncomment for Timer
-    clock_t end = clock();
-    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("The elapsed time is %f seconds", time_spent);
+    // clock_t end = clock();
+    // time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
+    // printf("The elapsed time is %f seconds", time_spent);
 
 /*
     for (int i = 0; i < NUMBLOCKS; ++i)
