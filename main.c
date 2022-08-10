@@ -12,6 +12,8 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 
+#define MIN(block_i) ((block_i)&(0xf0000000)) ? (block_i):(0)
+
 /*
 * Struct definition
 */
@@ -108,6 +110,9 @@ int main(int argc, char *argv[])
     register uint32_t min_sad = UINT32_MAX;
     uint8_t x_displ = 0;
     uint8_t y_displ = 0;
+
+    uint8_t t = MIN(-1);
+    printf("%d\n", t);
 
     // Start calculating the SAD values
     for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
