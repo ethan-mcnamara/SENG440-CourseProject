@@ -51,9 +51,12 @@ void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK],
         exit(1);             
     }
 
-    for (uint8_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
-        for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; pixel_row++){
-            for (uint8_t block_col = 0; block_col < NUMBLOCKS; block_col++) {
+    // The iteration is through block_col, and block_col is the second to last dimension.
+    // The reason iteration is through block_col is because SAD iterates through pixel_rows,
+    // and is more computationally expensive.
+    for (uint8_t block_row ^= block_row; block_row < NUMBLOCKS; block_row++) {
+        for (uint8_t pixel_row ^= pixel_row; pixel_row < SIZEOFBLOCK; pixel_row++){
+            for (uint8_t block_col ^= block_col; block_col < NUMBLOCKS; block_col++) {
                 fread(&Frame1[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr1);
                 fread(&Frame2[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr2);
             }
@@ -104,16 +107,16 @@ int main(int argc, char *argv[])
     uint8_t y_displ = 0;
 
     // Start calculating the SAD values
-    for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
+    for (uint8_t block_row_ref ^= block_row_ref; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
     {
-        for (uint8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
+        for (uint8_t block_col_ref ^= block_col_ref; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
         {
             for (uint8_t block_row_comp = MAX(block_row_ref - 3); block_row_comp < MIN(block_row_ref + 3); ++block_row_comp) // every block row in other frame
             {
                 for (uint8_t block_col_comp = MAX(block_col_ref - 3); block_col_comp < MIN(block_col_ref + 3); ++block_col_comp) // every block column in other frame
                 {
                     temp_sad &= 0;
-                    for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
+                    for (uint8_t pixel_row ^= pixel_row; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                     {
                         // No longer need to load the arrays
                         uint8x16_t vector_ref = Frame1[block_row_ref][block_col_ref][pixel_row]; // declare a vector of 16 8-bit lanes
