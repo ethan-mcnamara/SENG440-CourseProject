@@ -129,29 +129,24 @@ int main(int argc, char *argv[])
                         uint8x16_t init_result = vabdq_u8(vector_ref, vector_comp);
 
                         // Store first and second halves of the result vector in two different vectors of half size
-                        uint8x8_t result_high_1 = vget_high_u8( init_result );
-                        uint8x8_t result_low_1 = vget_low_u8( init_result );
+                        uint8x8_t result_high = vget_high_u8( init_result );
+                        uint8x8_t result_low = vget_low_u8( init_result );
 
                         // Perform vector addition with the high and low vectors.
                         // This shortens number of needed calculations below.
                         // Use vaddl_u8 to prevent overflow
-                        uint16x8_t result_1 = vaddl_u8( result_high_1, result_low_1);
-
-                        // Store first and second halves of the result_1 vector in two different vectors of half size
-                        uint16x4_t result_high_1 = vget_high_u16( result_1 );
-                        uint16x4_t result_low_1 = vget_low_u16( result_1 );
-
-                        // Perform vector addition with the high and low vectors.
-                        // This shortens number of needed calculations below.
-                        // Use vaddl_u16 to prevent overflow
-                        uint32x2_t final_result = vaddl_u16( result_high_1, result_low_1 );
+                        uint16x8_t final_result = vaddl_u8( result_high, result_low);
 
                         // Sum all elements in the result vector by reading the lanes individually
                         // A for-loop would add additional operations that are not necessary (operations require consts)
-                        temp_sad += vgetq_lane_u32(final_result, 0);
-                        temp_sad += vgetq_lane_u32(final_result, 1);
-                        temp_sad += vgetq_lane_u32(final_result, 2);
-                        temp_sad += vgetq_lane_u32(final_result, 3);
+                        temp_sad += vgetq_lane_u16(final_result, 0);
+                        temp_sad += vgetq_lane_u16(final_result, 1);
+                        temp_sad += vgetq_lane_u16(final_result, 2);
+                        temp_sad += vgetq_lane_u16(final_result, 3);
+                        temp_sad += vgetq_lane_u16(final_result, 4);
+                        temp_sad += vgetq_lane_u16(final_result, 5);
+                        temp_sad += vgetq_lane_u16(final_result, 6);
+                        temp_sad += vgetq_lane_u16(final_result, 7);
                     }
 
                     if (min_sad > temp_sad )
@@ -175,7 +170,7 @@ int main(int argc, char *argv[])
     // time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
     // printf("The elapsed time is %f seconds", time_spent);
 
-
+/*
     for (int i = 0; i < NUMBLOCKS; ++i)
     {
         for (int j = 0; j < NUMBLOCKS; ++j)
@@ -186,6 +181,6 @@ int main(int argc, char *argv[])
             printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
         }
     }
-
+*/
     return 0;
 }
