@@ -12,6 +12,10 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 
+
+#define MIN(block1)      ((block1 > SIZEOFBLOCK) ? SIZEOFBLOCK : block1)
+#define MAX(block1)      ((0 < block1) ? (block1) : (0))
+
 /*
 * Struct definition
 */
@@ -26,6 +30,7 @@ typedef struct Vector
 * Function definitions
 */
 
+// max(0, block_col_ref - 3)
 int8_t max(int8_t val_1, int8_t val_2)
 {
     return (val_1 < val_2) ? val_2 : val_1;
@@ -114,9 +119,9 @@ int main(int argc, char *argv[])
     {
         for (uint8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
         {
-            for (uint8_t block_row_comp = max(0, block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
+            for (uint8_t block_row_comp = MAX(0, block_row_ref - 3); block_row_comp < MIN(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
             {
-                for (uint8_t block_col_comp = max(0, block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
+                for (uint8_t block_col_comp = MAX(0, block_col_ref - 3); block_col_comp < MIN(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
                 {
                     temp_sad &= 0;
                     for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
