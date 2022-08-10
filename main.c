@@ -12,24 +12,66 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 
+/* General Barr C Compliance
+*  =======================================================================
+*  Barr C (1.3): Braces shall always surround the blocks of code. Moreover,
+*                the braces on the left-hand side are always a line below.
+*                This is evident throughout the code.
+*  
+*  Barr C (5.2): Whenever the width, in bits or bytes, of an integer value matters in
+*                the program, one of the fixed width data types shall be used in place
+*                of char, short, int, long, or long long. This is evident throughout the
+*                code. Note, there is a double in the code, but it is only for testing
+*                and is not an integer.
+*
+*  Barr C (6.3): Parameterized macros shall not be used if a function can be written
+*                to accomplish the same behavior. Parameterized Macros could have been used
+*                for the comp_zero and comp_max methods.
+*
+*  Barr C (8.1): The comma operator (,) shall not be used within variable
+*                declarations. For reference, consider the File pointers in Process_Frame 
+*                are on separate lines and the SAD local variables are declared separately
+*
+*  Barr C (8.4): With the exception of the initialization of a loop counter in the first clause of a
+*                for statement and the change to the same variable in the third, no assignment
+*                shall be made in any loop’s controlling expression. This is best shown in the for-loops
+*                associated with SAD.
+*/
+
+
 // These Pragmas were added in accordance with Lecture, but do not make any difference
 // to the runtime of the application.
 #define MIN(block1)      ((block1 > SIZEOFBLOCK) ? SIZEOFBLOCK : block1)
-#define MAX(block1)      ((0 < block1) ? (block1) : (0))
+#define MAX(block1)      ((0 < block1) ? (block1) : 0)
 
 /*
 * Struct definition
 */
 
-typedef struct Vector
+typedef struct
 {
     int8_t x;
     int8_t y;
+
 } Vector;
 
 /*
 * Function definitions
 */
+
+// Barr C (6.3) prevented use of Macros. Also,
+// the use of macros did not improve performance.
+int8_t comp_zero(int8_t val_1)
+{
+    return (val_1 > 0) ? val_1 : 0;
+}
+
+// Barr C (6.3) prevented use of Macros
+int8_t comp_max(int8_t val_1)
+{
+    return (val_1 > SIZEOFBLOCK) ? SIZEOFBLOCK : val_1;
+}
+
 
 void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK], 
                    uint8x16_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK])
@@ -52,10 +94,12 @@ void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK],
     }
 
     // The iteration is through block_col, and block_col is the second to last dimension.
-    // The reason iteration is through block_col is because SAD iterates through pixel_row
-    for (uint8_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
-        for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; pixel_row++){
-            for (uint8_t block_col = 0; block_col < NUMBLOCKS; block_col++) {
+    // The reason iteration is through block_col is because SAD iterates through pixel_row.
+    // Also, int32_t is used because ARM does not support short ints or characters (assumes an entire
+    // register).
+    for (int32_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
+        for (int32_t pixel_row = 0; pixel_row < SIZEOFBLOCK; pixel_row++){
+            for (int32_t block_col = 0; block_col < NUMBLOCKS; block_col++) {
                 fread(&Frame1[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr1);
                 fread(&Frame2[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr2);
             }
@@ -69,7 +113,7 @@ void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK],
 
 // This is just for testing purposes
 void print_uint8 (uint8x16_t data) {
-    int i;
+    int32_t i;
     static uint8_t p[16];
 
     vst1q_u8 (p, data);
@@ -105,17 +149,18 @@ int main(int argc, char *argv[])
     uint8_t x_displ = 0;
     uint8_t y_displ = 0;
 
-    // Start calculating the SAD values
-    for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
+    // Start calculating the SAD values.
+    // Barr C (8.4) shows proper definitions of for-loops.
+    for (int32_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
     {
-        for (uint8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
+        for (int32_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
         {
-            for (uint8_t block_row_comp = MAX(block_row_ref - 3); block_row_comp < MIN(block_row_ref + 3); ++block_row_comp) // every block row in other frame
+            for (int32_t block_row_comp = comp_zero(block_row_ref - 3); block_row_comp < comp_max(block_row_ref + 3); ++block_row_comp) // every block row in other frame
             {
-                for (uint8_t block_col_comp = MAX(block_col_ref - 3); block_col_comp < MIN(block_col_ref + 3); ++block_col_comp) // every block column in other frame
+                for (int32_t block_col_comp = comp_zero(block_col_ref - 3); block_col_comp < comp_max(block_col_ref + 3); ++block_col_comp) // every block column in other frame
                 {
                     temp_sad &= 0;
-                    for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
+                    for (int32_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                     {
                         // No longer need to load the arrays
                         uint8x16_t vector_ref = Frame1[block_row_ref][block_col_ref][pixel_row]; // declare a vector of 16 8-bit lanes
@@ -167,9 +212,9 @@ int main(int argc, char *argv[])
     // printf("The elapsed time is %f seconds", time_spent);
 
 /*
-    for (int i = 0; i < NUMBLOCKS; ++i)
+    for (int32_t i = 0; i < NUMBLOCKS; ++i)
     {
-        for (int j = 0; j < NUMBLOCKS; ++j)
+        for (int32_t j = 0; j < NUMBLOCKS; ++j)
         {
             int temp_diff = Differences[i][j];
             int temp_x = vectors[i][j].x;
