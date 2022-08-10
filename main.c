@@ -12,7 +12,10 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 
-#define MIN(block_i) (((block_i)&(0xf0000000)) ? (0): (block_i))
+// These Pragmas are in replacement of the Min/Max Functions.
+// 
+#define NEGATIVECHECK(block_i) ((block_i)^(0xf0000000) & block_i)  
+#define MAXCHECK(block_i)      (((block_i)&(0x00000010)) ? SIZEOFBLOCK: (block_i))
 
 /*
 * Struct definition
@@ -32,12 +35,6 @@ int8_t max(int8_t val_1, int8_t val_2)
 {
     return (val_1 < val_2) ? val_2 : val_1;
 }
-
-int8_t min(int8_t val_1, int8_t val_2)
-{
-    return (val_1 > val_2) ? val_2 : val_1;
-}
-
 
 void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK], 
                    uint8x16_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK])
@@ -111,7 +108,13 @@ int main(int argc, char *argv[])
     uint8_t x_displ = 0;
     uint8_t y_displ = 0;
 
-    uint8_t t = MIN(-1);
+    uint8_t t = NEGATIVECHECK(-1);
+    printf("%d\n", t);
+
+    uint8_t t = NEGATIVECHECK(0);
+    printf("%d\n", t);
+
+        uint8_t t = NEGATIVECHECK(1);
     printf("%d\n", t);
 
     // Start calculating the SAD values
@@ -119,9 +122,9 @@ int main(int argc, char *argv[])
     {
         for (uint8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
         {
-            for (uint8_t block_row_comp = max(0, block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
+            for (uint8_t block_row_comp = NEGATIVECHECK(block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
             {
-                for (uint8_t block_col_comp = max(0, block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
+                for (uint8_t block_col_comp = NEGATIVECHECK(block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
                 {
                     temp_sad &= 0;
                     for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
