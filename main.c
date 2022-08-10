@@ -31,8 +31,8 @@ typedef struct Vector
 * Function definitions
 */
 
-void process_frame(uint8x16_t* restrict Frame1[SIZEOFBLOCK][SIZEOFBLOCK], 
-                   uint8x16_t* restrict Frame2[SIZEOFBLOCK][SIZEOFBLOCK])
+void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK], 
+                   uint8x16_t Frame2[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK])
 {
     FILE *fptr1;
     FILE *fptr2;
