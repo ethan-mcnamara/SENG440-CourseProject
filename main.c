@@ -12,7 +12,7 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 
-#define MIN(block_i) ((block_i)&(0xf0000000)) ? (block_i):(0)
+#define MIN(block_i) ((block_i)&(0xf0000000)) ? (0): (block_i)
 
 /*
 * Struct definition
