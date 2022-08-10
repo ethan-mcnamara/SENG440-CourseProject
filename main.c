@@ -119,9 +119,9 @@ int main(int argc, char *argv[])
     {
         for (uint8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
         {
-            for (uint8_t block_row_comp = MAX(0, block_row_ref - 3); block_row_comp < MIN(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
+            for (uint8_t block_row_comp = MAX(block_row_ref - 3); block_row_comp < MIN(block_row_ref + 3); ++block_row_comp) // every block row in other frame
             {
-                for (uint8_t block_col_comp = MAX(0, block_col_ref - 3); block_col_comp < MIN(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
+                for (uint8_t block_col_comp = MAX(block_col_ref - 3); block_col_comp < MIN(block_col_ref + 3); ++block_col_comp) // every block column in other frame
                 {
                     temp_sad &= 0;
                     for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
