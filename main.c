@@ -148,10 +148,10 @@ int main(int argc, char *argv[])
 
                         // Sum all elements in the result vector by reading the lanes individually
                         // A for-loop would add additional operations that are not necessary (operations require consts)
-                        temp_sad += vgetq_lane_u16(final_result, 0);
-                        temp_sad += vgetq_lane_u16(final_result, 1);
-                        temp_sad += vgetq_lane_u16(final_result, 2);
-                        temp_sad += vgetq_lane_u16(final_result, 3);
+                        temp_sad += vgetq_lane_u32(final_result, 0);
+                        temp_sad += vgetq_lane_u32(final_result, 1);
+                        temp_sad += vgetq_lane_u32(final_result, 2);
+                        temp_sad += vgetq_lane_u32(final_result, 3);
                     }
 
                     if (min_sad > temp_sad )
