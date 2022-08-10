@@ -13,7 +13,7 @@
 #define SIZEOFIMAGE 256
 
 // These Pragmas are in replacement of the Min/Max Functions.
-#define NEGATIVECHECK(block_i) ( ( (!(block_i)&(0xf0)) & block_i) | 0)  
+#define NEGATIVECHECK(block_i) (((block_i)&(0xf0)) ? 0 : (block_i))  
 #define MAXCHECK(block_i)      (((block_i)&(0x10)) ? SIZEOFBLOCK: (block_i))
 
 /*
@@ -112,24 +112,15 @@ int main(int argc, char *argv[])
     uint8_t x_displ = 0;
     uint8_t y_displ = 0;
 
-    int8_t t = NEGATIVECHECK(-1);
-    printf("%d\n", t);
-
-    int8_t t1 = NEGATIVECHECK(0);
-    printf("%d\n", t1);
-
-    int8_t t2 = NEGATIVECHECK(1);
-    printf("%d\n", t2);
-
     // Start calculating the SAD values
     // int8_t are used in the for-loop for proper subtraction calculation
     for (int8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
     {
         for (int8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
         {
-            for (int8_t block_row_comp = NEGATIVECHECK(block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
+            for (int8_t block_row_comp = NEGATIVECHECK(block_row_ref - 3); block_row_comp < MAXCHECK(block_row_ref + 3); ++block_row_comp) // every block row in other frame
             {
-                for (int8_t block_col_comp = NEGATIVECHECK(block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
+                for (int8_t block_col_comp = NEGATIVECHECK(block_col_ref - 3); block_col_comp < MAXCHECK(block_col_ref + 3); ++block_col_comp) // every block column in other frame
                 {
                     temp_sad &= 0;
                     for (int8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
