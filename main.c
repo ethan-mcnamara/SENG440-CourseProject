@@ -10,6 +10,32 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 
+/* General Barr C Compliance
+*  =======================================================================
+*  Barr C (1.3): Braces shall always surround the blocks of code. Moreover,
+*                the braces on the left-hand side are always a line below.
+*                This is evident throughout the code.
+*  
+*  Barr C (5.2): Whenever the width, in bits or bytes, of an integer value matters in
+*                the program, one of the fixed width data types shall be used in place
+*                of char, short, int, long, or long long. This is evident throughout the
+*                code. Note, there is a double in the code, but it is only for testing
+*                and is not an integer.
+*
+*  Barr C (6.3): Parameterized macros shall not be used if a function can be written
+*                to accomplish the same behavior. Parameterized Macros could have been used
+*                for the max and min methods.
+*
+*  Barr C (8.1): The comma operator (,) shall not be used within variable
+*                declarations. For reference, consider the  local variables in Process_Frame 
+*                are on separate lines.
+*
+*  Barr C (8.4): With the exception of the initialization of a loop counter in the first clause of a
+*                for statement and the change to the same variable in the third, no assignment
+*                shall be made in any loop’s controlling expression. This is best shown in the for-loops
+*                associated with SAD.
+*/
+
 
 /*
 * Struct definitions
@@ -42,7 +68,7 @@ typedef struct Film
     Frame frame[NUMFRAMES];
 } Film;
 
-
+// Barr C (6.3): These two methods were not written as parameterized Macros
 int8_t max(int8_t val_1, int8_t val_2)
 {
     return (val_1 < val_2) ? val_2 : val_1;
@@ -58,16 +84,17 @@ int8_t min(int8_t val_1, int8_t val_2)
 void process_frame(Frame *cur_frame, FILE *fptr)
 {
     uint8_t cur_pixel;
-    int cur_pixel_row = 0;
-    int cur_pixel_col = 0;
-    int cur_block_row = 0;
-    int cur_block_col = 0;
+    // Barr C (8.31): Local variables declared on separate lines
+    int32_t cur_pixel_row = 0;
+    int32_t cur_pixel_col = 0;
+    int32_t cur_block_row = 0;
+    int32_t cur_block_col = 0;
 
     uint8_t first_iteration = 1;
 
-    for (int i = 0; i < NUMBLOCKS; ++i)
+    for (int32_t i = 0; i < NUMBLOCKS; ++i)
     {
-        for (int j = 0; j < NUMBLOCKS; ++j)
+        for (int32_t j = 0; j < NUMBLOCKS; ++j)
         {
             cur_frame->differences[i][j] = UINT32_MAX;
         }
@@ -157,9 +184,10 @@ int main(int argc, char *argv[])
     test_film->frame[1] = *test_frame;
     fclose(fptr);
 
-    double time_spent = 0.0;
-    clock_t begin = clock();
+    // double time_spent = 0.0;
+    // clock_t begin = clock();
 
+    // Barr C (8.4): For loops are declared with minimal initializations.
     for (uint8_t frame = 0; frame < NUMFRAMES - 1; ++frame) // every frame
     {
         for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
@@ -175,7 +203,7 @@ int main(int argc, char *argv[])
                         {
                             for (uint8_t pixel_col = 0; pixel_col < SIZEOFBLOCK; ++pixel_col) // every column in cur_block (cur_pixel)
                             {
-                                int diff = test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][pixel_col] - test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col];
+                                int32_t diff = test_film->frame[frame].block[block_row_ref][block_col_ref].pixel[pixel_row][pixel_col] - test_film->frame[frame + 1].block[block_row_comp][block_col_comp].pixel[pixel_row][pixel_col];
                                 if (diff < 0)
                                 {
                                     temp_sad -= diff;
@@ -188,7 +216,8 @@ int main(int argc, char *argv[])
                         }
                         /* Below Commented code is an artifact for determining shortest differences
                          *  double new_distance = sqrt((block_row_comp - block_row_ref) * (block_row_comp - block_row_ref) + (block_col_ref - block_col_comp) * (block_col_ref - block_col_comp));
-                         *  double cur_distance = sqrt(test_film->frame[frame].vectors[block_row_ref][block_col_ref].x * test_film->frame[frame].vectors[block_row_ref][block_col_ref].x + test_film->frame[frame].vectors[block_row_ref][block_col_ref].y * test_film->frame[frame].vectors[block_row_ref][block_col_ref].y); */
+                         *  double cur_distance = sqrt(test_film->frame[frame].vectors[block_row_ref][block_col_ref].x * test_film->frame[frame].vectors[block_row_ref][block_col_ref].x + test_film->frame[frame].vectors[block_row_ref][block_col_ref].y * test_film->frame[frame].vectors[block_row_ref][block_col_ref].y); 
+                         */
                         if (test_film->frame[frame].differences[block_row_ref][block_col_ref] > temp_sad )//|| (new_distance < cur_distance && test_film->frame[frame].differences[block_row_ref][block_col_ref] == temp_sad))
                         {
                             // Update the differences and vectors
@@ -202,19 +231,19 @@ int main(int argc, char *argv[])
         }
     }
     /*
-    for (int i = 0; i < NUMBLOCKS; ++i)
+    for (int32_t i = 0; i < NUMBLOCKS; ++i)
     {
-        for (int j = 0; j < NUMBLOCKS; ++j)
+        for (int32_t j = 0; j < NUMBLOCKS; ++j)
         {
-            int temp_diff = test_film->frame[0].differences[i][j];
-            int temp_x = test_film->frame[0].vectors[i][j].x;
-            int temp_y = test_film->frame[0].vectors[i][j].y;
+            int32_t temp_diff = test_film->frame[0].differences[i][j];
+            int32_t temp_x = test_film->frame[0].vectors[i][j].x;
+            int32_t temp_y = test_film->frame[0].vectors[i][j].y;
             printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
         }
     }
     */
-    clock_t end = clock();
-    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
-    printf("The elapsed time is %f seconds", time_spent);
+    // clock_t end = clock();
+    // time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
+    // printf("The elapsed time is %f seconds", time_spent);
     return 0;
 }
