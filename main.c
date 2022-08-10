@@ -83,8 +83,8 @@ void print_uint8 (uint8x16_t data) {
 int main(int argc, char *argv[]) 
 {
     // Uncomment for Timer
-    // double time_spent = 0.0;
-    // clock_t begin = clock();
+    double time_spent = 0.0;
+    clock_t begin = clock();
 
     // Initialize the frames
     // Make the last frame be the vectors in order to prevent loading in the for-loop
