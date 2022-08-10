@@ -13,8 +13,6 @@
 #define SIZEOFIMAGE 256
 
 // These Pragmas are in replacement of the Min/Max Functions.
-// Note, (uint8_t - value) are passed as parameters and would cause wrap-around
-// behaviour. 
 #define NEGATIVECHECK(block_i) ((block_i)^(0xf0) & block_i)  
 #define MAXCHECK(block_i)      (((block_i)&(0x10)) ? SIZEOFBLOCK: (block_i))
 
@@ -124,16 +122,17 @@ int main(int argc, char *argv[])
     printf("%d\n", t2);
 
     // Start calculating the SAD values
-    for (uint8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
+    // int8_t are used in the for-loop for proper subtraction calculation
+    for (int8_t block_row_ref = 0; block_row_ref < NUMBLOCKS; ++block_row_ref) // every row in frame (block)
     {
-        for (uint8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
+        for (int8_t block_col_ref = 0; block_col_ref < NUMBLOCKS; ++block_col_ref) // every column in frame (block)
         {
-            for (uint8_t block_row_comp = NEGATIVECHECK(block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
+            for (int8_t block_row_comp = NEGATIVECHECK(block_row_ref - 3); block_row_comp < min(NUMBLOCKS, block_row_ref + 3); ++block_row_comp) // every block row in other frame
             {
-                for (uint8_t block_col_comp = NEGATIVECHECK(block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
+                for (int8_t block_col_comp = NEGATIVECHECK(block_col_ref - 3); block_col_comp < min(NUMBLOCKS, block_col_ref + 3); ++block_col_comp) // every block column in other frame
                 {
                     temp_sad &= 0;
-                    for (uint8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
+                    for (int8_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                     {
                         // No longer need to load the arrays
                         uint8x16_t vector_ref = Frame1[block_row_ref][block_col_ref][pixel_row]; // declare a vector of 16 8-bit lanes
