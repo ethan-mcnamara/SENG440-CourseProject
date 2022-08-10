@@ -13,8 +13,8 @@
 #define SIZEOFIMAGE 256
 
 // These Pragmas are in replacement of the Min/Max Functions.
-#define NEGATIVECHECK(block_i) (((block_i)&(0xf0)) ? 0 : (block_i))  
-#define MAXCHECK(block_i)      (((block_i)&(0x10)) ? SIZEOFBLOCK: (block_i))
+#define NEGATIVECHECK(block1) (block1 < 0) ? 0 : block1
+#define MAXCHECK(block1)      (block1 > SIZEOFBLOCK) ? SIZEOFBLOCK : block1
 
 /*
 * Struct definition
@@ -83,8 +83,8 @@ void print_uint8 (uint8x16_t data) {
 int main(int argc, char *argv[]) 
 {
     // Uncomment for Timer
-    double time_spent = 0.0;
-    clock_t begin = clock();
+    // double time_spent = 0.0;
+    // clock_t begin = clock();
 
     // Initialize the frames
     // Make the last frame be the vectors in order to prevent loading in the for-loop
