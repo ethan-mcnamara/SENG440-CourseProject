@@ -13,7 +13,7 @@
 #define SIZEOFIMAGE 256
 
 // These Pragmas are in replacement of the Min/Max Functions.
-#define NEGATIVECHECK(block_i) ((block_i)^(0xf0) & block_i)  
+#define NEGATIVECHECK(block_i) ( ( (!(block_i)&(0xf0)) & block_i) | 0)  
 #define MAXCHECK(block_i)      (((block_i)&(0x10)) ? SIZEOFBLOCK: (block_i))
 
 /*
