@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
     // time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
     // printf("The elapsed time is %f seconds", time_spent);
 
-
+/*
     for (int i = 0; i < NUMBLOCKS; ++i)
     {
         for (int j = 0; j < NUMBLOCKS; ++j)
@@ -185,6 +185,6 @@ int main(int argc, char *argv[])
             printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
         }
     }
-
+*/
     return 0;
 }
