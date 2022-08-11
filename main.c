@@ -90,11 +90,14 @@ void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK],
     // The reason iteration is through block_col is because SAD iterates through pixel_row.
     // Also, int32_t is used because ARM does not support short ints or characters (assumes an entire
     // register).
+
+    register uint32_t size_pixel_row = sizeof(uint8_t) * 16;
+
     for (int32_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
         for (int32_t pixel_row = 0; pixel_row < SIZEOFBLOCK; pixel_row++){
             for (int32_t block_col = 0; block_col < NUMBLOCKS; block_col++) {
-                fread(&Frame1[block_row][block_col][pixel_row], SIZEOFROW, 1, fptr1);
-                fread(&Frame2[block_row][block_col][pixel_row], SIZEOFROW, 1, fptr2);
+                fread(&Frame1[block_row][block_col][pixel_row], size_pixel_row, 1, fptr1);
+                fread(&Frame2[block_row][block_col][pixel_row], size_pixel_row, 1, fptr2);
             }
         }
     }
