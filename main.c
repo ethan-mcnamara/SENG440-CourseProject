@@ -200,7 +200,9 @@ int main(int argc, char *argv[])
     // time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
     // printf("The elapsed time is %f seconds", time_spent);
 
-/*
+
+// The print statements are not optimized. However, they are required for the `-03` flag
+// to not neglect the vector computations.
     for (int32_t i = 0; i < NUMBLOCKS; ++i)
     {
         for (int32_t j = 0; j < NUMBLOCKS; ++j)
@@ -211,6 +213,6 @@ int main(int argc, char *argv[])
             printf("Block[%d][%d]: Vector: (%d, %d); Difference: %d\n", i, j, temp_x, temp_y, temp_diff);
         }
     }
-*/
+
     return 0;
 }
