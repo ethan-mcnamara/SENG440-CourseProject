@@ -75,7 +75,6 @@ void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK],
     fptr2 = fopen("test_images/Image2.bmp", "rb");
 
     // BMP header size is 54 bytes (8 bytes * 7 - 2 = 54 bytes)
-    register uint32_t bmp_header_size = sizeof(uint8_t) * 7 - 2;
     fread(&rm_header, 54, 1, fptr1);
     fread(&rm_header, 54, 1, fptr2);
 
@@ -91,8 +90,6 @@ void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK],
     // register).
 
     register uint32_t size_pixel_row = sizeof(uint8_t) * 16;
-    // printf("Pixel row size: %d\n", size_pixel_row);
-    // exit(1);
 
     for (int32_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
         for (int32_t pixel_row = 0; pixel_row < SIZEOFBLOCK; pixel_row++){
