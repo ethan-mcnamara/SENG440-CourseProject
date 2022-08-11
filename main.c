@@ -8,7 +8,7 @@
 #define NUMFRAMES 2
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
-#define HEADERSIZE 54
+#define HEADERSIZE 432
 
 /* General Barr C Compliance
 *  =======================================================================
