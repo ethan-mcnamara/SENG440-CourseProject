@@ -8,7 +8,6 @@
 #define NUMFRAMES 2
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
-#define HEADERSIZE 432
 
 /* General Barr C Compliance
 *  =======================================================================
@@ -76,8 +75,9 @@ void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK],
     fptr2 = fopen("test_images/Image2.bmp", "rb");
 
     // BMP header size is 54 bytes (8 bytes * 7 - 2 = 54 bytes)
-    fread(&rm_header, HEADERSIZE, 1, fptr1);
-    fread(&rm_header, HEADERSIZE, 1, fptr2);
+    register uint32_t bmp_header_size = sizeof(uint8_t) * 7 - 2;
+    fread(&rm_header, bmp_header_size, 1, fptr1);
+    fread(&rm_header, bmp_header_size, 1, fptr2);
 
     if(fptr1 == NULL || fptr2 == NULL)
     {
