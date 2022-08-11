@@ -8,7 +8,6 @@
 #define NUMFRAMES 2
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
-#define SIZEOFROW 128
 #define HEADERSIZE 54
 
 /* General Barr C Compliance
@@ -144,9 +143,11 @@ int main(int argc, char *argv[])
                 for (int32_t block_col_comp = comp_zero(block_col_ref - 2); block_col_comp < comp_max(block_col_ref + 3); ++block_col_comp) // every block column in other frame
                 {
                     temp_sad1 = 0;
-                    temp_sad2 = 0;
                     for (int32_t pixel_row = 1; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                     {
+                        // Set this value ot 0, as to not accumulate already-summed values
+                        temp_sad2 = 0;
+
                         // No longer need to load the arrays
                         uint8x16_t vector_ref = Frame1[block_row_ref][block_col_ref][pixel_row]; // declare a vector of 16 8-bit lanes
                         uint8x16_t vector_comp = Frame2[block_row_comp][block_col_comp][pixel_row]; // declare a vector of 16 8-bit lanes
