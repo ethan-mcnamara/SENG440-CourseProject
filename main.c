@@ -1,9 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include <stdint.h>
-#include <limits.h>
-#include <math.h>
 #include <time.h>
 #include <arm_neon.h>
 
@@ -172,6 +168,8 @@ int main(int argc, char *argv[])
                         temp_sad2 += vgetq_lane_u16(final_result, 5);
                         temp_sad1 += vgetq_lane_u16(final_result, 6);
                         temp_sad2 += vgetq_lane_u16(final_result, 7);
+
+                        // Sum both temp_sad variables
                         temp_sad1 += temp_sad2;
                     }
 
