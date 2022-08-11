@@ -6,7 +6,7 @@
 	.eabi_attribute 24, 1
 	.eabi_attribute 25, 1
 	.eabi_attribute 26, 2
-	.eabi_attribute 30, 6
+	.eabi_attribute 30, 2
 	.eabi_attribute 34, 1
 	.eabi_attribute 18, 4
 	.file	"main.c"
@@ -19,21 +19,10 @@
 	.fpu neon
 	.type	comp_zero, %function
 comp_zero:
-	@ args = 0, pretend = 0, frame = 8
-	@ frame_needed = 1, uses_anonymous_args = 0
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	str	fp, [sp, #-4]!
-	add	fp, sp, #0
-	sub	sp, sp, #12
-	mov	r3, r0
-	strb	r3, [fp, #-5]
-	ldrsb	r3, [fp, #-5]
-	bic	r3, r3, r3, asr #31
-	sxtb	r3, r3
-	mov	r0, r3
-	add	sp, fp, #0
-	@ sp needed
-	ldr	fp, [sp], #4
+	bic	r0, r0, r0, asr #31
 	bx	lr
 	.size	comp_zero, .-comp_zero
 	.align	2
@@ -43,39 +32,13 @@ comp_zero:
 	.fpu neon
 	.type	comp_max, %function
 comp_max:
-	@ args = 0, pretend = 0, frame = 8
-	@ frame_needed = 1, uses_anonymous_args = 0
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	str	fp, [sp, #-4]!
-	add	fp, sp, #0
-	sub	sp, sp, #12
-	mov	r3, r0
-	strb	r3, [fp, #-5]
-	ldrsb	r3, [fp, #-5]
-	cmp	r3, #16
-	movlt	r3, r3
-	movge	r3, #16
-	sxtb	r3, r3
-	mov	r0, r3
-	add	sp, fp, #0
-	@ sp needed
-	ldr	fp, [sp], #4
+	cmp	r0, #16
+	movge	r0, #16
 	bx	lr
 	.size	comp_max, .-comp_max
-	.section	.rodata
-	.align	2
-.LC0:
-	.ascii	"rb\000"
-	.align	2
-.LC1:
-	.ascii	"test_images/Image1.bmp\000"
-	.align	2
-.LC2:
-	.ascii	"test_images/Image2.bmp\000"
-	.align	2
-.LC3:
-	.ascii	"Error!\000"
-	.text
 	.align	2
 	.global	process_frame
 	.syntax unified
@@ -83,125 +46,91 @@ comp_max:
 	.fpu neon
 	.type	process_frame, %function
 process_frame:
-	@ args = 0, pretend = 0, frame = 88
-	@ frame_needed = 1, uses_anonymous_args = 0
-	push	{r4, fp, lr}
-	add	fp, sp, #8
-	sub	sp, sp, #92
-	str	r0, [fp, #-96]
-	str	r1, [fp, #-100]
-	movw	r1, #:lower16:.LC0
-	movt	r1, #:upper16:.LC0
+	@ args = 0, pretend = 0, frame = 64
+	@ frame_needed = 0, uses_anonymous_args = 0
+	push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
+	mov	fp, r0
+	mov	r4, r1
 	movw	r0, #:lower16:.LC1
+	movw	r1, #:lower16:.LC0
+	sub	sp, sp, #68
+	movt	r1, #:upper16:.LC0
 	movt	r0, #:upper16:.LC1
 	bl	fopen
-	str	r0, [fp, #-28]
 	movw	r1, #:lower16:.LC0
-	movt	r1, #:upper16:.LC0
+	mov	r8, r0
 	movw	r0, #:lower16:.LC2
+	movt	r1, #:upper16:.LC0
 	movt	r0, #:upper16:.LC2
 	bl	fopen
-	str	r0, [fp, #-32]
-	sub	r0, fp, #88
-	ldr	r3, [fp, #-28]
+	mov	r7, r0
+	mov	r3, r8
+	mov	r2, #1
+	mov	r1, #54
+	add	r0, sp, #8
+	bl	fread
+	mov	r3, r7
+	add	r0, sp, #8
 	mov	r2, #1
 	mov	r1, #54
 	bl	fread
-	sub	r0, fp, #88
-	ldr	r3, [fp, #-32]
-	mov	r2, #1
-	mov	r1, #54
-	bl	fread
-	ldr	r3, [fp, #-28]
-	cmp	r3, #0
-	beq	.L6
-	ldr	r3, [fp, #-32]
-	cmp	r3, #0
-	bne	.L7
+	cmp	r7, #0
+	cmpne	r8, #0
+	beq	.L5
+	add	r3, fp, #69632
+	add	r3, r3, #256
+	str	r4, [sp]
+	str	r3, [sp, #4]
+	add	r9, fp, #4352
 .L6:
+	ldr	r3, [sp]
+	sub	r6, r9, #256
+	sub	r10, r3, #4096
+	sub	r10, r10, fp
+.L10:
+	sub	r4, r6, #4096
+	add	r5, r10, r6
+.L7:
+	mov	r3, r8
+	mov	r2, #1
+	mov	r1, #16
+	mov	r0, r4
+	bl	fread
+	add	r4, r4, #256
+	mov	r0, r5
+	mov	r3, r7
+	mov	r2, #1
+	mov	r1, #16
+	bl	fread
+	cmp	r4, r6
+	add	r5, r5, #256
+	bne	.L7
+	add	r6, r4, #16
+	cmp	r6, r9
+	bne	.L10
+	ldr	r3, [sp, #4]
+	add	r9, r6, #4096
+	cmp	r9, r3
+	ldr	r3, [sp]
+	add	fp, fp, #4096
+	add	r3, r3, #4096
+	str	r3, [sp]
+	bne	.L6
+	mov	r0, r8
+	bl	fclose
+	mov	r0, r7
+	bl	fclose
+	add	sp, sp, #68
+	@ sp needed
+	pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+.L5:
 	movw	r0, #:lower16:.LC3
 	movt	r0, #:upper16:.LC3
 	bl	printf
 	mov	r0, #1
 	bl	exit
-.L7:
-	mov	r4, #16
-	mov	r3, #0
-	str	r3, [fp, #-16]
-	b	.L8
-.L13:
-	mov	r3, #0
-	str	r3, [fp, #-20]
-	b	.L9
-.L12:
-	mov	r3, #0
-	str	r3, [fp, #-24]
-	b	.L10
-.L11:
-	ldr	r3, [fp, #-16]
-	lsl	r3, r3, #12
-	ldr	r2, [fp, #-96]
-	add	r2, r2, r3
-	ldr	r3, [fp, #-24]
-	lsl	r1, r3, #4
-	ldr	r3, [fp, #-20]
-	add	r3, r1, r3
-	lsl	r3, r3, #4
-	add	r0, r2, r3
-	ldr	r3, [fp, #-28]
-	mov	r2, #1
-	mov	r1, r4
-	bl	fread
-	ldr	r3, [fp, #-16]
-	lsl	r3, r3, #12
-	ldr	r2, [fp, #-100]
-	add	r2, r2, r3
-	ldr	r3, [fp, #-24]
-	lsl	r1, r3, #4
-	ldr	r3, [fp, #-20]
-	add	r3, r1, r3
-	lsl	r3, r3, #4
-	add	r0, r2, r3
-	ldr	r3, [fp, #-32]
-	mov	r2, #1
-	mov	r1, r4
-	bl	fread
-	ldr	r3, [fp, #-24]
-	add	r3, r3, #1
-	str	r3, [fp, #-24]
-.L10:
-	ldr	r3, [fp, #-24]
-	cmp	r3, #15
-	ble	.L11
-	ldr	r3, [fp, #-20]
-	add	r3, r3, #1
-	str	r3, [fp, #-20]
-.L9:
-	ldr	r3, [fp, #-20]
-	cmp	r3, #15
-	ble	.L12
-	ldr	r3, [fp, #-16]
-	add	r3, r3, #1
-	str	r3, [fp, #-16]
-.L8:
-	ldr	r3, [fp, #-16]
-	cmp	r3, #15
-	ble	.L13
-	ldr	r0, [fp, #-28]
-	bl	fclose
-	ldr	r0, [fp, #-32]
-	bl	fclose
-	nop
-	sub	sp, fp, #8
-	@ sp needed
-	pop	{r4, fp, pc}
 	.size	process_frame, .-process_frame
-	.section	.rodata
-	.align	2
-.LC4:
-	.ascii	"Block[%d][%d]: Vector: (%d, %d); Difference: %d\012"
-	.ascii	"\000"
-	.text
+	.section	.text.startup,"ax",%progbits
 	.align	2
 	.global	main
 	.syntax unified
@@ -209,391 +138,246 @@ process_frame:
 	.fpu neon
 	.type	main, %function
 main:
-	@ args = 0, pretend = 0, frame = 132952
-	@ frame_needed = 1, uses_anonymous_args = 0
-	push	{r4, r5, r6, fp, lr}
-	add	fp, sp, #16
+	@ args = 0, pretend = 0, frame = 132704
+	@ frame_needed = 0, uses_anonymous_args = 0
+	push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
 	sub	sp, sp, #132096
-	sub	sp, sp, #868
-	sub	r3, fp, #131072
-	sub	r3, r3, #20
-	str	r0, [r3, #-1876]
-	sub	r3, fp, #131072
-	sub	r3, r3, #20
-	str	r1, [r3, #-1880]
-	sub	r2, fp, #131072
-	sub	r2, r2, #20
-	sub	r2, r2, #336
-	sub	r3, fp, #65536
-	sub	r3, r3, #20
-	sub	r3, r3, #336
-	mov	r1, r2
-	mov	r0, r3
+	sub	sp, sp, #620
+	add	r1, sp, #66560
+	add	r0, sp, #1632
+	add	r1, r1, #616
+	add	r0, r0, #8
 	bl	process_frame
-	mov	r4, #0
-	mov	r5, #0
-	mvn	r6, #0
 	mov	r3, #0
-	strb	r3, [fp, #-21]
-	mov	r3, #0
-	strb	r3, [fp, #-22]
-	mov	r3, #0
-	str	r3, [fp, #-28]
-	b	.L16
-.L38:
-	mov	r3, #0
-	str	r3, [fp, #-32]
-	b	.L17
-.L37:
-	ldr	r3, [fp, #-28]
+	add	r0, sp, #1632
+	add	r0, r0, #8
+	add	r0, r0, #16
+	str	r0, [sp, #68]
+	add	r0, sp, #66560
+	add	r0, r0, #616
+	add	r2, sp, #616
+	add	r1, sp, #104
+	add	r0, r0, #16
+	str	r3, [sp, #56]
+	str	r2, [sp, #92]
+	str	r1, [sp, #88]
+	str	r0, [sp, #100]
+	str	r1, [sp, #64]
+	str	r2, [sp, #60]
+	str	r3, [sp, #16]
+	str	r3, [sp, #12]
+.L14:
+	ldrb	r3, [sp, #56]	@ zero_extendqisi2
+	sub	r1, r3, #2
+	sxtb	r1, r1
+	add	r2, r3, #3
+	bic	r1, r1, r1, asr #31
+	sxtb	r2, r2
+	sub	r3, r3, r1
 	uxtb	r3, r3
-	sub	r3, r3, #2
-	uxtb	r3, r3
+	cmp	r2, #16
+	str	r3, [sp, #96]
+	movlt	r3, r2
+	movge	r3, #16
+	str	r3, [sp, #80]
+	ldr	r3, [sp, #68]
+	str	r1, [sp, #84]
+	add	fp, r3, #240
+	str	r3, [sp, #28]
+	ldr	r3, [sp, #64]
+	str	r3, [sp, #76]
+	ldr	r3, [sp, #60]
+	str	r3, [sp, #72]
+	mov	r3, #0
+	str	r3, [sp, #52]
+.L21:
+	ldr	r1, [sp, #80]
+	ldr	r0, [sp, #84]
+	cmp	r1, r0
+	ble	.L25
+	ldrb	r2, [sp, #52]	@ zero_extendqisi2
+	add	r3, r2, #3
 	sxtb	r3, r3
-	mov	r0, r3
-	bl	comp_zero
-	mov	r3, r0
-	str	r3, [fp, #-36]
-	b	.L18
-.L36:
-	ldr	r3, [fp, #-32]
-	uxtb	r3, r3
-	sub	r3, r3, #2
-	uxtb	r3, r3
+	cmp	r3, #16
+	movlt	ip, r3
+	ldr	r3, [sp, #96]
+	movge	ip, #16
+	str	r3, [sp, #24]
+	mvn	r3, #0
+	str	r3, [sp, #8]
+	mov	r3, #16
+	smlabb	r0, r0, r3, ip
+	smlabb	r1, r1, r3, ip
+	sub	r3, r2, #2
 	sxtb	r3, r3
-	mov	r0, r3
-	bl	comp_zero
-	mov	r3, r0
-	str	r3, [fp, #-40]
-	b	.L19
-.L35:
-	mov	r4, #0
-	mov	r3, #1
-	str	r3, [fp, #-44]
-	b	.L20
-.L33:
-	mov	r5, #0
-	sub	r3, fp, #65536
-	sub	r3, r3, #20
-	mov	r1, r3
-	ldr	r3, [fp, #-28]
-	lsl	r2, r3, #4
-	ldr	r3, [fp, #-32]
-	add	r3, r2, r3
-	lsl	r2, r3, #4
-	ldr	r3, [fp, #-44]
-	add	r3, r2, r3
-	lsl	r3, r3, #4
-	add	r3, r1, r3
-	sub	r3, r3, #336
-	vld1.64	{d16-d17}, [r3:64]
-	vstr	d16, [fp, #-68]
-	vstr	d17, [fp, #-60]
-	sub	r3, fp, #131072
-	sub	r3, r3, #20
-	mov	r1, r3
-	ldr	r3, [fp, #-36]
-	lsl	r2, r3, #4
-	ldr	r3, [fp, #-40]
-	add	r3, r2, r3
-	lsl	r2, r3, #4
-	ldr	r3, [fp, #-44]
-	add	r3, r2, r3
-	lsl	r3, r3, #4
-	add	r3, r1, r3
-	sub	r3, r3, #336
-	vld1.64	{d16-d17}, [r3:64]
-	vstr	d16, [fp, #-84]
-	vstr	d17, [fp, #-76]
-	vldr	d16, [fp, #-68]
-	vldr	d17, [fp, #-60]
-	vstr	d16, [fp, #-340]
-	vstr	d17, [fp, #-332]
-	vldr	d16, [fp, #-84]
-	vldr	d17, [fp, #-76]
-	vstr	d16, [fp, #-356]
-	vstr	d17, [fp, #-348]
-	vldr	d16, [fp, #-340]
-	vldr	d17, [fp, #-332]
-	vldr	d18, [fp, #-356]
-	vldr	d19, [fp, #-348]
-	vabd.u8	q8, q8, q9
-	vstr	d16, [fp, #-100]
-	vstr	d17, [fp, #-92]
-	vldr	d16, [fp, #-100]
-	vldr	d17, [fp, #-92]
-	vstr	d16, [fp, #-324]
-	vstr	d17, [fp, #-316]
-	vldr	d16, [fp, #-324]
-	vldr	d17, [fp, #-316]
-	vmov	d16, d17  @ v8qi
-	vstr	d16, [fp, #-108]
-	vldr	d16, [fp, #-100]
-	vldr	d17, [fp, #-92]
-	vstr	d16, [fp, #-308]
-	vstr	d17, [fp, #-300]
-	vldr	d16, [fp, #-308]
-	vldr	d17, [fp, #-300]
-	vstr	d16, [fp, #-116]
-	vldr	d16, [fp, #-108]
-	vstr	d16, [fp, #-284]
-	vldr	d16, [fp, #-116]
-	vstr	d16, [fp, #-292]
-	vldr	d16, [fp, #-284]
-	vldr	d17, [fp, #-292]
-	vaddl.u8	q8, d16, d17
-	vstr	d16, [fp, #-132]
-	vstr	d17, [fp, #-124]
-	vldr	d16, [fp, #-132]
-	vldr	d17, [fp, #-124]
-	vstr	d16, [fp, #-276]
-	vstr	d17, [fp, #-268]
-	vldr	d16, [fp, #-276]
-	vldr	d17, [fp, #-268]
-	vmov.u16	r3, d16[0]
-	uxth	r3, r3
-	add	r4, r4, r3
-	vldr	d16, [fp, #-132]
-	vldr	d17, [fp, #-124]
-	vstr	d16, [fp, #-260]
-	vstr	d17, [fp, #-252]
-	vldr	d16, [fp, #-260]
-	vldr	d17, [fp, #-252]
-	vmov.u16	r3, d16[1]
-	uxth	r3, r3
-	add	r5, r5, r3
-	vldr	d16, [fp, #-132]
-	vldr	d17, [fp, #-124]
-	vstr	d16, [fp, #-244]
-	vstr	d17, [fp, #-236]
-	vldr	d16, [fp, #-244]
-	vldr	d17, [fp, #-236]
-	vmov.u16	r3, d16[2]
-	uxth	r3, r3
-	add	r4, r4, r3
-	vldr	d16, [fp, #-132]
-	vldr	d17, [fp, #-124]
-	vstr	d16, [fp, #-228]
-	vstr	d17, [fp, #-220]
-	vldr	d16, [fp, #-228]
-	vldr	d17, [fp, #-220]
-	vmov.u16	r3, d16[3]
-	uxth	r3, r3
-	add	r5, r5, r3
-	vldr	d16, [fp, #-132]
-	vldr	d17, [fp, #-124]
-	vstr	d16, [fp, #-212]
-	vstr	d17, [fp, #-204]
-	vldr	d16, [fp, #-212]
-	vldr	d17, [fp, #-204]
-	vmov.u16	r3, d17[0]
-	uxth	r3, r3
-	add	r4, r4, r3
-	vldr	d16, [fp, #-132]
-	vldr	d17, [fp, #-124]
-	vstr	d16, [fp, #-196]
-	vstr	d17, [fp, #-188]
-	vldr	d16, [fp, #-196]
-	vldr	d17, [fp, #-188]
-	vmov.u16	r3, d17[1]
-	uxth	r3, r3
-	add	r5, r5, r3
-	vldr	d16, [fp, #-132]
-	vldr	d17, [fp, #-124]
-	vstr	d16, [fp, #-180]
-	vstr	d17, [fp, #-172]
-	vldr	d16, [fp, #-180]
-	vldr	d17, [fp, #-172]
-	vmov.u16	r3, d17[2]
-	uxth	r3, r3
-	add	r4, r4, r3
-	vldr	d16, [fp, #-132]
-	vldr	d17, [fp, #-124]
-	vstr	d16, [fp, #-164]
-	vstr	d17, [fp, #-156]
-	vldr	d16, [fp, #-164]
-	vldr	d17, [fp, #-156]
-	vmov.u16	r3, d17[3]
-	uxth	r3, r3
-	add	r5, r5, r3
-	add	r4, r4, r5
-	ldr	r3, [fp, #-44]
-	add	r3, r3, #1
-	str	r3, [fp, #-44]
+	bic	r3, r3, r3, asr #31
+	sub	r2, r3, r2
+	str	ip, [sp, #36]
+	str	r3, [sp, #32]
+	sub	r3, r3, ip
+	ldr	ip, [sp, #100]
+	uxtb	r2, r2
+	add	r0, ip, r0, lsl #8
+	add	r1, ip, r1, lsl #8
+	lsl	r3, r3, #8
+	str	r0, [sp, #20]
+	str	r1, [sp, #40]
+	str	r2, [sp, #48]
+	str	r3, [sp, #44]
 .L20:
-	ldr	r3, [fp, #-44]
-	cmp	r3, #15
-	ble	.L33
-	cmp	r6, r4
-	bls	.L34
-	mov	r6, r4
-	ldr	r3, [fp, #-40]
-	uxtb	r2, r3
-	ldr	r3, [fp, #-32]
-	uxtb	r3, r3
-	sub	r3, r2, r3
-	strb	r3, [fp, #-21]
-	ldr	r3, [fp, #-28]
-	uxtb	r2, r3
-	ldr	r3, [fp, #-36]
-	uxtb	r3, r3
-	sub	r3, r2, r3
-	strb	r3, [fp, #-22]
-.L34:
-	ldr	r3, [fp, #-40]
-	add	r3, r3, #1
-	str	r3, [fp, #-40]
+	ldr	r3, [sp, #32]
+	ldr	r2, [sp, #36]
+	cmp	r3, r2
+	bge	.L16
+	ldr	r3, [sp, #20]
+	ldr	r2, [sp, #44]
+	ldr	r9, [sp, #48]
+	add	r10, r3, r2
 .L19:
-	ldr	r3, [fp, #-32]
-	uxtb	r3, r3
-	add	r3, r3, #3
-	uxtb	r3, r3
-	sxtb	r3, r3
-	mov	r0, r3
-	bl	comp_max
-	mov	r3, r0
-	mov	r2, r3
-	ldr	r3, [fp, #-40]
-	cmp	r3, r2
-	blt	.L35
-	ldr	r3, [fp, #-36]
-	add	r3, r3, #1
-	str	r3, [fp, #-36]
-.L18:
-	ldr	r3, [fp, #-28]
-	uxtb	r3, r3
-	add	r3, r3, #3
-	uxtb	r3, r3
-	sxtb	r3, r3
-	mov	r0, r3
-	bl	comp_max
-	mov	r3, r0
-	mov	r2, r3
-	ldr	r3, [fp, #-36]
-	cmp	r3, r2
-	blt	.L36
-	sub	r3, fp, #131072
-	sub	r3, r3, #20
-	mov	r1, r3
-	ldr	r3, [fp, #-28]
-	lsl	r2, r3, #4
-	ldr	r3, [fp, #-32]
-	add	r3, r2, r3
-	lsl	r3, r3, #2
-	add	r3, r1, r3
-	str	r6, [r3, #-1360]
-	ldrsb	r1, [fp, #-21]
-	sub	r3, fp, #131072
-	sub	r3, r3, #20
-	mov	r0, r3
-	ldr	r3, [fp, #-28]
-	lsl	r2, r3, #4
-	ldr	r3, [fp, #-32]
-	add	r3, r2, r3
-	lsl	r3, r3, #1
-	add	r3, r0, r3
-	mov	r2, r1
-	strb	r2, [r3, #-1872]
-	ldrsb	r1, [fp, #-22]
-	sub	r3, fp, #131072
-	sub	r3, r3, #20
-	mov	r0, r3
-	ldr	r3, [fp, #-28]
-	lsl	r2, r3, #4
-	ldr	r3, [fp, #-32]
-	add	r3, r2, r3
-	lsl	r3, r3, #1
-	add	r3, r0, r3
-	mov	r2, r1
-	strb	r2, [r3, #-1871]
-	mvn	r6, #0
-	ldr	r3, [fp, #-32]
-	add	r3, r3, #1
-	str	r3, [fp, #-32]
+	mov	ip, r10
+	mov	r0, #0
+	ldr	r1, [sp, #28]
 .L17:
-	ldr	r3, [fp, #-32]
-	cmp	r3, #15
-	ble	.L37
-	ldr	r3, [fp, #-28]
-	add	r3, r3, #1
-	str	r3, [fp, #-28]
+	vld1.64	{d16-d17}, [r1:64]!
+	vld1.64	{d18-d19}, [ip:64]!
+	vabd.u8	q8, q8, q9
+	vaddl.u8	q8, d17, d16
+	vmov.u16	r2, d16[0]
+	vmov.u16	r8, d16[1]
+	vmov.u16	r3, d16[2]
+	vmov.u16	r7, d16[3]
+	vmov.u16	r6, d17[0]
+	vmov.u16	r5, d17[1]
+	vmov.u16	r4, d17[2]
+	vmov.u16	lr, d17[3]
+	add	r2, r2, r8
+	add	r3, r2, r3
+	add	r3, r3, r7
+	add	r3, r3, r6
+	add	r3, r3, r5
+	add	r3, r3, r4
+	add	r3, r3, lr
+	cmp	r1, fp
+	add	r0, r0, r3
+	bne	.L17
+	ldr	r3, [sp, #8]
+	ldr	r1, [sp, #24]
+	cmp	r3, r0
+	ldr	r2, [sp, #16]
+	movhi	r2, r1
+	movhi	r3, r0
+	str	r2, [sp, #16]
+	ldr	r2, [sp, #12]
+	movhi	r2, r9
+	str	r3, [sp, #8]
+	ldr	r3, [sp, #20]
+	add	r10, r10, #256
+	add	r9, r9, #1
+	cmp	r10, r3
+	str	r2, [sp, #12]
+	uxtb	r9, r9
+	bne	.L19
 .L16:
-	ldr	r3, [fp, #-28]
-	cmp	r3, #15
-	ble	.L38
-	mov	r3, #0
-	str	r3, [fp, #-48]
-	b	.L39
-.L42:
-	mov	r3, #0
-	str	r3, [fp, #-52]
-	b	.L40
-.L41:
-	sub	r3, fp, #131072
-	sub	r3, r3, #20
-	mov	r1, r3
-	ldr	r3, [fp, #-48]
-	lsl	r2, r3, #4
-	ldr	r3, [fp, #-52]
-	add	r3, r2, r3
-	lsl	r3, r3, #2
-	add	r3, r1, r3
-	ldr	r3, [r3, #-1360]
-	str	r3, [fp, #-136]
-	sub	r3, fp, #131072
-	sub	r3, r3, #20
-	mov	r1, r3
-	ldr	r3, [fp, #-48]
-	lsl	r2, r3, #4
-	ldr	r3, [fp, #-52]
-	add	r3, r2, r3
-	lsl	r3, r3, #1
-	add	r3, r1, r3
-	sub	r3, r3, #1872
-	ldrsb	r3, [r3]
-	str	r3, [fp, #-140]
-	sub	r3, fp, #131072
-	sub	r3, r3, #20
-	mov	r1, r3
-	ldr	r3, [fp, #-48]
-	lsl	r2, r3, #4
-	ldr	r3, [fp, #-52]
-	add	r3, r2, r3
-	lsl	r3, r3, #1
-	add	r3, r1, r3
-	sub	r3, r3, #1856
-	sub	r3, r3, #15
-	ldrsb	r3, [r3]
-	str	r3, [fp, #-144]
-	ldr	r3, [fp, #-136]
-	str	r3, [sp, #4]
-	ldr	r3, [fp, #-144]
+	ldr	r3, [sp, #20]
+	ldr	r2, [sp, #40]
+	add	r3, r3, #4096
+	str	r3, [sp, #20]
+	cmp	r3, r2
+	ldr	r3, [sp, #24]
+	sub	r3, r3, #1
+	uxtb	r3, r3
+	str	r3, [sp, #24]
+	bne	.L20
+.L15:
+	ldr	r3, [sp, #52]
+	ldr	r2, [sp, #12]
+	add	r3, r3, #1
+	str	r3, [sp, #52]
+	cmp	r3, #16
+	ldr	r3, [sp, #76]
+	ldr	r1, [sp, #8]
+	strb	r2, [r3]
+	ldr	r2, [sp, #16]
+	add	r3, r3, #2
+	strb	r2, [r3, #-1]
+	ldr	r2, [sp, #72]
+	str	r3, [sp, #76]
+	ldr	r3, [sp, #28]
+	str	r1, [r2], #4
+	add	r3, r3, #256
+	str	r2, [sp, #72]
+	str	r3, [sp, #28]
+	add	fp, fp, #256
+	bne	.L21
+	ldr	r3, [sp, #56]
+	add	r3, r3, #1
+	str	r3, [sp, #56]
+	cmp	r3, #16
+	ldr	r3, [sp, #60]
+	add	r3, r3, #64
+	str	r3, [sp, #60]
+	ldr	r3, [sp, #64]
+	add	r3, r3, #32
+	str	r3, [sp, #64]
+	ldr	r3, [sp, #68]
+	add	r3, r3, #4096
+	str	r3, [sp, #68]
+	bne	.L14
+	movw	r7, #:lower16:.LC4
+	mov	r6, #0
+	ldr	r8, [sp, #92]
+	ldr	r10, [sp, #88]
+	add	r9, r8, #1024
+	movt	r7, #:upper16:.LC4
+.L22:
+	mov	r5, r10
+	mov	fp, r8
+	mov	r4, #0
+.L23:
+	ldrsb	r3, [r5, #1]
+	ldr	r2, [fp], #4
 	str	r3, [sp]
-	ldr	r3, [fp, #-140]
-	ldr	r2, [fp, #-52]
-	ldr	r1, [fp, #-48]
-	movw	r0, #:lower16:.LC4
-	movt	r0, #:upper16:.LC4
+	str	r2, [sp, #4]
+	ldrsb	r3, [r5]
+	mov	r2, r4
+	mov	r1, r6
+	add	r4, r4, #1
+	mov	r0, r7
 	bl	printf
-	ldr	r3, [fp, #-52]
-	add	r3, r3, #1
-	str	r3, [fp, #-52]
-.L40:
-	ldr	r3, [fp, #-52]
-	cmp	r3, #15
-	ble	.L41
-	ldr	r3, [fp, #-48]
-	add	r3, r3, #1
-	str	r3, [fp, #-48]
-.L39:
-	ldr	r3, [fp, #-48]
-	cmp	r3, #15
-	ble	.L42
-	mov	r3, #0
-	mov	r0, r3
-	sub	sp, fp, #16
+	cmp	r4, #16
+	add	r5, r5, #2
+	bne	.L23
+	add	r8, r8, #64
+	cmp	r9, r8
+	add	r6, r6, #1
+	add	r10, r10, #32
+	bne	.L22
+	mov	r0, #0
+	add	sp, sp, #132096
+	add	sp, sp, #620
 	@ sp needed
-	pop	{r4, r5, r6, fp, pc}
+	pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
+.L25:
+	mvn	r3, #0
+	str	r3, [sp, #8]
+	b	.L15
 	.size	main, .-main
+	.section	.rodata.str1.4,"aMS",%progbits,1
+	.align	2
+.LC0:
+	.ascii	"rb\000"
+	.space	1
+.LC1:
+	.ascii	"test_images/Image1.bmp\000"
+	.space	1
+.LC2:
+	.ascii	"test_images/Image2.bmp\000"
+	.space	1
+.LC3:
+	.ascii	"Error!\000"
+	.space	1
+.LC4:
+	.ascii	"Block[%d][%d]: Vector: (%d, %d); Difference: %d\012"
+	.ascii	"\000"
 	.ident	"GCC: (GNU) 8.2.1 20180801 (Red Hat 8.2.1-2)"
 	.section	.note.GNU-stack,"",%progbits
