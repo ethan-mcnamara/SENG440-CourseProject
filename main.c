@@ -9,6 +9,7 @@
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
 #define SIZEOFROW 128
+#define HEADERSIZE 54
 
 /* General Barr C Compliance
 *  =======================================================================
@@ -76,8 +77,8 @@ void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK],
     fptr2 = fopen("test_images/Image2.bmp", "rb");
 
     // BMP header size is 54 bytes (8 bytes * 7 - 2 = 54 bytes)
-    fread(&rm_header, sizeof(uint8_t) * 7 - 2, 1, fptr1);
-    fread(&rm_header, sizeof(uint8_t)* 7 - 2, 1, fptr2);
+    fread(&rm_header, HEADERSIZE, 1, fptr1);
+    fread(&rm_header, HEADERSIZE, 1, fptr2);
 
     if(fptr1 == NULL || fptr2 == NULL)
     {
@@ -139,8 +140,8 @@ int main(int argc, char *argv[])
             {
                 for (int32_t block_col_comp = comp_zero(block_col_ref - 2); block_col_comp < comp_max(block_col_ref + 3); ++block_col_comp) // every block column in other frame
                 {
-                    temp_sad1 &= 0;
-                    temp_sad2 &= 0;
+                    temp_sad1 = 0;
+                    temp_sad2 = 0;
                     for (int32_t pixel_row = 1; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                     {
                         // No longer need to load the arrays
