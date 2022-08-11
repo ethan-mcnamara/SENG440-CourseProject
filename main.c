@@ -90,7 +90,7 @@ void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK],
     // Also, int32_t is used because ARM does not support short ints or characters (assumes an entire
     // register).
 
-    // register uint32_t size_pixel_row = sizeof(uint8_t) * 16;
+    register uint32_t size_pixel_row = sizeof(uint8_t) * 16;
     // printf("Pixel row size: %d\n", size_pixel_row);
     // exit(1);
 
