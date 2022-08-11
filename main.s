@@ -150,8 +150,9 @@ main:
 	bl	process_frame
 	mov	r3, #0
 	add	r0, sp, #1632
-	add	r0, r0, #8
-	add	r0, r0, #16
+	// Change made here, combinining two add instructions into one
+	add	r0, r0, #24
+	//add	r0, r0, #16
 	str	r0, [sp, #68]
 	add	r0, sp, #66560
 	add	r0, r0, #616
@@ -250,13 +251,14 @@ main:
 	vmov.u16	r5, d17[1]
 	vmov.u16	r4, d17[2]
 	vmov.u16	lr, d17[3]
+	// Changing order of the adds to improve performance.
 	add	r2, r2, r8
-	add	r3, r2, r3
 	add	r3, r3, r7
-	add	r3, r3, r6
-	add	r3, r3, r5
-	add	r3, r3, r4
-	add	r3, r3, lr
+	add	r4, r4, r6
+	add	r5, r5, lr
+	add	r3, r2, r3
+	add	r4, r4, r5
+	add r3, r3, r4
 	cmp	r1, fp
 	add	r0, r0, r3
 	bne	.L17
