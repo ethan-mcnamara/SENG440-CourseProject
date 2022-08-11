@@ -150,8 +150,9 @@ main:
 	bl	process_frame
 	mov	r3, #0
 	add	r0, sp, #1632
-	add	r0, r0, #8
-	add	r0, r0, #16
+	// Change made here, combinining two add instructions into one
+	add	r0, r0, #24
+	//add	r0, r0, #16
 	str	r0, [sp, #68]
 	add	r0, sp, #66560
 	add	r0, r0, #616
