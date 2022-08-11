@@ -91,7 +91,7 @@ void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK],
     // register).
 
     register uint32_t size_pixel_row = sizeof(uint8_t) * 16;
-    print("Pixel row size: %d\n", size_pixel_row);
+    printf("Pixel row size: %d\n", size_pixel_row);
     exit(1);
 
     for (int32_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
