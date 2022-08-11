@@ -138,7 +138,8 @@ int main(int argc, char *argv[])
     Vector vectors[NUMBLOCKS][NUMBLOCKS];
 
     // Create Local Variables to speed-up the process
-    register uint32_t temp_sad = 0;
+    register uint32_t temp_sad1 = 0;
+    register uint32_t temp_sad2 = 0;
     register uint32_t min_sad = UINT32_MAX;
     uint8_t x_displ = 0;
     uint8_t y_displ = 0;
@@ -153,7 +154,8 @@ int main(int argc, char *argv[])
             {
                 for (int32_t block_col_comp = comp_zero(block_col_ref - 3); block_col_comp < comp_max(block_col_ref + 3); ++block_col_comp) // every block column in other frame
                 {
-                    temp_sad &= 0;
+                    temp_sad1 &= 0;
+                    temp_sad2 &= 0;
                     for (int32_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                     {
                         // No longer need to load the arrays
@@ -174,19 +176,21 @@ int main(int argc, char *argv[])
 
                         // Sum all elements in the result vector by reading the lanes individually
                         // A for-loop would add additional operations that are not necessary (operations require consts)
-                        temp_sad += vgetq_lane_u16(final_result, 0);
-                        temp_sad += vgetq_lane_u16(final_result, 1);
-                        temp_sad += vgetq_lane_u16(final_result, 2);
-                        temp_sad += vgetq_lane_u16(final_result, 3);
-                        temp_sad += vgetq_lane_u16(final_result, 4);
-                        temp_sad += vgetq_lane_u16(final_result, 5);
-                        temp_sad += vgetq_lane_u16(final_result, 6);
-                        temp_sad += vgetq_lane_u16(final_result, 7);
+                        // Two indepent temp_sad variables are used to allow for more software pipelining
+                        temp_sad1 += vgetq_lane_u16(final_result, 0);
+                        temp_sad2 += vgetq_lane_u16(final_result, 1);
+                        temp_sad1 += vgetq_lane_u16(final_result, 2);
+                        temp_sad2 += vgetq_lane_u16(final_result, 3);
+                        temp_sad1 += vgetq_lane_u16(final_result, 4);
+                        temp_sad2 += vgetq_lane_u16(final_result, 5);
+                        temp_sad1 += vgetq_lane_u16(final_result, 6);
+                        temp_sad2 += vgetq_lane_u16(final_result, 7);
+                        temp_sad1 += temp_sad2;
                     }
 
-                    if (min_sad > temp_sad )
+                    if (min_sad > temp_sad1 )
                     {
-                        min_sad = temp_sad;
+                        min_sad = temp_sad1;
                         x_displ = block_col_comp - block_col_ref;
                         y_displ = block_row_ref - block_row_comp;
                     }
