@@ -7,6 +7,7 @@
 #define NUMFRAMES 2
 #define NUMBLOCKS 16
 #define SIZEOFIMAGE 256
+#define SIZEOFROW 128
 
 /* General Barr C Compliance
 *  =======================================================================
@@ -90,8 +91,8 @@ void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK],
     for (int32_t block_row = 0; block_row < NUMBLOCKS; block_row++) {
         for (int32_t pixel_row = 0; pixel_row < SIZEOFBLOCK; pixel_row++){
             for (int32_t block_col = 0; block_col < NUMBLOCKS; block_col++) {
-                fread(&Frame1[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr1);
-                fread(&Frame2[block_row][block_col][pixel_row], sizeof(uint8_t)*16, 1, fptr2);
+                fread(&Frame1[block_row][block_col][pixel_row], SIZEOFROW, 1, fptr1);
+                fread(&Frame2[block_row][block_col][pixel_row], SIZEOFROW, 1, fptr2);
             }
         }
     }
