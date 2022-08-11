@@ -156,14 +156,14 @@ int main(int argc, char *argv[])
                 {
                     temp_sad1 &= 0;
                     temp_sad2 &= 0;
-                    for (int32_t pixel_row = 0; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
+                    for (int32_t pixel_row = 1; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                     {
                         // No longer need to load the arrays
                         uint8x16_t vector_ref = Frame1[block_row_ref][block_col_ref][pixel_row]; // declare a vector of 16 8-bit lanes
                         uint8x16_t vector_comp = Frame2[block_row_comp][block_col_comp][pixel_row]; // declare a vector of 16 8-bit lanes
 
                         // Perform the Absolute Differences operation:
-                        uint8x16_t init_result = vabdq_u8(vector_ref, vector_comp);
+                        uint8x16_t init_result = vabdq_u8( vector_ref, vector_comp );
 
                         // Store first and second halves of the result vector in two different vectors of half size
                         uint8x8_t result_high = vget_high_u8( init_result );
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
                         // Perform vector addition with the high and low vectors.
                         // This shortens number of needed calculations below.
                         // Use vaddl_u8 to prevent overflow
-                        uint16x8_t final_result = vaddl_u8( result_high, result_low);
+                        uint16x8_t final_result = vaddl_u8( result_high, result_low );
 
                         // Sum all elements in the result vector by reading the lanes individually
                         // A for-loop would add additional operations that are not necessary (operations require consts)
