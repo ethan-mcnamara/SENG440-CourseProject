@@ -105,19 +105,6 @@ void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK],
     return;
 }
 
-// This is just for testing purposes
-void print_uint8 (uint8x16_t data) {
-    int32_t i;
-    static uint8_t p[16];
-
-    vst1q_u8 (p, data);
-
-    for (i = 0; i < 16; i++) {
-	printf ("%02d ", p[i]);
-    }
-    printf ("\n");
-}
-
 /*
 * Main function
 */
