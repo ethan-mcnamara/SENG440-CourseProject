@@ -107,7 +107,7 @@ void process_frame(Frame *cur_frame, FILE *fptr)
     uint8_t rm_header [54];
 
     // Read the header and store it in an array (not to be used)
-    fread(&rm_header, sizeof(uint8_t) * 7 - 2, 1, fptr);
+    fread(&rm_header, 54, 1, fptr);
 
     // Read the first pixel for iteration purposes
     fread(&cur_pixel, sizeof(uint8_t), 1, fptr);
