@@ -249,6 +249,7 @@ main:
 	vmov.u16	r5, d17[1]
 	vmov.u16	r4, d17[2]
 	vmov.u16	lr, d17[3]
+	// Changing order of the adds to improve performance.
 	add	r2, r2, r8
 	add	r3, r3, r7
 	add	r4, r4, r6
