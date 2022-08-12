@@ -149,20 +149,36 @@ int main(int argc, char *argv[])
                         // vectors into a uint32x4_t Neon Vector, allowing for easier access. 
                         // Most likely, this would occur in the process_frame method.
                         // Note, the instruction can only take two 32-bit values as parameters.
-                        uint32x4_t placeholder = {0, 1, 2, 3};
-                        uint32_t sum_1;
-                        uint32_t sum_2;
-                        uint32_t parameter_1 = vgetq_lane_u32(placeholder, 0);
-                        uint32_t parameter_2 = vgetq_lane_u32(placeholder, 1);
+                        uint32x4_t placeholder_1 = {0, 1, 2, 3};
+                        uint32x4_t placeholder_2 = {0, 1, 2, 3};
+                        uint32_t sum;
+                        uint32_t parameter_1 = vgetq_lane_u32(placeholder_1, 0);
+                        uint32_t parameter_2 = vgetq_lane_u32(placeholder_2, 0);
 
-                        __asm__("Manual_SAD %0 %1 %2" : "=r" (sum_1): "r" (parameter_1), "r" (parameter_2));
+                        __asm__("Manual_SAD %0 %1 %2" : "=r" (sum): "r" (parameter_1), "r" (parameter_2));
 
-                        parameter_1 = vgetq_lane_u32(placeholder, 2);
-                        parameter_2 = vgetq_lane_u32(placeholder, 3);
+                        temp_sad1 += sum;
 
-                        __asm__("Manual_SAD %0 %1 %2" : "=r" (sum_2): "r" (parameter_1), "r" (parameter_2));
+                        parameter_1 = vgetq_lane_u32(placeholder_1, 1);
+                        parameter_2 = vgetq_lane_u32(placeholder_2, 1);
 
-                        temp_sad1 = temp_sad1 + sum_1 + sum_2;
+                        __asm__("Manual_SAD %0 %1 %2" : "=r" (sum): "r" (parameter_1), "r" (parameter_2));
+
+                        temp_sad1 += sum;
+
+                        parameter_1 = vgetq_lane_u32(placeholder_1, 2);
+                        parameter_2 = vgetq_lane_u32(placeholder_2, 2);
+
+                        __asm__("Manual_SAD %0 %1 %2" : "=r" (sum): "r" (parameter_1), "r" (parameter_2));
+
+                        temp_sad1 += sum;
+
+                        parameter_1 = vgetq_lane_u32(placeholder_1, 3);
+                        parameter_2 = vgetq_lane_u32(placeholder_2, 3);
+
+                        __asm__("Manual_SAD %0 %1 %2" : "=r" (sum): "r" (parameter_1), "r" (parameter_2));
+
+                        temp_sad1 += sum;
                     }
 
                     if (min_sad > temp_sad1 )
