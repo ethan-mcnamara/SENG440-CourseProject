@@ -203,7 +203,8 @@ int main(int argc, char *argv[])
 
 
 // The print statements are not optimized. However, they are required for the `-03` flag
-// to not neglect the vector computations.
+// to not neglect the vector computations. Also, the timer is above this print statement, 
+// and therefore, the print statements are not considered in execution times.
     for (int32_t i = 0; i < NUMBLOCKS; ++i)
     {
         for (int32_t j = 0; j < NUMBLOCKS; ++j)
