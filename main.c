@@ -110,9 +110,10 @@ void process_frame(uint8x16_t Frame1[NUMBLOCKS][NUMBLOCKS][SIZEOFBLOCK],
 */
 int main(int argc, char *argv[]) 
 {
-    // Uncomment for Timer
-    // double time_spent = 0.0;
-    // clock_t begin = clock();
+    // Uncomment for Timer. Note, this is not optimized,
+    // and is only for testing purposes.
+    double time_spent = 0.0;
+    clock_t begin = clock();
 
     // Initialize the frames
     // Make the last frame be the vectors in order to prevent loading in the for-loop
@@ -196,9 +197,9 @@ int main(int argc, char *argv[])
     }
 
     // Uncomment for Timer
-    // clock_t end = clock();
-    // time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
-    // printf("The elapsed time is %f seconds", time_spent);
+    clock_t end = clock();
+    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("The elapsed time is %f seconds\n", time_spent);
 
 
 // The print statements are not optimized. However, they are required for the `-03` flag
