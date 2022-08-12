@@ -148,6 +148,7 @@ int main(int argc, char *argv[])
                         // It is assumed there is a way to place the necessary
                         // vectors into a uint32x4_t Neon Vector, allowing for easier access. 
                         // Most likely, this would occur in the process_frame method.
+                        // Note, the instruction can only take two 32-bit values as parameters.
                         uint32x4_t placeholder = {0, 1, 2, 3};
                         uint32_t sum_1;
                         uint32_t sum_2;
