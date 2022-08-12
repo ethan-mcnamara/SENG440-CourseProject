@@ -157,6 +157,9 @@ void process_frame(Frame *cur_frame, FILE *fptr)
 */
 int main(int argc, char *argv[]) 
 {
+    double time_spent = 0.0;
+    clock_t begin = clock();
+
     FILE *fptr;
     
     //for each block in frame
@@ -183,9 +186,6 @@ int main(int argc, char *argv[])
     process_frame(test_frame, fptr);
     test_film->frame[1] = *test_frame;
     fclose(fptr);
-
-    // double time_spent = 0.0;
-    // clock_t begin = clock();
 
     // Barr C (8.4): For loops are declared with minimal initializations.
     for (uint8_t frame = 0; frame < NUMFRAMES - 1; ++frame) // every frame
@@ -242,8 +242,8 @@ int main(int argc, char *argv[])
         }
     }
     
-    // clock_t end = clock();
-    // time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
-    // printf("The elapsed time is %f seconds", time_spent);
+    clock_t end = clock();
+    time_spent += (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("The elapsed time is %f seconds", time_spent);
     return 0;
 }
