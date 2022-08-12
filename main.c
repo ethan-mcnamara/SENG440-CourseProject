@@ -145,8 +145,6 @@ int main(int argc, char *argv[])
                     temp_sad1 = 0;
                     for (int32_t pixel_row = 1; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                     {
-                        // Set this value ot 0, as to not accumulate already-summed values
-                        temp_sad2 = 0;
 
                         // No longer need to load the arrays
                         uint8x16_t vector_ref = Frame1[block_row_ref][block_col_ref][pixel_row]; // declare a vector of 16 8-bit lanes
@@ -168,16 +166,13 @@ int main(int argc, char *argv[])
                         // A for-loop would add additional operations that are not necessary (operations require consts)
                         // Two indepent temp_sad variables are used to allow for more software pipelining
                         temp_sad1 += vgetq_lane_u16(final_result, 0);
-                        temp_sad2 += vgetq_lane_u16(final_result, 1);
+                        temp_sad1 += vgetq_lane_u16(final_result, 1);
                         temp_sad1 += vgetq_lane_u16(final_result, 2);
-                        temp_sad2 += vgetq_lane_u16(final_result, 3);
+                        temp_sad1 += vgetq_lane_u16(final_result, 3);
                         temp_sad1 += vgetq_lane_u16(final_result, 4);
-                        temp_sad2 += vgetq_lane_u16(final_result, 5);
+                        temp_sad1 += vgetq_lane_u16(final_result, 5);
                         temp_sad1 += vgetq_lane_u16(final_result, 6);
-                        temp_sad2 += vgetq_lane_u16(final_result, 7);
-
-                        // Sum both temp_sad variables
-                        temp_sad1 += temp_sad2;
+                        temp_sad1 += vgetq_lane_u16(final_result, 7);
                     }
 
                     if (min_sad > temp_sad1 )
