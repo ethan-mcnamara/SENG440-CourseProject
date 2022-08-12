@@ -145,39 +145,23 @@ int main(int argc, char *argv[])
                     temp_sad1 = 0;
                     for (int32_t pixel_row = 1; pixel_row < SIZEOFBLOCK; ++pixel_row) // every row in cur_block (cur_pixel)
                     {
-                        // Set this value ot 0, as to not accumulate already-summed values
-                        temp_sad2 = 0;
+                        // It is assumed there is a way to place the necessary
+                        // vectors into a uint32x4_t Neon Vector, allowing for easier access. 
+                        // Most likely, this would occur in the process_frame method.
+                        uint32x4_t placeholder = {0, 1, 2, 3};
+                        uint32_t sum_1;
+                        uint32_t sum_2;
+                        uint32_t parameter_1 = vgetq_lane_u32(placeholder, 0);
+                        uint32_t parameter_2 = vgetq_lane_u32(placeholder, 1);
 
-                        // No longer need to load the arrays
-                        uint8x16_t vector_ref = Frame1[block_row_ref][block_col_ref][pixel_row]; // declare a vector of 16 8-bit lanes
-                        uint8x16_t vector_comp = Frame2[block_row_comp][block_col_comp][pixel_row]; // declare a vector of 16 8-bit lanes
+                        __asm__("Manual_SAD %0 %1 %2" : "=r" (sum_1): "r" (parameter_1), "r" (parameter_2));
 
-                        // Perform the Absolute Differences operation:
-                        uint8x16_t init_result = vabdq_u8( vector_ref, vector_comp );
+                        parameter_1 = vgetq_lane_u32(placeholder, 2);
+                        parameter_2 = vgetq_lane_u32(placeholder, 3);
 
-                        // Store first and second halves of the result vector in two different vectors of half size
-                        uint8x8_t result_high = vget_high_u8( init_result );
-                        uint8x8_t result_low = vget_low_u8( init_result );
+                        __asm__("Manual_SAD %0 %1 %2" : "=r" (sum_2): "r" (parameter_1), "r" (parameter_2));
 
-                        // Perform vector addition with the high and low vectors.
-                        // This shortens number of needed calculations below.
-                        // Use vaddl_u8 to prevent overflow
-                        uint16x8_t final_result = vaddl_u8( result_high, result_low );
-
-                        // Sum all elements in the result vector by reading the lanes individually
-                        // A for-loop would add additional operations that are not necessary (operations require consts)
-                        // Two indepent temp_sad variables are used to allow for more software pipelining
-                        temp_sad1 += vgetq_lane_u16(final_result, 0);
-                        temp_sad2 += vgetq_lane_u16(final_result, 1);
-                        temp_sad1 += vgetq_lane_u16(final_result, 2);
-                        temp_sad2 += vgetq_lane_u16(final_result, 3);
-                        temp_sad1 += vgetq_lane_u16(final_result, 4);
-                        temp_sad2 += vgetq_lane_u16(final_result, 5);
-                        temp_sad1 += vgetq_lane_u16(final_result, 6);
-                        temp_sad2 += vgetq_lane_u16(final_result, 7);
-
-                        // Sum both temp_sad variables
-                        temp_sad1 += temp_sad2;
+                        temp_sad1 = temp_sad1 + sum_1 + sum_2;
                     }
 
                     if (min_sad > temp_sad1 )
